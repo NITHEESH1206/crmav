@@ -65,7 +65,7 @@ export function EditableField({
             onClick={() => setEditing(true)}
             className="mt-1 flex items-center gap-2 -ml-1 px-1 py-0.5 rounded text-sm text-white/85 hover:bg-white/[0.04] transition-colors w-full text-left"
           >
-            <span className="truncate">{displayValue ?? stringify(value) || "—"}</span>
+            <span className="truncate">{displayValue ?? (stringify(value) || "—")}</span>
             <Pencil className="h-3 w-3 text-white/30 opacity-0 group-hover:opacity-100 transition-opacity ml-auto shrink-0" />
           </motion.button>
         ) : (
