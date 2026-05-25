@@ -1,0 +1,159 @@
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  darkMode: ["class"],
+  content: [
+    "./app/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./lib/**/*.{ts,tsx}",
+  ],
+  theme: {
+    container: {
+      center: true,
+      padding: "1.5rem",
+      screens: { "2xl": "1400px" },
+    },
+    extend: {
+      fontFamily: {
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "system-ui", "sans-serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
+      },
+      colors: {
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        aether: {
+          50: "#fff5eb",
+          100: "#ffe6cc",
+          200: "#ffc999",
+          300: "#ffa866",
+          400: "#ff8a33",
+          500: "#ff6b00",
+          600: "#e55f00",
+          700: "#b34a00",
+          800: "#803500",
+          900: "#4d2000",
+        },
+        ink: {
+          50: "#0e0e10",
+          100: "#0b0b0d",
+          200: "#08080a",
+          300: "#050505",
+          400: "#020203",
+          500: "#000000",
+        },
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      backgroundImage: {
+        "aether-radial":
+          "radial-gradient(circle at 20% 10%, rgba(255,107,0,0.18), transparent 40%), radial-gradient(circle at 80% 90%, rgba(255,107,0,0.12), transparent 50%)",
+        "aether-mesh":
+          "radial-gradient(at 12% 8%, rgba(255,107,0,0.22) 0px, transparent 50%), radial-gradient(at 90% 20%, rgba(255,138,51,0.16) 0px, transparent 50%), radial-gradient(at 40% 95%, rgba(255,107,0,0.18) 0px, transparent 50%)",
+        "grid-fade":
+          "linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px)",
+        "shine":
+          "linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%)",
+      },
+      boxShadow: {
+        glow: "0 0 40px -10px rgba(255,107,0,0.55), 0 0 80px -20px rgba(255,107,0,0.35)",
+        "glow-sm": "0 0 22px -6px rgba(255,107,0,0.6)",
+        soft: "0 10px 40px -10px rgba(0,0,0,0.55)",
+        card: "0 1px 0 0 rgba(255,255,255,0.04) inset, 0 0 0 1px rgba(255,255,255,0.04), 0 20px 50px -20px rgba(0,0,0,0.6)",
+        "card-hover":
+          "0 1px 0 0 rgba(255,255,255,0.08) inset, 0 0 0 1px rgba(255,107,0,0.25), 0 30px 60px -20px rgba(0,0,0,0.7), 0 0 30px -8px rgba(255,107,0,0.35)",
+      },
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        shimmer: {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-12px)" },
+        },
+        "float-slow": {
+          "0%, 100%": { transform: "translate3d(0,0,0)" },
+          "50%": { transform: "translate3d(0,-18px,0)" },
+        },
+        glow: {
+          "0%, 100%": { opacity: "0.55" },
+          "50%": { opacity: "1" },
+        },
+        "spin-slow": {
+          from: { transform: "rotate(0deg)" },
+          to: { transform: "rotate(360deg)" },
+        },
+        "gradient-pan": {
+          "0%, 100%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+        },
+        "scroll-x": {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" },
+        },
+        "fade-up": {
+          from: { opacity: "0", transform: "translateY(20px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+        shimmer: "shimmer 2.4s linear infinite",
+        float: "float 6s ease-in-out infinite",
+        "float-slow": "float-slow 9s ease-in-out infinite",
+        glow: "glow 3.6s ease-in-out infinite",
+        "spin-slow": "spin-slow 22s linear infinite",
+        "gradient-pan": "gradient-pan 8s ease infinite",
+        "scroll-x": "scroll-x 40s linear infinite",
+        "fade-up": "fade-up 0.8s ease-out both",
+      },
+    },
+  },
+  plugins: [require("tailwindcss-animate")],
+};
+
+export default config;

@@ -1,0 +1,102 @@
+import { ModuleShell } from "@/components/app/module-shell";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Sparkles, TrendingUp, Building2 } from "lucide-react";
+import { initials, formatCompact } from "@/lib/utils";
+import { getOpportunitiesByStage } from "@/lib/data/opportunities";
+import { OpenableRow } from "@/components/app/openable";
+
+const STAGE_LABEL: Record<string, string> = {
+  DISCOVERY: "Discovery",
+  PROPOSAL: "Proposal",
+  NEGOTIATION: "Negotiation",
+  CLOSED_WON: "Closed Won",
+};
+
+export default async function OpportunitiesPage() {
+  const columns = await getOpportunitiesByStage();
+  const totalPipeline = columns
+    .filter((c) => c.stage !== "CLOSED_WON" && c.stage !== "CLOSED_LOST")
+    .reduce((s, c) => s + c.totalCents, 0);
+
+  return (
+    <ModuleShell
+      eyebrow="Sales"
+      title="Opportunities"
+      description="Stage-aware kanban with AI deal scoring, quotation builder, and live proposal generation."
+    >
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {columns.map((col) => (
+          <div key={col.stage} className="flex flex-col gap-3 min-h-[400px]">
+            <div className="flex items-center justify-between px-1">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-semibold">{STAGE_LABEL[col.stage] ?? col.stage}</span>
+                <Badge variant="secondary" className="h-5">{col.deals.length}</Badge>
+              </div>
+              <span className="text-xs text-white/45 font-mono">${formatCompact(col.totalCents / 100)}</span>
+            </div>
+
+            <div className="flex flex-col gap-2.5 flex-1 rounded-2xl bg-white/[0.015] border border-white/[0.04] p-2.5">
+              {col.deals.map((d) => (
+                <OpenableRow key={d.id} kind="opportunity" id={d.id}>
+                <Card className="hover-lift">
+                  <CardContent className="p-3.5">
+                    <div className="flex items-center gap-2 text-[10px] text-white/35 font-mono">
+                      {d.id.slice(0, 8)}
+                    </div>
+                    <div className="text-sm font-medium mt-1 leading-tight">{d.name}</div>
+                    <div className="flex items-center gap-1.5 mt-1.5 text-[11px] text-white/45">
+                      <Building2 className="h-3 w-3" />
+                      {d.account?.name ?? "—"}
+                    </div>
+                    <div className="mt-3 pt-3 border-t border-white/[0.06] flex items-center justify-between">
+                      <div className="font-display text-base font-semibold text-gradient">
+                        ${formatCompact(d.valueCents / 100)}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {d.aiScore !== null && d.aiScore !== undefined && (
+                          <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-aether-500/10 border border-aether-500/20 text-[10px] text-aether-400">
+                            <Sparkles className="h-2.5 w-2.5" />
+                            {d.aiScore}
+                          </div>
+                        )}
+                        {d.owner && (
+                          <Avatar className="h-6 w-6">
+                            <AvatarFallback className="text-[9px]">{initials(d.owner.name)}</AvatarFallback>
+                          </Avatar>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                </OpenableRow>
+              ))}
+              <button className="rounded-xl border border-dashed border-white/[0.08] text-xs text-white/40 py-3 hover:text-white/70 hover:border-aether-500/40 transition-colors">
+                + Add deal
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <Card className="mt-6">
+        <CardContent className="p-5 flex flex-col sm:flex-row items-center gap-4">
+          <div className="h-10 w-10 rounded-xl bg-aether-500/15 border border-aether-500/30 flex items-center justify-center">
+            <Sparkles className="h-4 w-4 text-aether-400" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-semibold">AI insight</div>
+            <div className="text-xs text-white/55 mt-0.5">
+              ${formatCompact(totalPipeline / 100)} active pipeline. Deals stuck in Proposal &gt; 14 days drop 41% in win rate.
+            </div>
+          </div>
+          <div className="flex items-center gap-1 text-xs text-emerald-400">
+            <TrendingUp className="h-3 w-3" />
+            Live data
+          </div>
+        </CardContent>
+      </Card>
+    </ModuleShell>
+  );
+}

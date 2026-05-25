@@ -1,0 +1,92 @@
+import { ModuleShell } from "@/components/app/module-shell";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { RefreshCcw, CheckCircle2 } from "lucide-react";
+import { formatCompact, formatDate } from "@/lib/utils";
+import { listInvoices, listSubscriptions, billingSummary } from "@/lib/data/billing";
+
+const statusVariant = (s: string) =>
+  s === "PAID" ? ("success" as const) : s === "OVERDUE" ? ("destructive" as const) : ("secondary" as const);
+
+export default async function BillingPage() {
+  const [invoices, subs, summary] = await Promise.all([listInvoices(), listSubscriptions(), billingSummary()]);
+
+  const stats = [
+    { l: "Outstanding", v: `$${formatCompact(summary.outstandingCents / 100)}`, sub: `${summary.outstandingCount} invoices` },
+    { l: "Collected", v: `$${formatCompact(summary.collectedCents / 100)}`, sub: "Lifetime" },
+    { l: "Recurring MRR", v: `$${formatCompact(summary.mrrCents / 100)}`, sub: `${summary.amcCount} AMCs` },
+    { l: "DSO (days)", v: "26.4", sub: "Trailing 90d" },
+  ];
+
+  return (
+    <ModuleShell
+      eyebrow="Billing"
+      title="Invoices & Subscriptions"
+      description="Recurring billing, AMC contracts, Stripe payments, multi-currency support."
+    >
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        {stats.map((s) => (
+          <Card key={s.l}>
+            <CardContent className="p-5">
+              <div className="text-xs text-white/45">{s.l}</div>
+              <div className="font-display text-3xl font-semibold tracking-tight mt-1">{s.v}</div>
+              <div className="text-[11px] text-white/35 mt-1">{s.sub}</div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-[1.6fr_1fr] gap-5">
+        <Card>
+          <CardHeader><CardTitle>Recent invoices</CardTitle></CardHeader>
+          <CardContent className="p-0">
+            <div className="grid grid-cols-[100px_2fr_120px_140px_100px] text-[10px] uppercase tracking-wider text-white/40 px-5 py-3 border-y border-white/[0.04]">
+              <div>Invoice</div>
+              <div>Client</div>
+              <div>Amount</div>
+              <div>Due</div>
+              <div>Status</div>
+            </div>
+            {invoices.map((inv) => (
+              <div key={inv.id} className="grid grid-cols-[100px_2fr_120px_140px_100px] items-center gap-3 px-5 py-3.5 border-b border-white/[0.04] hover:bg-white/[0.015] cursor-pointer">
+                <div className="text-[11px] text-white/40 font-mono">{inv.number}</div>
+                <div className="text-sm font-medium">{inv.account?.name ?? "—"}</div>
+                <div className="text-sm font-mono">${formatCompact(inv.totalCents / 100)}</div>
+                <div className="text-xs text-white/55">
+                  {inv.dueAt ? formatDate(inv.dueAt, { month: "short", day: "numeric" }) : "—"}
+                </div>
+                <Badge variant={statusVariant(inv.status)} className="capitalize">
+                  {inv.status.toLowerCase()}
+                </Badge>
+              </div>
+            ))}
+            {invoices.length === 0 && <div className="px-5 py-8 text-center text-xs text-white/40">No invoices yet.</div>}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader><CardTitle>Subscriptions</CardTitle></CardHeader>
+          <CardContent className="space-y-3">
+            {subs.map((s) => (
+              <div key={s.id} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5">
+                <div className="flex items-center justify-between">
+                  <div className="text-sm font-medium truncate">{s.account.name}</div>
+                  <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+                </div>
+                <div className="text-[11px] text-white/45 mt-0.5">{s.plan}</div>
+                <div className="mt-3 flex items-center justify-between">
+                  <div className="text-sm font-mono text-gradient">${(s.monthlyCents / 100).toLocaleString()}/mo</div>
+                  <div className="flex items-center gap-1 text-[11px] text-white/45">
+                    <RefreshCcw className="h-3 w-3" />
+                    {s.renewsAt ? formatDate(s.renewsAt, { month: "short", year: "numeric" }) : "—"}
+                  </div>
+                </div>
+              </div>
+            ))}
+            {subs.length === 0 && <div className="text-xs text-white/40">No subscriptions.</div>}
+          </CardContent>
+        </Card>
+      </div>
+    </ModuleShell>
+  );
+}

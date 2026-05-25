@@ -1,0 +1,771 @@
+// AetherAV CRM — Prisma schema covering all 14 modules + AV-specific tables.
+// Keep this in sync with app/(app)/* modules.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Workspace, identity & RBAC
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Workspace {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  logoUrl   String?
+  currency  String   @default("USD")
+  timezone  String   @default("UTC")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users         User[]
+  accounts      Account[]
+  contacts      Contact[]
+  opportunities Opportunity[]
+  projects      Project[]
+  tickets       ServiceTicket[]
+  amcs          AMCContract[]
+  vendors       Vendor[]
+  purchaseOrders PurchaseOrder[]
+  inventoryItems InventoryItem[]
+  warehouses    Warehouse[]
+  catalogItems  CatalogItem[]
+  invoices      Invoice[]
+  subscriptions Subscription[]
+  timeEntries   TimeEntry[]
+  todos         Todo[]
+  events        CalendarEvent[]
+  apiKeys       ApiKey[]
+  auditLogs     AuditLog[]
+  notifications Notification[]
+  racks         AVRack[]
+  signalFlows   SignalFlow[]
+  rooms         Room[]
+  devices       Device[]
+  siteSurveys   SiteSurvey[]
+  drawings      Drawing[]
+  amcChecklists CommissioningChecklist[]
+}
+
+model User {
+  id           String   @id @default(cuid())
+  workspaceId  String
+  workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  clerkId      String?  @unique
+  email        String   @unique
+  name         String
+  avatarUrl    String?
+  role         Role     @default(MEMBER)
+  jobTitle     String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  ownedOpportunities Opportunity[] @relation("OpportunityOwner")
+  assignedTickets    ServiceTicket[] @relation("TicketAssignee")
+  assignedTodos      Todo[]          @relation("TodoAssignee")
+  timeEntries        TimeEntry[]
+  events             CalendarEvent[]
+  auditLogs          AuditLog[]
+  notifications      Notification[]
+  technicianFor      ProjectTechnician[]
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  SALES
+  ENGINEER
+  SERVICE_TECH
+  MEMBER
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Accounts (companies + contacts)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Account {
+  id           String    @id @default(cuid())
+  workspaceId  String
+  workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name         String
+  tier         AccountTier @default(STARTER)
+  industry     String?
+  website      String?
+  parentId     String?
+  parent       Account?  @relation("AccountHierarchy", fields: [parentId], references: [id])
+  children     Account[] @relation("AccountHierarchy")
+  ltvCents     Int       @default(0)
+  healthScore  Int       @default(80)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  contacts      Contact[]
+  opportunities Opportunity[]
+  projects      Project[]
+  tickets       ServiceTicket[]
+  amcs          AMCContract[]
+  invoices      Invoice[]
+  subscriptions Subscription[]
+  rooms         Room[]
+
+  @@index([workspaceId])
+}
+
+enum AccountTier {
+  STARTER
+  GROWTH
+  ENTERPRISE
+}
+
+model Contact {
+  id          String   @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  accountId   String?
+  account     Account? @relation(fields: [accountId], references: [id])
+  firstName   String
+  lastName    String
+  email       String?
+  phone       String?
+  title       String?
+  isPrimary   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([accountId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Opportunities & quoting
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Opportunity {
+  id           String   @id @default(cuid())
+  workspaceId  String
+  workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  accountId    String?
+  account      Account? @relation(fields: [accountId], references: [id])
+  ownerId      String?
+  owner        User?    @relation("OpportunityOwner", fields: [ownerId], references: [id])
+  name         String
+  stage        OpportunityStage @default(DISCOVERY)
+  valueCents   Int      @default(0)
+  probability  Int      @default(20)
+  aiScore      Int?
+  expectedClose DateTime?
+  lostReason   String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  quote        Quote?
+  project      Project?
+}
+
+enum OpportunityStage {
+  DISCOVERY
+  SITE_SURVEY
+  PROPOSAL
+  NEGOTIATION
+  CLOSED_WON
+  CLOSED_LOST
+}
+
+model Quote {
+  id            String   @id @default(cuid())
+  opportunityId String   @unique
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id], onDelete: Cascade)
+  number        String   @unique
+  status        QuoteStatus @default(DRAFT)
+  totalCents    Int      @default(0)
+  taxCents      Int      @default(0)
+  sentAt        DateTime?
+  signedAt      DateTime?
+  pdfUrl        String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  lines QuoteLine[]
+}
+
+enum QuoteStatus {
+  DRAFT
+  SENT
+  REVIEW
+  SIGNED
+  EXPIRED
+}
+
+model QuoteLine {
+  id          String  @id @default(cuid())
+  quoteId     String
+  quote       Quote   @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  catalogId   String?
+  catalogItem CatalogItem? @relation(fields: [catalogId], references: [id])
+  description String
+  quantity    Int     @default(1)
+  unitPriceCents Int  @default(0)
+  position    Int     @default(0)
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Projects (with AV-specific room structure)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Project {
+  id              String   @id @default(cuid())
+  workspaceId     String
+  workspace       Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  accountId       String?
+  account         Account? @relation(fields: [accountId], references: [id])
+  opportunityId   String?  @unique
+  opportunity     Opportunity? @relation(fields: [opportunityId], references: [id])
+  name            String
+  phase           ProjectPhase @default(ENGINEERING)
+  status          ProjectStatus @default(ACTIVE)
+  contractValueCents Int   @default(0)
+  budgetCents     Int      @default(0)
+  startDate       DateTime?
+  dueDate         DateTime?
+  progress        Int      @default(0)
+  riskLevel       RiskLevel @default(LOW)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  milestones  Milestone[]
+  rooms       Room[]
+  boqItems    BOQItem[]
+  technicians ProjectTechnician[]
+  timeEntries TimeEntry[]
+  todos       Todo[]
+  tickets     ServiceTicket[]
+  invoices    Invoice[]
+  drawings    Drawing[]
+  surveys     SiteSurvey[]
+  checklists  CommissioningChecklist[]
+}
+
+enum ProjectPhase {
+  ENGINEERING
+  PROCUREMENT
+  INSTALLATION
+  COMMISSIONING
+  HANDOVER
+  CLOSED
+}
+
+enum ProjectStatus {
+  ACTIVE
+  ON_HOLD
+  COMPLETED
+  CANCELLED
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+model Milestone {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name      String
+  dueDate   DateTime?
+  done      Boolean  @default(false)
+  position  Int      @default(0)
+}
+
+model ProjectTechnician {
+  id        String  @id @default(cuid())
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role      String?
+
+  @@unique([projectId, userId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// AV-specific: Rooms, BOQ, racks, signal flows, devices, drawings, surveys
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Room {
+  id          String  @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  projectId   String?
+  project     Project? @relation(fields: [projectId], references: [id])
+  accountId   String?
+  account     Account? @relation(fields: [accountId], references: [id])
+  name        String
+  roomType    RoomType
+  capacity    Int?
+  notes       String?
+
+  boqItems    BOQItem[]
+  devices     Device[]
+  racks       AVRack[]
+  signalFlows SignalFlow[]
+}
+
+enum RoomType {
+  BOARDROOM
+  HUDDLE
+  TRAINING
+  STUDIO
+  AUDITORIUM
+  LOBBY
+  COMMAND_CENTER
+  OTHER
+}
+
+model BOQItem {
+  id          String  @id @default(cuid())
+  projectId   String
+  project     Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  roomId      String?
+  room        Room?   @relation(fields: [roomId], references: [id])
+  catalogId   String?
+  catalogItem CatalogItem? @relation(fields: [catalogId], references: [id])
+  description String
+  quantity    Int     @default(1)
+  unitPriceCents Int  @default(0)
+}
+
+model AVRack {
+  id          String  @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  roomId      String?
+  room        Room?   @relation(fields: [roomId], references: [id])
+  name        String
+  totalU      Int     @default(42)
+  layoutJson  Json?
+  createdAt   DateTime @default(now())
+}
+
+model SignalFlow {
+  id          String  @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  roomId      String?
+  room        Room?   @relation(fields: [roomId], references: [id])
+  name        String
+  diagramJson Json?
+  createdAt   DateTime @default(now())
+}
+
+model Device {
+  id          String  @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  roomId      String?
+  room        Room?   @relation(fields: [roomId], references: [id])
+  catalogId   String?
+  catalogItem CatalogItem? @relation(fields: [catalogId], references: [id])
+  serialNumber String? @unique
+  ipAddress   String?
+  macAddress  String?
+  firmware    String?
+  status      DeviceStatus @default(ONLINE)
+  lastSeenAt  DateTime?
+  dspConfigUrl String?
+
+  @@index([workspaceId])
+}
+
+enum DeviceStatus {
+  ONLINE
+  OFFLINE
+  WARNING
+  RETIRED
+}
+
+model Drawing {
+  id          String  @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  projectId   String?
+  project     Project? @relation(fields: [projectId], references: [id])
+  name        String
+  fileUrl     String
+  version     Int     @default(1)
+  createdAt   DateTime @default(now())
+}
+
+model SiteSurvey {
+  id          String  @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  projectId   String?
+  project     Project? @relation(fields: [projectId], references: [id])
+  notes       String?
+  photoUrls   String[]
+  createdAt   DateTime @default(now())
+}
+
+model CommissioningChecklist {
+  id          String  @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  projectId   String?
+  project     Project? @relation(fields: [projectId], references: [id])
+  name        String
+  itemsJson   Json
+  completedAt DateTime?
+  createdAt   DateTime @default(now())
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Catalog
+// ─────────────────────────────────────────────────────────────────────────────
+
+model CatalogItem {
+  id           String  @id @default(cuid())
+  workspaceId  String
+  workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  sku          String  @unique
+  name         String
+  brand        String
+  category     String
+  description  String?
+  specsJson    Json?
+  datasheetUrl String?
+  imageUrl     String?
+  listPriceCents Int   @default(0)
+  costCents    Int     @default(0)
+
+  quoteLines  QuoteLine[]
+  boqItems    BOQItem[]
+  devices     Device[]
+  inventory   InventoryItem[]
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Inventory & procurement
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Warehouse {
+  id          String   @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name        String
+  location    String?
+
+  items InventoryItem[]
+}
+
+model InventoryItem {
+  id           String  @id @default(cuid())
+  workspaceId  String
+  workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  warehouseId  String?
+  warehouse    Warehouse? @relation(fields: [warehouseId], references: [id])
+  catalogId    String
+  catalogItem  CatalogItem @relation(fields: [catalogId], references: [id])
+  stock        Int     @default(0)
+  allocated    Int     @default(0)
+  reorderLevel Int     @default(0)
+  serials      String[]
+  rmas         RMA[]
+}
+
+model RMA {
+  id             String   @id @default(cuid())
+  inventoryItemId String
+  inventoryItem  InventoryItem @relation(fields: [inventoryItemId], references: [id], onDelete: Cascade)
+  serial         String
+  reason         String
+  status         RMAStatus @default(OPEN)
+  createdAt      DateTime @default(now())
+  resolvedAt     DateTime?
+}
+
+enum RMAStatus {
+  OPEN
+  IN_REVIEW
+  RESOLVED
+  REJECTED
+}
+
+model Vendor {
+  id           String  @id @default(cuid())
+  workspaceId  String
+  workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name         String
+  contactEmail String?
+  contactPhone String?
+  healthScore  Int     @default(80)
+  avgLeadDays  Int?
+
+  purchaseOrders PurchaseOrder[]
+}
+
+model PurchaseOrder {
+  id          String   @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  vendorId    String
+  vendor      Vendor   @relation(fields: [vendorId], references: [id])
+  number      String   @unique
+  status      POStatus @default(PENDING)
+  totalCents  Int      @default(0)
+  expectedDate DateTime?
+  receivedAt  DateTime?
+  trackingNumber String?
+  notes       String?
+  createdAt   DateTime @default(now())
+
+  lines POLine[]
+}
+
+enum POStatus {
+  DRAFT
+  PENDING
+  APPROVED
+  IN_TRANSIT
+  DELIVERED
+  CANCELLED
+}
+
+model POLine {
+  id        String  @id @default(cuid())
+  poId      String
+  po        PurchaseOrder @relation(fields: [poId], references: [id], onDelete: Cascade)
+  catalogId String?
+  description String
+  quantity  Int     @default(1)
+  unitCostCents Int @default(0)
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Service desk + AMC
+// ─────────────────────────────────────────────────────────────────────────────
+
+model ServiceTicket {
+  id          String   @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  accountId   String?
+  account     Account? @relation(fields: [accountId], references: [id])
+  projectId   String?
+  project     Project? @relation(fields: [projectId], references: [id])
+  amcId       String?
+  amc         AMCContract? @relation(fields: [amcId], references: [id])
+  assigneeId  String?
+  assignee    User?    @relation("TicketAssignee", fields: [assigneeId], references: [id])
+  number      String   @unique
+  title       String
+  description String?
+  priority    TicketPriority @default(P3)
+  status      TicketStatus   @default(OPEN)
+  slaDueAt    DateTime?
+  resolvedAt  DateTime?
+  createdAt   DateTime @default(now())
+}
+
+enum TicketPriority {
+  P1
+  P2
+  P3
+  P4
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  SCHEDULED
+  WAITING
+  RESOLVED
+  CLOSED
+}
+
+model AMCContract {
+  id          String   @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  accountId   String
+  account     Account  @relation(fields: [accountId], references: [id])
+  name        String
+  tier        AMCTier  @default(STANDARD)
+  startDate   DateTime
+  endDate     DateTime
+  visitsTotal Int      @default(4)
+  visitsUsed  Int      @default(0)
+  monthlyValueCents Int @default(0)
+  healthScore Int      @default(85)
+
+  tickets ServiceTicket[]
+}
+
+enum AMCTier {
+  STANDARD
+  PREMIER
+  ENTERPRISE
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Billing
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Invoice {
+  id          String   @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  accountId   String?
+  account     Account? @relation(fields: [accountId], references: [id])
+  projectId   String?
+  project     Project? @relation(fields: [projectId], references: [id])
+  number      String   @unique
+  status      InvoiceStatus @default(DRAFT)
+  totalCents  Int      @default(0)
+  taxCents    Int      @default(0)
+  issuedAt    DateTime?
+  dueAt       DateTime?
+  paidAt      DateTime?
+  pdfUrl      String?
+  stripeId    String?
+  createdAt   DateTime @default(now())
+
+  lines InvoiceLine[]
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+  VOID
+}
+
+model InvoiceLine {
+  id          String  @id @default(cuid())
+  invoiceId   String
+  invoice     Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  description String
+  quantity    Int     @default(1)
+  unitPriceCents Int  @default(0)
+}
+
+model Subscription {
+  id          String   @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  accountId   String
+  account     Account  @relation(fields: [accountId], references: [id])
+  plan        String
+  status      SubStatus @default(ACTIVE)
+  monthlyCents Int     @default(0)
+  renewsAt    DateTime?
+  stripeId    String?
+}
+
+enum SubStatus {
+  TRIAL
+  ACTIVE
+  PAST_DUE
+  CANCELLED
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Time, todos, calendar, notifications, audit, api keys
+// ─────────────────────────────────────────────────────────────────────────────
+
+model TimeEntry {
+  id          String   @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectId   String?
+  project     Project? @relation(fields: [projectId], references: [id])
+  date        DateTime
+  minutes     Int
+  billable    Boolean  @default(true)
+  description String?
+}
+
+model Todo {
+  id          String   @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  projectId   String?
+  project     Project? @relation(fields: [projectId], references: [id])
+  assigneeId  String?
+  assignee    User?    @relation("TodoAssignee", fields: [assigneeId], references: [id])
+  title       String
+  description String?
+  priority    TicketPriority @default(P3)
+  dueDate     DateTime?
+  done        Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model CalendarEvent {
+  id          String   @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  title       String
+  startsAt    DateTime
+  endsAt      DateTime
+  location    String?
+  eventType   EventType @default(MEETING)
+  externalId  String?
+}
+
+enum EventType {
+  MEETING
+  SITE_VISIT
+  INSTALL
+  AMC_VISIT
+  TASK
+}
+
+model Notification {
+  id          String   @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  type        String
+  title       String
+  body        String?
+  read        Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  action      String
+  entityType  String
+  entityId    String?
+  metadata    Json?
+  createdAt   DateTime @default(now())
+
+  @@index([workspaceId, createdAt])
+}
+
+model ApiKey {
+  id          String   @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name        String
+  prefix      String
+  hashedKey   String   @unique
+  lastUsedAt  DateTime?
+  createdAt   DateTime @default(now())
+}

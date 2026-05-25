@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(npx prisma generate 2>&1)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/dashboard)",
+      "Bash(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/__TRACKED_VAR__)",
+      "Bash(curl -s http://localhost:3000/dashboard)",
+      "Bash(curl -s http://localhost:3000/api/opportunities)",
+      "Skill(claude-api)",
+      "Skill(claude-api:*)"
+    ]
+  }
+}
