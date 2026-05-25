@@ -132,7 +132,7 @@ export function DetailDrawer() {
                             <div className="text-xs text-white/40 italic">None</div>
                           ) : (
                             <div className="space-y-1.5">
-                              items.map((it: any, i: number) => (
+                              {items.map((it: any, i: number) => (
                                 <div
                                   key={i}
                                   className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2 flex items-center justify-between"
