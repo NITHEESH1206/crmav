@@ -2,14 +2,16 @@
 > ZynexAV-crm@0.1.0 dev
 > next dev
 
-   ▲ Next.js 15.3.0
+   ▲ Next.js 15.5.18
    - Local:        http://localhost:3000
    - Network:      http://10.213.112.12:3000
    - Environments: .env.local, .env
+   - Experiments (use with caution):
+     · optimizePackageImports
 
  ✓ Starting...
- ✓ Ready in 2.9s
- ✓ Compiled /middleware in 418ms (108 modules)
- ○ Compiling /calendar ...
- ✓ Compiled /calendar in 6.1s (2189 modules)
- GET /calendar 200 in 8743ms
+ ✓ Ready in 2.6s
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 3.1s (115 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 26.9s (1823 modules)
