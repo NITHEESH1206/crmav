@@ -18,11 +18,36 @@ export default async function ProcurementPage() {
     { l: "Avg lead time", v: `${summary.avgLeadDays}d` },
   ];
 
+  const exportRows = pos.map((po) => ({
+    number: po.number,
+    vendor: po.vendor.name,
+    status: po.status,
+    total_usd: (po.totalCents / 100).toFixed(2),
+    expected_date: po.expectedDate ? po.expectedDate.toISOString().slice(0, 10) : "",
+    received_at: po.receivedAt ? po.receivedAt.toISOString().slice(0, 10) : "",
+    tracking: po.trackingNumber ?? "",
+    created_at: po.createdAt.toISOString(),
+  }));
+
   return (
     <ModuleShell
       eyebrow="Procurement"
       title="Purchase Orders & Vendors"
       description="Vendor management, quote comparison, approval workflows, and live shipment tracking."
+      exportConfig={{
+        filenamePrefix: "purchase-orders",
+        rows: exportRows,
+        columns: [
+          { key: "number", header: "PO #" },
+          { key: "vendor", header: "Vendor" },
+          { key: "status", header: "Status" },
+          { key: "total_usd", header: "Total (USD)" },
+          { key: "expected_date", header: "Expected" },
+          { key: "received_at", header: "Received" },
+          { key: "tracking", header: "Tracking" },
+          { key: "created_at", header: "Created" },
+        ],
+      }}
     >
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         {stats.map((s) => (

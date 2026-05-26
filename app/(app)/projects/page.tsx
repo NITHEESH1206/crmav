@@ -14,11 +14,38 @@ const riskColor = (r: string) =>
 export default async function ProjectsPage() {
   const [projects, phases] = await Promise.all([listProjects(), getPhaseSummary()]);
 
+  const exportRows = projects.map((p) => ({
+    name: p.name,
+    account: p.account?.name ?? "",
+    phase: p.phase,
+    status: p.status,
+    contract_value_usd: (p.contractValueCents / 100).toFixed(2),
+    progress_pct: p.progress,
+    risk: p.riskLevel,
+    due_date: p.dueDate ? p.dueDate.toISOString().slice(0, 10) : "",
+    created_at: p.createdAt.toISOString(),
+  }));
+
   return (
     <ModuleShell
       eyebrow="Projects"
       title="AV Projects"
       description="Room-wise BOQ tracking, Gantt timelines, milestones, and live project profitability."
+      exportConfig={{
+        filenamePrefix: "projects",
+        rows: exportRows,
+        columns: [
+          { key: "name", header: "Name" },
+          { key: "account", header: "Account" },
+          { key: "phase", header: "Phase" },
+          { key: "status", header: "Status" },
+          { key: "contract_value_usd", header: "Contract value (USD)" },
+          { key: "progress_pct", header: "Progress %" },
+          { key: "risk", header: "Risk" },
+          { key: "due_date", header: "Due" },
+          { key: "created_at", header: "Created" },
+        ],
+      }}
     >
       {projects.length === 0 ? (
         <EmptyState

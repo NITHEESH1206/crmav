@@ -10,11 +10,36 @@ import { OpenableRow } from "@/components/app/openable";
 export default async function AccountsPage() {
   const [accounts, summary] = await Promise.all([listAccounts(), accountsSummary()]);
 
+  const exportRows = accounts.map((a) => ({
+    name: a.name,
+    tier: a.tier,
+    industry: a.industry ?? "",
+    contacts: a._count.contacts,
+    projects: a._count.projects,
+    ltv_usd: (a.ltvCents / 100).toFixed(2),
+    health_score: a.healthScore,
+    website: a.website ?? "",
+  }));
+
   return (
     <ModuleShell
       eyebrow="Accounts"
       title="Customer Accounts"
       description="Company hierarchy, contacts, communication history, and document repository."
+      exportConfig={{
+        filenamePrefix: "accounts",
+        rows: exportRows,
+        columns: [
+          { key: "name", header: "Name" },
+          { key: "tier", header: "Tier" },
+          { key: "industry", header: "Industry" },
+          { key: "contacts", header: "Contacts" },
+          { key: "projects", header: "Projects" },
+          { key: "ltv_usd", header: "LTV (USD)" },
+          { key: "health_score", header: "Health %" },
+          { key: "website", header: "Website" },
+        ],
+      }}
     >
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         {[

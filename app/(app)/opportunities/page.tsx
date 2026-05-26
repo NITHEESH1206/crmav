@@ -20,11 +20,40 @@ export default async function OpportunitiesPage() {
     .filter((c) => c.stage !== "CLOSED_WON" && c.stage !== "CLOSED_LOST")
     .reduce((s, c) => s + c.totalCents, 0);
 
+  const exportRows = columns.flatMap((c) =>
+    c.deals.map((d) => ({
+      name: d.name,
+      account: d.account?.name ?? "",
+      stage: d.stage,
+      value_usd: (d.valueCents / 100).toFixed(2),
+      probability_pct: d.probability,
+      ai_score: d.aiScore ?? "",
+      owner: d.owner?.name ?? "",
+      expected_close: d.expectedClose ? d.expectedClose.toISOString().slice(0, 10) : "",
+      created_at: d.createdAt.toISOString(),
+    }))
+  );
+
   return (
     <ModuleShell
       eyebrow="Sales"
       title="Opportunities"
       description="Stage-aware kanban with AI deal scoring, quotation builder, and live proposal generation."
+      exportConfig={{
+        filenamePrefix: "opportunities",
+        rows: exportRows,
+        columns: [
+          { key: "name", header: "Name" },
+          { key: "account", header: "Account" },
+          { key: "stage", header: "Stage" },
+          { key: "value_usd", header: "Value (USD)" },
+          { key: "probability_pct", header: "Probability %" },
+          { key: "ai_score", header: "AI score" },
+          { key: "owner", header: "Owner" },
+          { key: "expected_close", header: "Expected close" },
+          { key: "created_at", header: "Created" },
+        ],
+      }}
     >
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {columns.map((col) => (

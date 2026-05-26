@@ -24,6 +24,10 @@ import type {
   SignalClass,
   EndpointIcon,
 } from "@/lib/data/signal-flows";
+import { ExportMenu, type ExportFormat } from "@/components/app/export-menu";
+import { buildSignalFlowSVG } from "@/lib/export/signal-flow-svg";
+import { downloadSVG, downloadSVGAsPNG } from "@/lib/export/svg";
+import { downloadJSON, timestampedFilename } from "@/lib/export/download";
 import { cn } from "@/lib/utils";
 
 // ──────────────────────────────────────────────────────────────────────────
@@ -156,6 +160,32 @@ export function SignalFlowDesigner({ flows }: { flows: Flow[] }) {
     });
   }
 
+  async function handleExport(format: ExportFormat) {
+    if (!active) return;
+    const slug = active.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "signal-flow";
+    try {
+      if (format === "json") {
+        downloadJSON(diagram, timestampedFilename(slug, "json"));
+        toast.success("Exported JSON", { description: `${diagram.nodes.length} devices · ${diagram.edges.length} signals` });
+        return;
+      }
+      const svg = buildSignalFlowSVG(diagram, active.name);
+      if (format === "svg") {
+        downloadSVG(svg, timestampedFilename(slug, "svg"));
+        toast.success("Exported SVG");
+        return;
+      }
+      if (format === "png") {
+        await downloadSVGAsPNG(svg, timestampedFilename(slug, "png"));
+        toast.success("Exported PNG", { description: "2× resolution" });
+      }
+    } catch (e) {
+      toast.error("Export failed", {
+        description: e instanceof Error ? e.message : "Unknown error",
+      });
+    }
+  }
+
   if (!active) {
     return <div className="text-sm text-white/45">No signal flows yet.</div>;
   }
@@ -225,8 +255,9 @@ export function SignalFlowDesigner({ flows }: { flows: Flow[] }) {
               <div className="text-[10px] uppercase tracking-wider text-aether-400">Editing</div>
               <div className="font-display text-lg font-semibold tracking-tight">{active.name}</div>
             </div>
-            <div className="flex items-center gap-3">
-              {saved === "saved" && <span className="text-[11px] text-emerald-400">✓ Saved</span>}
+            <div className="flex items-center gap-2">
+              {saved === "saved" && <span className="text-[11px] text-emerald-400 mr-1">✓ Saved</span>}
+              <ExportMenu formats={["png", "svg", "json"]} onExport={handleExport} />
               <Button size="sm" onClick={save} disabled={isPending}>
                 <Save className="h-3.5 w-3.5" />
                 {isPending ? "Saving…" : "Save flow"}

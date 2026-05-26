@@ -5,7 +5,9 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Plus, Download, Filter } from "lucide-react";
 import { type ReactNode } from "react";
+import { toast } from "sonner";
 import { useQuickCreate } from "@/lib/stores/quick-create";
+import { downloadCSV, timestampedFilename } from "@/lib/export/download";
 
 type Kind = "todo" | "opportunity" | "ticket" | "project";
 
@@ -16,22 +18,73 @@ const PATH_TO_KIND: Record<string, Kind> = {
   "/todos": "todo",
 };
 
+export type ExportColumn = { key: string; header: string };
+
+export type ExportConfig = {
+  filenamePrefix: string;
+  rows: Record<string, unknown>[];
+  columns: ExportColumn[];
+};
+
 export function ModuleShell({
   eyebrow,
   title,
   description,
   actions,
+  exportConfig,
+  onExport,
   children,
 }: {
   eyebrow?: string;
   title: string;
   description?: string;
   actions?: ReactNode;
+  /** When provided, the default Export button downloads this dataset as CSV. */
+  exportConfig?: ExportConfig;
+  /** Alternative: a custom export handler (used by Signal Flow / Rack Builder). */
+  onExport?: () => void | Promise<void>;
   children: ReactNode;
 }) {
   const pathname = usePathname();
   const showQuickCreate = useQuickCreate((s) => s.show);
   const matchedKind = Object.entries(PATH_TO_KIND).find(([p]) => pathname.startsWith(p))?.[1];
+
+  async function handleExport() {
+    if (onExport) {
+      try {
+        await onExport();
+      } catch (e) {
+        toast.error("Export failed", {
+          description: e instanceof Error ? e.message : "Unknown error",
+        });
+      }
+      return;
+    }
+    if (!exportConfig) {
+      toast.info("Export not available on this page yet");
+      return;
+    }
+    if (exportConfig.rows.length === 0) {
+      toast.info("Nothing to export", { description: "Add some data first." });
+      return;
+    }
+    try {
+      downloadCSV(
+        exportConfig.rows,
+        timestampedFilename(exportConfig.filenamePrefix, "csv"),
+        exportConfig.columns
+      );
+      toast.success(`Exported ${exportConfig.rows.length} rows to CSV`, {
+        description: `${exportConfig.filenamePrefix}.csv`,
+      });
+    } catch (e) {
+      toast.error("Export failed", {
+        description: e instanceof Error ? e.message : "Unknown error",
+      });
+    }
+  }
+
+  const canExport = Boolean(exportConfig || onExport);
 
   return (
     <div className="space-y-6">
@@ -59,10 +112,12 @@ export function ModuleShell({
                 <Filter className="h-3.5 w-3.5" />
                 Filters
               </Button>
-              <Button variant="secondary" size="sm">
-                <Download className="h-3.5 w-3.5" />
-                Export
-              </Button>
+              {canExport && (
+                <Button variant="secondary" size="sm" onClick={handleExport}>
+                  <Download className="h-3.5 w-3.5" />
+                  Export
+                </Button>
+              )}
               {matchedKind && (
                 <Button size="sm" onClick={() => showQuickCreate(matchedKind)}>
                   <Plus className="h-3.5 w-3.5" />

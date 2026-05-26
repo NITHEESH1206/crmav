@@ -18,11 +18,36 @@ export default async function BillingPage() {
     { l: "DSO (days)", v: "26.4", sub: "Trailing 90d" },
   ];
 
+  const exportRows = invoices.map((inv) => ({
+    number: inv.number,
+    account: inv.account?.name ?? "",
+    status: inv.status,
+    total_usd: (inv.totalCents / 100).toFixed(2),
+    tax_usd: (inv.taxCents / 100).toFixed(2),
+    issued_at: inv.issuedAt ? inv.issuedAt.toISOString().slice(0, 10) : "",
+    due_at: inv.dueAt ? inv.dueAt.toISOString().slice(0, 10) : "",
+    paid_at: inv.paidAt ? inv.paidAt.toISOString().slice(0, 10) : "",
+  }));
+
   return (
     <ModuleShell
       eyebrow="Billing"
       title="Invoices & Subscriptions"
       description="Recurring billing, AMC contracts, Stripe payments, multi-currency support."
+      exportConfig={{
+        filenamePrefix: "invoices",
+        rows: exportRows,
+        columns: [
+          { key: "number", header: "Invoice #" },
+          { key: "account", header: "Account" },
+          { key: "status", header: "Status" },
+          { key: "total_usd", header: "Total (USD)" },
+          { key: "tax_usd", header: "Tax (USD)" },
+          { key: "issued_at", header: "Issued" },
+          { key: "due_at", header: "Due" },
+          { key: "paid_at", header: "Paid" },
+        ],
+      }}
     >
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         {stats.map((s) => (

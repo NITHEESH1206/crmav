@@ -17,11 +17,38 @@ export default async function ServicePage() {
     { label: "AMC active", value: counts.amcActive, icon: ShieldCheck, color: "text-sky-400", bg: "bg-sky-500/10 border-sky-500/20" },
   ];
 
+  const exportRows = tickets.map((t) => ({
+    number: t.number,
+    title: t.title,
+    account: t.account?.name ?? "",
+    priority: t.priority,
+    status: t.status,
+    assignee: t.assignee?.name ?? "",
+    created_at: t.createdAt.toISOString(),
+    sla_due_at: t.slaDueAt ? t.slaDueAt.toISOString() : "",
+    resolved_at: t.resolvedAt ? t.resolvedAt.toISOString() : "",
+  }));
+
   return (
     <ModuleShell
       eyebrow="Service"
       title="Service Desk"
       description="SLA-aware tickets, preventive maintenance, technician dispatch, and AMC contracts."
+      exportConfig={{
+        filenamePrefix: "service-tickets",
+        rows: exportRows,
+        columns: [
+          { key: "number", header: "Ticket #" },
+          { key: "title", header: "Title" },
+          { key: "account", header: "Account" },
+          { key: "priority", header: "Priority" },
+          { key: "status", header: "Status" },
+          { key: "assignee", header: "Assignee" },
+          { key: "created_at", header: "Created" },
+          { key: "sla_due_at", header: "SLA due" },
+          { key: "resolved_at", header: "Resolved" },
+        ],
+      }}
     >
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         {stats.map((s) => {

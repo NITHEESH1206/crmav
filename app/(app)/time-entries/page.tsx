@@ -17,11 +17,30 @@ export default async function TimeEntriesPage() {
     { l: "Avg utilization", v: `${avgUtil}%` },
   ];
 
+  const exportRows = entries.map((e) => ({
+    technician: e.tech,
+    project: e.project,
+    hours: e.hours,
+    billable_hours: e.billable,
+    utilization_pct: e.util,
+  }));
+
   return (
     <ModuleShell
       eyebrow="Time"
       title="Time Entries"
       description="Technician timesheets, billable hours, productivity analytics."
+      exportConfig={{
+        filenamePrefix: "time-entries",
+        rows: exportRows,
+        columns: [
+          { key: "technician", header: "Technician" },
+          { key: "project", header: "Project" },
+          { key: "hours", header: "Hours" },
+          { key: "billable_hours", header: "Billable hours" },
+          { key: "utilization_pct", header: "Utilization %" },
+        ],
+      }}
     >
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         {stats.map((s) => (

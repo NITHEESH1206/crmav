@@ -9,6 +9,10 @@ import { Server, Save, Trash2, Plus, Zap, Layers, Search, Sparkles } from "lucid
 import { toast } from "sonner";
 import { saveRackLayout } from "@/app/actions/racks";
 import type { RackItem, RackLayout } from "@/lib/data/racks";
+import { ExportMenu, type ExportFormat } from "@/components/app/export-menu";
+import { buildRackSVG } from "@/lib/export/rack-svg";
+import { downloadSVG, downloadSVGAsPNG } from "@/lib/export/svg";
+import { downloadJSON, downloadCSV, timestampedFilename } from "@/lib/export/download";
 import { cn } from "@/lib/utils";
 
 type CatalogEntry = {
@@ -122,6 +126,53 @@ export function RackBuilder({ racks, catalog }: { racks: Rack[]; catalog: Catalo
     setSaved("idle");
   }
 
+  async function handleExport(format: ExportFormat) {
+    if (!active) return;
+    const slug = active.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "rack";
+    try {
+      if (format === "json") {
+        downloadJSON({ name: active.name, totalU: active.totalU, items }, timestampedFilename(slug, "json"));
+        toast.success("Exported JSON");
+        return;
+      }
+      if (format === "csv") {
+        downloadCSV(
+          items.map((i) => ({
+            u_start: i.uStart,
+            u_end: i.uStart + i.uHeight - 1,
+            height: i.uHeight,
+            sku: i.catalogSku ?? "",
+            label: i.label,
+          })),
+          timestampedFilename(slug, "csv"),
+          [
+            { key: "u_start", header: "U Start" },
+            { key: "u_end", header: "U End" },
+            { key: "height", header: "Height" },
+            { key: "sku", header: "SKU" },
+            { key: "label", header: "Description" },
+          ]
+        );
+        toast.success("Exported CSV");
+        return;
+      }
+      const svg = buildRackSVG({ name: active.name, totalU: active.totalU, items });
+      if (format === "svg") {
+        downloadSVG(svg, timestampedFilename(slug, "svg"));
+        toast.success("Exported SVG");
+        return;
+      }
+      if (format === "png") {
+        await downloadSVGAsPNG(svg, timestampedFilename(slug, "png"), { background: "#ffffff" });
+        toast.success("Exported PNG", { description: `${items.length} items · ${active.totalU}U` });
+      }
+    } catch (e) {
+      toast.error("Export failed", {
+        description: e instanceof Error ? e.message : "Unknown error",
+      });
+    }
+  }
+
   function save() {
     if (!active) return;
     setSaved("saving");
@@ -190,12 +241,13 @@ export function RackBuilder({ racks, catalog }: { racks: Rack[]; catalog: Catalo
                 <motion.span
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="text-[11px] text-emerald-400 flex items-center gap-1"
+                  className="text-[11px] text-emerald-400 flex items-center gap-1 mr-1"
                 >
                   <Sparkles className="h-3 w-3" />
                   Saved
                 </motion.span>
               )}
+              <ExportMenu formats={["png", "svg", "csv", "json"]} onExport={handleExport} />
               <Button size="sm" onClick={save} disabled={isPending}>
                 <Save className="h-3.5 w-3.5" />
                 {isPending ? "Saving…" : "Save layout"}

@@ -14,11 +14,40 @@ export default async function InventoryPage() {
     { l: "Open RMAs", v: summary.openRMAs.toString(), icon: RotateCcw },
   ];
 
+  const exportRows = items.map((i) => ({
+    sku: i.catalogItem.sku,
+    product: i.catalogItem.name,
+    brand: i.catalogItem.brand,
+    category: i.catalogItem.category,
+    warehouse: i.warehouse?.name ?? "",
+    stock: i.stock,
+    allocated: i.allocated,
+    reorder_level: i.reorderLevel,
+    unit_price_usd: (i.catalogItem.listPriceCents / 100).toFixed(2),
+    stock_value_usd: ((i.stock * i.catalogItem.listPriceCents) / 100).toFixed(2),
+  }));
+
   return (
     <ModuleShell
       eyebrow="Inventory"
       title="Warehouse & Devices"
       description="Serial-number tracking, barcode scanning, multi-warehouse, RMA workflows, device lifecycle."
+      exportConfig={{
+        filenamePrefix: "inventory",
+        rows: exportRows,
+        columns: [
+          { key: "sku", header: "SKU" },
+          { key: "product", header: "Product" },
+          { key: "brand", header: "Brand" },
+          { key: "category", header: "Category" },
+          { key: "warehouse", header: "Warehouse" },
+          { key: "stock", header: "Stock" },
+          { key: "allocated", header: "Allocated" },
+          { key: "reorder_level", header: "Reorder level" },
+          { key: "unit_price_usd", header: "Unit price (USD)" },
+          { key: "stock_value_usd", header: "Stock value (USD)" },
+        ],
+      }}
     >
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         {stats.map((s) => {

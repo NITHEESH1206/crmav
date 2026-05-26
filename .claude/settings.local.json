@@ -7,7 +7,12 @@
       "Bash(curl -s http://localhost:3000/dashboard)",
       "Bash(curl -s http://localhost:3000/api/opportunities)",
       "Skill(claude-api)",
-      "Skill(claude-api:*)"
+      "Skill(claude-api:*)",
+      "Bash(echo '__TRACKED_VAR__: __TRACKED_VAR__')",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" -m 10 http://127.0.0.1:3000/projects)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" -m 10 http://192.168.1.12:3000/projects)",
+      "PowerShell(try { \\(Invoke-WebRequest -Uri \"http://localhost:3000/projects\" -UseBasicParsing -TimeoutSec 30\\).StatusCode } catch { \"ERROR: $_\" })",
+      "Bash(curl -s -m 30 http://localhost:3000/projects)"
     ]
   }
 }
