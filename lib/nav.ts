@@ -16,6 +16,7 @@ import {
   Server,
   Network,
   Layers3,
+  Cpu,
   type LucideIcon,
 } from "lucide-react";
 
@@ -39,6 +40,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "Rack Builder", href: "/rack-builder", icon: Server, group: "AV Tools" },
   { label: "Signal Flow", href: "/signal-flow", icon: Network, group: "AV Tools" },
   { label: "Rooms", href: "/rooms", icon: Layers3, group: "AV Tools" },
+  { label: "Devices", href: "/devices", icon: Cpu, group: "AV Tools" },
   { label: "Accounts", href: "/accounts", icon: Building2, group: "Finance" },
   { label: "Billing", href: "/billing", icon: Receipt, group: "Finance" },
   { label: "Time Entries", href: "/time-entries", icon: Timer, group: "Finance" },

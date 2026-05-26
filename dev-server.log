@@ -55,3 +55,50 @@
  ✓ Compiled /billing in 640ms (3426 modules)
  GET /billing 200 in 1611ms
  GET /calendar 200 in 714ms
+ ✓ Compiled in 1164ms (1508 modules)
+ ✓ Compiled in 467ms (1508 modules)
+ ✓ Compiled in 1687ms (1508 modules)
+ ✓ Compiled in 446ms (1508 modules)
+ ✓ Compiled in 504ms (1508 modules)
+ ✓ Compiled in 558ms (1508 modules)
+ ✓ Compiled in 476ms (1508 modules)
+ ✓ Compiled in 425ms (1508 modules)
+ ✓ Compiled in 926ms (1623 modules)
+ ✓ Compiled in 421ms (1508 modules)
+ ✓ Compiled in 416ms (1508 modules)
+ ✓ Compiled in 390ms (1508 modules)
+ ✓ Compiled in 450ms (1508 modules)
+ ✓ Compiled in 436ms (1508 modules)
+ ✓ Compiled in 383ms (1508 modules)
+ ✓ Compiled in 444ms (1508 modules)
+ ✓ Compiled in 448ms (1508 modules)
+ ✓ Compiled in 446ms (1508 modules)
+ ✓ Compiled in 426ms (1508 modules)
+ ✓ Compiled in 446ms (1508 modules)
+ ✓ Compiled in 424ms (1508 modules)
+ ✓ Compiled in 431ms (1508 modules)
+ ✓ Compiled in 495ms (1508 modules)
+ ○ Compiling /devices ...
+ ✓ Compiled /devices in 2.1s (2791 modules)
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+ GET /devices 200 in 6625ms
+ ✓ Compiled /projects in 433ms (1309 modules)
+ GET /projects 200 in 2101ms
+ ○ Compiling /calendar ...
+ ✓ Compiled /calendar in 551ms (1328 modules)
+ GET /calendar 200 in 1966ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 1363ms (1908 modules)
+ GET /dashboard 200 in 5436ms

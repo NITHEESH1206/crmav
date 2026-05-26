@@ -777,9 +777,64 @@ async function main() {
     },
   });
 
+  // Devices — populated from catalog into the project rooms
+  const allRooms = await prisma.room.findMany({ where: { workspaceId: ws.id, projectId: { not: null } } });
+  const deviceSeeds: Array<{
+    sku: string;
+    roomIdx: number;
+    serial: string;
+    ip: string;
+    mac: string;
+    firmware: string;
+    status: "ONLINE" | "OFFLINE" | "WARNING" | "RETIRED";
+    minutesAgo: number;
+  }> = [
+    // Hilton boardroom (room 0)
+    { sku: "QSYS-CORE-110F",   roomIdx: 0, serial: "QSC-CORE-110F-A4172", ip: "10.20.4.10",  mac: "00:60:74:A4:17:2C", firmware: "9.10.0",  status: "ONLINE",  minutesAgo: 2 },
+    { sku: "CRES-DM-NVX-360",  roomIdx: 0, serial: "CRES-NVX-360-B2204", ip: "10.20.4.11",  mac: "00:1A:2B:B2:20:4D", firmware: "4.0.99",  status: "ONLINE",  minutesAgo: 1 },
+    { sku: "SHRE-MXA920",      roomIdx: 0, serial: "SHR-MXA920-C8841",   ip: "10.20.4.20",  mac: "5C:F0:64:C8:84:1E", firmware: "1.4.1",   status: "ONLINE",  minutesAgo: 4 },
+    { sku: "SONY-BRAVIA-85",   roomIdx: 0, serial: "SNY-BRAVIA85-D1102", ip: "10.20.4.30",  mac: "AC:9B:0A:D1:10:24", firmware: "Sony-PR0.4.2", status: "WARNING", minutesAgo: 42 },
+    // Westin DSP recom (room 1)
+    { sku: "QSYS-CORE-110F",   roomIdx: 1, serial: "QSC-CORE-110F-A4188", ip: "10.30.2.10",  mac: "00:60:74:A4:18:80", firmware: "9.10.0",  status: "ONLINE",  minutesAgo: 6 },
+    { sku: "BIMP-TES-FORTE",   roomIdx: 1, serial: "BMP-FORTE-E5510",    ip: "10.30.2.12",  mac: "00:90:5E:E5:51:01", firmware: "4.5.2",   status: "OFFLINE", minutesAgo: 178 },
+    { sku: "EXTR-SMP-351",     roomIdx: 1, serial: "EXT-SMP351-F2240",   ip: "10.30.2.13",  mac: "00:05:A6:F2:24:09", firmware: "2.16",    status: "ONLINE",  minutesAgo: 8 },
+    // Nexus HQ (room 2 if present)
+    { sku: "CREST-TS-1542",    roomIdx: 2, serial: "CRES-TS1542-G8801",  ip: "10.40.1.40",  mac: "00:1A:2B:G8:80:11", firmware: "2.014",   status: "ONLINE",  minutesAgo: 3 },
+    { sku: "POLY-STUDIO-X70",  roomIdx: 2, serial: "POL-X70-H7720",      ip: "10.40.1.50",  mac: "64:16:7F:H7:72:0F", firmware: "3.10.3",  status: "ONLINE",  minutesAgo: 12 },
+    { sku: "YAMA-RM-CR",       roomIdx: 2, serial: "YMH-RMCR-I9930",     ip: "10.40.1.51",  mac: "00:A0:DE:I9:93:0A", firmware: "1.6.2",   status: "WARNING", minutesAgo: 28 },
+    // Apex Studio (room 3)
+    { sku: "LOGI-RALLY-BAR",   roomIdx: 3, serial: "LGI-RALLY-J3315",    ip: "10.50.1.10",  mac: "00:E0:4C:J3:31:55", firmware: "v2.1.85", status: "ONLINE",  minutesAgo: 5 },
+    { sku: "GENL-8030C",       roomIdx: 3, serial: "GEN-8030C-K6612",    ip: "—",           mac: "—",                 firmware: "—",       status: "ONLINE",  minutesAgo: 0 },
+    // Bloomberg (room 4)
+    { sku: "QSYS-CORE-110F",   roomIdx: 4, serial: "QSC-CORE-110F-L2211", ip: "10.60.3.10", mac: "00:60:74:L2:21:13", firmware: "9.10.0",  status: "ONLINE",  minutesAgo: 1 },
+    { sku: "SAMS-Q70-65",      roomIdx: 4, serial: "SMS-Q70-65-M5544",   ip: "10.60.3.30",  mac: "08:08:C2:M5:54:42", firmware: "T-MSL-6.0", status: "ONLINE", minutesAgo: 14 },
+    // Retired
+    { sku: "EXTR-SMP-351",     roomIdx: 0, serial: "EXT-SMP351-Z0001",   ip: "—",           mac: "—",                 firmware: "1.10",    status: "RETIRED", minutesAgo: 60 * 24 * 14 },
+  ];
+
+  for (const d of deviceSeeds) {
+    const room = allRooms[d.roomIdx];
+    if (!room) continue;
+    const cat = catalog.find((c) => c.sku === d.sku);
+    if (!cat) continue;
+    await prisma.device.create({
+      data: {
+        workspaceId: ws.id,
+        roomId: room.id,
+        catalogId: cat.id,
+        serialNumber: d.serial,
+        ipAddress: d.ip === "—" ? null : d.ip,
+        macAddress: d.mac === "—" ? null : d.mac,
+        firmware: d.firmware === "—" ? null : d.firmware,
+        status: d.status,
+        lastSeenAt: new Date(Date.now() - d.minutesAgo * 60_000),
+      },
+    });
+  }
+
   console.log("✓ Seeded workspace:", ws.name);
   console.log("  Accounts:", accounts.length, "· Projects:", projects.length, "· Catalog items:", catalog.length);
-  console.log("  + AV Racks: 2, Signal Flows: 2");
+  console.log("  + AV Racks: 2, Signal Flows: 2, Devices:", deviceSeeds.length);
 }
 
 main()

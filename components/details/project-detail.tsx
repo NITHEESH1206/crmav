@@ -22,6 +22,8 @@ import { StatusPill } from "@/components/details/status-pill";
 import { RelatedList } from "@/components/details/related-list";
 import { updateProject } from "@/app/actions/update";
 import { formatCompact, initials } from "@/lib/utils";
+import { CommissioningChecklist } from "@/components/projects/commissioning-checklist";
+import { ProjectDocuments } from "@/components/projects/project-documents";
 
 type Project = {
   id: string;
@@ -184,6 +186,12 @@ export function ProjectDetail({ project }: { project: Project }) {
             </Button>
           </CardContent>
         </Card>
+      </div>
+
+      {/* Commissioning + Documents side-by-side on lg+ */}
+      <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-5">
+        <CommissioningChecklist projectId={project.id} />
+        <ProjectDocuments projectId={project.id} />
       </div>
 
       {/* Milestones */}
