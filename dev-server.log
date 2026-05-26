@@ -9,3 +9,7 @@
 
  ✓ Starting...
  ✓ Ready in 2.9s
+ ✓ Compiled /middleware in 418ms (108 modules)
+ ○ Compiling /calendar ...
+ ✓ Compiled /calendar in 6.1s (2189 modules)
+ GET /calendar 200 in 8743ms

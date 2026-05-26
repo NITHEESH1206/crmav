@@ -331,13 +331,38 @@ async function main() {
     ],
   });
 
-  // Calendar events (next 7 days)
+  // Calendar events — spread across the current week (Sunday-start)
+  const weekStart = (() => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() - d.getDay());
+    return d;
+  })();
+  const at = (dayOffset: number, hour: number, minute = 0) => {
+    const d = new Date(weekStart);
+    d.setDate(d.getDate() + dayOffset);
+    d.setHours(hour, minute, 0, 0);
+    return d;
+  };
   await prisma.calendarEvent.createMany({
     data: [
-      { workspaceId: ws.id, userId: users[3].id, title: "Site survey — Nexus Floor 4", startsAt: new Date(Date.now() + 4 * 3600_000), endsAt: new Date(Date.now() + 5.5 * 3600_000), location: "Nexus HQ, NYC", eventType: "SITE_VISIT" },
-      { workspaceId: ws.id, userId: users[2].id, title: "Crestron review w/ Hilton AV team", startsAt: new Date(Date.now() + 7 * 3600_000), endsAt: new Date(Date.now() + 7.75 * 3600_000), location: "Teams", eventType: "MEETING" },
-      { workspaceId: ws.id, userId: users[5].id, title: "AMC renewal call — Apex Media", startsAt: new Date(Date.now() + 9 * 3600_000), endsAt: new Date(Date.now() + 9.5 * 3600_000), location: "Phone", eventType: "MEETING" },
-      { workspaceId: ws.id, userId: users[4].id, title: "Boardroom installation — Hilton", startsAt: new Date(Date.now() + 24 * 3600_000), endsAt: new Date(Date.now() + 27 * 3600_000), location: "Hilton GI", eventType: "INSTALL" },
+      // Monday
+      { workspaceId: ws.id, userId: users[3].id, title: "Site survey — Nexus Floor 4", startsAt: at(1, 9), endsAt: at(1, 11), location: "Nexus HQ, NYC", eventType: "SITE_VISIT" },
+      { workspaceId: ws.id, userId: users[2].id, title: "Crestron review · Hilton AV", startsAt: at(1, 13), endsAt: at(1, 14), location: "Teams", eventType: "MEETING" },
+      { workspaceId: ws.id, userId: users[5].id, title: "AMC renewal — Apex Media", startsAt: at(1, 15, 30), endsAt: at(1, 16), location: "Phone", eventType: "MEETING" },
+      // Tuesday
+      { workspaceId: ws.id, userId: users[4].id, title: "Boardroom install — Hilton", startsAt: at(2, 8), endsAt: at(2, 12), location: "Hilton GI", eventType: "INSTALL" },
+      { workspaceId: ws.id, userId: users[1].id, title: "Pipeline review w/ leadership", startsAt: at(2, 14), endsAt: at(2, 15), location: "HQ", eventType: "MEETING" },
+      // Wednesday
+      { workspaceId: ws.id, userId: users[3].id, title: "DSP commissioning — Westin", startsAt: at(3, 9, 30), endsAt: at(3, 13), location: "Westin TS", eventType: "INSTALL" },
+      { workspaceId: ws.id, userId: users[0].id, title: "Marriott QBR", startsAt: at(3, 14), endsAt: at(3, 15, 30), location: "Marriott HQ", eventType: "MEETING" },
+      // Thursday
+      { workspaceId: ws.id, userId: users[5].id, title: "Quarterly AMC visit — Apex", startsAt: at(4, 10), endsAt: at(4, 12), location: "Apex Studios", eventType: "AMC_VISIT" },
+      { workspaceId: ws.id, userId: users[2].id, title: "Bloomberg signal flow review", startsAt: at(4, 13, 30), endsAt: at(4, 15), location: "Teams", eventType: "MEETING" },
+      // Friday
+      { workspaceId: ws.id, userId: users[4].id, title: "Touch panel firmware push", startsAt: at(5, 9), endsAt: at(5, 10), location: "Bloomberg", eventType: "TASK" },
+      { workspaceId: ws.id, userId: users[3].id, title: "Site survey — Soho HQ", startsAt: at(5, 11), endsAt: at(5, 13), location: "Soho NYC", eventType: "SITE_VISIT" },
+      { workspaceId: ws.id, userId: users[1].id, title: "Weekly sales standup", startsAt: at(5, 16), endsAt: at(5, 16, 30), location: "Zoom", eventType: "MEETING" },
     ],
   });
 
