@@ -74,7 +74,8 @@ export default async function ProjectsPage() {
           <CardTitle>Active projects</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          <div className="grid grid-cols-[2fr_1fr_1fr_120px_80px_60px] text-[10px] uppercase tracking-wider text-white/40 px-5 py-3 border-y border-white/[0.04] bg-white/[0.01]">
+          {/* Table header (md+) */}
+          <div className="hidden md:grid grid-cols-[2fr_1fr_1fr_120px_80px_60px] text-[10px] uppercase tracking-wider text-white/40 px-5 py-3 border-y border-white/[0.04] bg-white/[0.01]">
             <div>Project</div>
             <div>Phase</div>
             <div>Value</div>
@@ -87,7 +88,7 @@ export default async function ProjectsPage() {
               key={p.id}
               kind="project"
               id={p.id}
-              className="grid grid-cols-[2fr_1fr_1fr_120px_80px_60px] items-center gap-3 px-5 py-4 border-b border-white/[0.04] hover:bg-white/[0.015] transition-colors"
+              className="grid grid-cols-[1fr_auto] md:grid-cols-[2fr_1fr_1fr_120px_80px_60px] items-start md:items-center gap-3 px-4 md:px-5 py-3 md:py-4 border-b border-white/[0.04] hover:bg-white/[0.015] transition-colors"
             >
               <div className="min-w-0">
                 <div className="text-sm font-medium truncate">{p.name}</div>
@@ -95,17 +96,28 @@ export default async function ProjectsPage() {
                   <Building2 className="h-3 w-3" />
                   <span className="truncate">{p.account?.name ?? "—"}</span>
                 </div>
+                {/* Mobile-only meta strip */}
+                <div className="md:hidden mt-2 flex flex-wrap items-center gap-2 text-[11px]">
+                  <Badge variant="secondary" className="capitalize">{p.phase.toLowerCase()}</Badge>
+                  <span className="text-white/65 font-mono">${formatCompact(p.contractValueCents / 100)}</span>
+                  <span className="text-white/40">{p.progress}%</span>
+                  {p.dueDate && (
+                    <span className="text-white/40">· {formatDate(p.dueDate, { month: "short", day: "numeric" })}</span>
+                  )}
+                </div>
               </div>
-              <div><Badge variant="secondary" className="capitalize">{p.phase.toLowerCase()}</Badge></div>
-              <div className="text-sm font-mono">${formatCompact(p.contractValueCents / 100)}</div>
-              <div className="flex items-center gap-2">
+              {/* Desktop columns */}
+              <div className="hidden md:block"><Badge variant="secondary" className="capitalize">{p.phase.toLowerCase()}</Badge></div>
+              <div className="hidden md:block text-sm font-mono">${formatCompact(p.contractValueCents / 100)}</div>
+              <div className="hidden md:flex items-center gap-2">
                 <Progress value={p.progress} className="flex-1" />
                 <span className="text-[10px] text-white/55 font-mono w-7 text-right">{p.progress}%</span>
               </div>
-              <div className="text-[11px] text-white/55">
+              <div className="hidden md:block text-[11px] text-white/55">
                 {p.dueDate ? formatDate(p.dueDate, { month: "short", day: "numeric" }) : "—"}
               </div>
-              <div>
+              {/* Risk badge — visible always (top-right on mobile, last col on desktop) */}
+              <div className="self-start md:self-center">
                 <Badge variant={riskColor(p.riskLevel)} className="capitalize">
                   {p.riskLevel.toLowerCase()}
                 </Badge>

@@ -71,7 +71,7 @@ export default async function ServicePage() {
         <Card>
           <CardHeader><CardTitle>Tickets</CardTitle></CardHeader>
           <CardContent className="p-0">
-            <div className="grid grid-cols-[80px_2fr_1fr_60px_100px] text-[10px] uppercase tracking-wider text-white/40 px-5 py-3 border-y border-white/[0.04]">
+            <div className="hidden md:grid grid-cols-[80px_2fr_1fr_60px_100px] text-[10px] uppercase tracking-wider text-white/40 px-5 py-3 border-y border-white/[0.04]">
               <div>ID</div>
               <div>Title</div>
               <div>Client</div>
@@ -83,15 +83,24 @@ export default async function ServicePage() {
                 key={t.id}
                 kind="ticket"
                 id={t.id}
-                className="grid grid-cols-[80px_2fr_1fr_60px_100px] items-center gap-3 px-5 py-3.5 border-b border-white/[0.04] hover:bg-white/[0.015]"
+                className="grid grid-cols-[1fr_auto] md:grid-cols-[80px_2fr_1fr_60px_100px] items-start md:items-center gap-3 px-4 md:px-5 py-3 md:py-3.5 border-b border-white/[0.04] hover:bg-white/[0.015]"
               >
-                <div className="text-[11px] text-white/40 font-mono">{t.number}</div>
-                <div className="text-sm font-medium truncate">{t.title}</div>
-                <div className="text-xs text-white/55 truncate">{t.account?.name ?? "—"}</div>
-                <Badge variant={t.priority === "P1" ? "destructive" : t.priority === "P2" ? "warning" : "secondary"} className="h-5 px-1.5 text-[10px]">
+                <div className="hidden md:block text-[11px] text-white/40 font-mono">{t.number}</div>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 md:hidden mb-1">
+                    <span className="text-[10px] text-white/40 font-mono">{t.number}</span>
+                  </div>
+                  <div className="text-sm font-medium truncate">{t.title}</div>
+                  <div className="md:hidden mt-1 flex items-center gap-2 flex-wrap text-[11px]">
+                    <span className="text-white/55 truncate">{t.account?.name ?? "—"}</span>
+                    {t.assignee && <span className="text-white/40">· {t.assignee.name}</span>}
+                  </div>
+                </div>
+                <div className="hidden md:block text-xs text-white/55 truncate">{t.account?.name ?? "—"}</div>
+                <Badge variant={t.priority === "P1" ? "destructive" : t.priority === "P2" ? "warning" : "secondary"} className="h-5 px-1.5 text-[10px] self-start md:self-center">
                   {t.priority}
                 </Badge>
-                <div className="text-xs text-white/55 truncate">{t.assignee?.name ?? "—"}</div>
+                <div className="hidden md:block text-xs text-white/55 truncate">{t.assignee?.name ?? "—"}</div>
               </OpenableRow>
             ))}
           </CardContent>

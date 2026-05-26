@@ -65,7 +65,7 @@ export default async function BillingPage() {
         <Card>
           <CardHeader><CardTitle>Recent invoices</CardTitle></CardHeader>
           <CardContent className="p-0">
-            <div className="grid grid-cols-[100px_2fr_120px_140px_100px] text-[10px] uppercase tracking-wider text-white/40 px-5 py-3 border-y border-white/[0.04]">
+            <div className="hidden md:grid grid-cols-[100px_2fr_120px_140px_100px] text-[10px] uppercase tracking-wider text-white/40 px-5 py-3 border-y border-white/[0.04]">
               <div>Invoice</div>
               <div>Client</div>
               <div>Amount</div>
@@ -73,14 +73,23 @@ export default async function BillingPage() {
               <div>Status</div>
             </div>
             {invoices.map((inv) => (
-              <div key={inv.id} className="grid grid-cols-[100px_2fr_120px_140px_100px] items-center gap-3 px-5 py-3.5 border-b border-white/[0.04] hover:bg-white/[0.015] cursor-pointer">
-                <div className="text-[11px] text-white/40 font-mono">{inv.number}</div>
-                <div className="text-sm font-medium">{inv.account?.name ?? "—"}</div>
-                <div className="text-sm font-mono">${formatCompact(inv.totalCents / 100)}</div>
-                <div className="text-xs text-white/55">
+              <div key={inv.id} className="grid grid-cols-[1fr_auto] md:grid-cols-[100px_2fr_120px_140px_100px] items-start md:items-center gap-3 px-4 md:px-5 py-3 md:py-3.5 border-b border-white/[0.04] hover:bg-white/[0.015] cursor-pointer">
+                <div className="hidden md:block text-[11px] text-white/40 font-mono">{inv.number}</div>
+                <div className="min-w-0">
+                  <div className="text-sm font-medium truncate">{inv.account?.name ?? "—"}</div>
+                  <div className="md:hidden mt-1 flex flex-wrap items-center gap-x-2 text-[11px]">
+                    <span className="text-white/40 font-mono">{inv.number}</span>
+                    <span className="text-white/55 font-mono">${formatCompact(inv.totalCents / 100)}</span>
+                    {inv.dueAt && (
+                      <span className="text-white/40">· due {formatDate(inv.dueAt, { month: "short", day: "numeric" })}</span>
+                    )}
+                  </div>
+                </div>
+                <div className="hidden md:block text-sm font-mono">${formatCompact(inv.totalCents / 100)}</div>
+                <div className="hidden md:block text-xs text-white/55">
                   {inv.dueAt ? formatDate(inv.dueAt, { month: "short", day: "numeric" }) : "—"}
                 </div>
-                <Badge variant={statusVariant(inv.status)} className="capitalize">
+                <Badge variant={statusVariant(inv.status)} className="capitalize self-start md:self-center">
                   {inv.status.toLowerCase()}
                 </Badge>
               </div>

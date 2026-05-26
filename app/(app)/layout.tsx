@@ -1,4 +1,5 @@
 import { Sidebar } from "@/components/app/sidebar";
+import { MobileSidebar } from "@/components/app/mobile-sidebar";
 import { Topbar } from "@/components/app/topbar";
 import { QuickCreateProvider } from "@/components/app/quick-create-provider";
 import { DetailDrawer } from "@/components/app/detail-drawer";
@@ -11,9 +12,10 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   return (
     <div className="relative min-h-screen">
       <Sidebar />
+      <MobileSidebar />
       <div className="lg:pl-[260px] min-h-screen flex flex-col">
         <Topbar />
-        <main className="flex-1 px-4 sm:px-6 lg:px-8 pb-12 pt-6">
+        <main className="flex-1 px-3 sm:px-6 lg:px-8 pb-12 pt-4 sm:pt-6">
           <div className="mx-auto max-w-[1600px]">{children}</div>
         </main>
       </div>

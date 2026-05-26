@@ -66,7 +66,7 @@ export default async function AccountsPage() {
       <Card>
         <CardHeader><CardTitle>Top accounts</CardTitle></CardHeader>
         <CardContent className="p-0">
-          <div className="grid grid-cols-[2fr_1fr_80px_80px_120px_100px] text-[10px] uppercase tracking-wider text-white/40 px-5 py-3 border-y border-white/[0.04]">
+          <div className="hidden md:grid grid-cols-[2fr_1fr_80px_80px_120px_100px] text-[10px] uppercase tracking-wider text-white/40 px-5 py-3 border-y border-white/[0.04]">
             <div>Account</div>
             <div>Tier</div>
             <div>Contacts</div>
@@ -79,19 +79,29 @@ export default async function AccountsPage() {
               key={a.id}
               kind="account"
               id={a.id}
-              className="grid grid-cols-[2fr_1fr_80px_80px_120px_100px] items-center gap-3 px-5 py-3.5 border-b border-white/[0.04] hover:bg-white/[0.015]"
+              className="grid grid-cols-[1fr_auto] md:grid-cols-[2fr_1fr_80px_80px_120px_100px] items-start md:items-center gap-3 px-4 md:px-5 py-3 md:py-3.5 border-b border-white/[0.04] hover:bg-white/[0.015]"
             >
-              <div className="flex items-center gap-3">
-                <Avatar className="h-9 w-9 rounded-lg">
+              <div className="flex items-center gap-3 min-w-0">
+                <Avatar className="h-9 w-9 rounded-lg shrink-0">
                   <AvatarFallback className="rounded-lg from-signal-500 to-signal-700">{initials(a.name)}</AvatarFallback>
                 </Avatar>
-                <div className="text-sm font-medium truncate">{a.name}</div>
+                <div className="min-w-0">
+                  <div className="text-sm font-medium truncate">{a.name}</div>
+                  {/* Mobile-only meta */}
+                  <div className="md:hidden mt-1 flex items-center gap-2 flex-wrap text-[11px]">
+                    <Badge variant={a.tier === "ENTERPRISE" ? "default" : "secondary"} className="capitalize">{a.tier.toLowerCase()}</Badge>
+                    <span className="text-white/55 font-mono">${formatCompact(a.ltvCents / 100)}</span>
+                    <span className="text-white/40">{a._count.contacts} contacts</span>
+                    <span className="text-white/40">·</span>
+                    <span className="text-white/40">{a._count.projects} projects</span>
+                  </div>
+                </div>
               </div>
-              <div><Badge variant={a.tier === "ENTERPRISE" ? "default" : "secondary"}>{a.tier.toLowerCase()}</Badge></div>
-              <div className="text-sm font-mono">{a._count.contacts}</div>
-              <div className="text-sm font-mono">{a._count.projects}</div>
-              <div className="text-sm font-mono">${formatCompact(a.ltvCents / 100)}</div>
-              <div className="text-sm text-emerald-400 font-mono">{a.healthScore}%</div>
+              <div className="hidden md:block"><Badge variant={a.tier === "ENTERPRISE" ? "default" : "secondary"}>{a.tier.toLowerCase()}</Badge></div>
+              <div className="hidden md:block text-sm font-mono">{a._count.contacts}</div>
+              <div className="hidden md:block text-sm font-mono">{a._count.projects}</div>
+              <div className="hidden md:block text-sm font-mono">${formatCompact(a.ltvCents / 100)}</div>
+              <div className="text-sm text-emerald-400 font-mono self-start md:self-center">{a.healthScore}%</div>
             </OpenableRow>
           ))}
         </CardContent>
