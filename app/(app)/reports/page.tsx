@@ -1,43 +1,66 @@
 import { ModuleShell } from "@/components/app/module-shell";
-import { Card, CardContent } from "@/components/ui/card";
-import { MarginChart, ServiceMixChart } from "@/components/modules/reports-charts";
-import { projectMarginData, serviceMix, reportsSummary } from "@/lib/data/reports";
+import {
+  RevenueTrendCard,
+  PipelineFunnelCard,
+  ProfitabilityCard,
+  SLAComplianceCard,
+  UtilizationCard,
+  HealthDistributionCard,
+  ReportStat,
+} from "@/components/reports/report-cards";
+import {
+  revenueByMonth,
+  pipelineFunnelDetail,
+  projectProfitability,
+  slaComplianceTrend,
+  technicianUtilization,
+  customerHealthDistribution,
+  reportsSummary,
+} from "@/lib/data/reports";
+import { DollarSign, TrendingUp, Building2, Wrench } from "lucide-react";
 import { formatCompact } from "@/lib/utils";
 
 export default async function ReportsPage() {
-  const [margins, mix, summary] = await Promise.all([
-    projectMarginData(),
-    serviceMix(),
+  const [revenue, pipeline, profitability, sla, utilization, health, summary] = await Promise.all([
+    revenueByMonth(),
+    pipelineFunnelDetail(),
+    projectProfitability(),
+    slaComplianceTrend(),
+    technicianUtilization(),
+    customerHealthDistribution(),
     reportsSummary(),
   ]);
-
-  const stats = [
-    { l: "Revenue (paid)", v: `$${formatCompact(summary.revenueYtdCents / 100)}` },
-    { l: "Avg project margin", v: `${summary.avgMargin.toFixed(1)}%` },
-    { l: "Service rooms", v: mix.reduce((s, d) => s + d.count, 0).toString() },
-    { l: "Active projects", v: margins.length.toString() },
-  ];
 
   return (
     <ModuleShell
       eyebrow="Reports"
       title="Analytics"
-      description="Revenue reports, project profitability, service analytics, inventory valuation, technician productivity."
+      description="Live revenue, pipeline, profitability, service SLA, technician utilization, and customer health — all driven from your live Neon data."
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <MarginChart data={margins} />
-        <ServiceMixChart data={mix} />
+      {/* Top stats */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
+        <ReportStat label="Revenue (paid)" value={`$${formatCompact(summary.revenueYtdCents / 100)}`} icon={DollarSign} />
+        <ReportStat label="Avg project margin" value={`${summary.avgMargin}%`} icon={TrendingUp} />
+        <ReportStat label="Active accounts" value={summary.activeAccounts.toString()} icon={Building2} />
+        <ReportStat label="Tickets resolved" value={summary.resolvedTickets.toString()} icon={Wrench} />
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-5">
-        {stats.map((s) => (
-          <Card key={s.l}>
-            <CardContent className="p-5">
-              <div className="text-xs text-white/45">{s.l}</div>
-              <div className="font-display text-3xl font-semibold tracking-tight mt-1 text-gradient">{s.v}</div>
-            </CardContent>
-          </Card>
-        ))}
+      {/* Hero row — revenue trend (2 cols) + pipeline funnel */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
+        <RevenueTrendCard data={revenue} />
+        <PipelineFunnelCard data={pipeline} />
+      </div>
+
+      {/* Mid row — profitability + SLA */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
+        <ProfitabilityCard data={profitability} />
+        <SLAComplianceCard data={sla} />
+      </div>
+
+      {/* Bottom row — utilization + health */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <UtilizationCard data={utilization} />
+        <HealthDistributionCard data={health} />
       </div>
     </ModuleShell>
   );

@@ -273,17 +273,85 @@ async function main() {
     ],
   });
 
-  // Invoices
+  // Invoices — including 12 months of historical paid invoices for revenue charts
+  const monthlyHistoryData: Array<{ monthsAgo: number; amounts: number[]; account: number }> = [
+    // Past 12 months — varied amounts to show growth curve
+    { monthsAgo: 12, amounts: [4_200_000, 6_800_000], account: 0 },
+    { monthsAgo: 11, amounts: [5_400_000, 3_900_000], account: 1 },
+    { monthsAgo: 10, amounts: [7_100_000, 4_800_000, 2_600_000], account: 2 },
+    { monthsAgo: 9, amounts: [6_300_000, 5_200_000], account: 3 },
+    { monthsAgo: 8, amounts: [8_400_000, 4_100_000, 3_300_000], account: 0 },
+    { monthsAgo: 7, amounts: [9_800_000, 6_700_000], account: 1 },
+    { monthsAgo: 6, amounts: [11_200_000, 5_900_000, 4_200_000], account: 4 },
+    { monthsAgo: 5, amounts: [9_400_000, 7_800_000, 3_600_000], account: 2 },
+    { monthsAgo: 4, amounts: [12_600_000, 8_200_000], account: 3 },
+    { monthsAgo: 3, amounts: [14_100_000, 9_400_000, 5_800_000], account: 0 },
+    { monthsAgo: 2, amounts: [13_800_000, 11_200_000, 4_900_000], account: 1 },
+    { monthsAgo: 1, amounts: [16_400_000, 9_800_000, 7_200_000], account: 2 },
+  ];
+
+  let invCounter = 1000;
+  const historyInvoices = monthlyHistoryData.flatMap(({ monthsAgo, amounts, account }) =>
+    amounts.map((amount, i) => {
+      const issued = new Date();
+      issued.setMonth(issued.getMonth() - monthsAgo);
+      issued.setDate(5 + i * 7);
+      const paid = new Date(issued);
+      paid.setDate(paid.getDate() + 18 + Math.floor(Math.random() * 14));
+      return {
+        workspaceId: ws.id,
+        accountId: accounts[(account + i) % accounts.length].id,
+        number: `INV-${invCounter++}`,
+        status: "PAID" as const,
+        totalCents: amount,
+        issuedAt: issued,
+        paidAt: paid,
+        dueAt: new Date(issued.getTime() + 30 * 86_400_000),
+      };
+    })
+  );
+
   await prisma.invoice.createMany({
     data: [
+      // Current outstanding / recent
       { workspaceId: ws.id, accountId: accounts[0].id, projectId: projects[0].id, number: "INV-1182", status: "SENT", totalCents: 8_420_000, issuedAt: new Date(), dueAt: new Date(Date.now() + 14 * 86_400_000) },
       { workspaceId: ws.id, accountId: accounts[1].id, projectId: projects[1].id, number: "INV-1181", status: "OVERDUE", totalCents: 14_200_000, issuedAt: new Date(Date.now() - 40 * 86_400_000), dueAt: new Date(Date.now() - 12 * 86_400_000) },
       { workspaceId: ws.id, accountId: accounts[2].id, number: "INV-1180", status: "SENT", totalCents: 3_840_000, issuedAt: new Date(), dueAt: new Date(Date.now() + 10 * 86_400_000) },
       { workspaceId: ws.id, accountId: accounts[3].id, number: "INV-1178", status: "PAID", totalCents: 9_640_000, issuedAt: new Date(Date.now() - 14 * 86_400_000), paidAt: new Date(Date.now() - 5 * 86_400_000) },
       { workspaceId: ws.id, accountId: accounts[4].id, number: "INV-1175", status: "PAID", totalCents: 2_400_000, issuedAt: new Date(Date.now() - 20 * 86_400_000), paidAt: new Date(Date.now() - 12 * 86_400_000) },
       { workspaceId: ws.id, accountId: accounts[0].id, number: "INV-1172", status: "PAID", totalCents: 12_800_000, issuedAt: new Date(Date.now() - 40 * 86_400_000), paidAt: new Date(Date.now() - 28 * 86_400_000) },
+      ...historyInvoices,
     ],
   });
+
+  // Service tickets — historical resolved tickets for SLA chart
+  let ticketCounter = 700;
+  for (let weeksAgo = 12; weeksAgo >= 1; weeksAgo--) {
+    const baseDate = new Date(Date.now() - weeksAgo * 7 * 86_400_000);
+    const numTickets = 4 + Math.floor(Math.random() * 4);
+    for (let t = 0; t < numTickets; t++) {
+      const created = new Date(baseDate.getTime() + t * 12 * 3600_000);
+      const slaTarget = new Date(created.getTime() + 24 * 3600_000);
+      // 70-90% met SLA, improving over time
+      const slaHitRate = 0.7 + (12 - weeksAgo) * 0.015;
+      const onTime = Math.random() < slaHitRate;
+      const resolved = new Date(created.getTime() + (onTime ? 4 + Math.random() * 18 : 26 + Math.random() * 20) * 3600_000);
+      await prisma.serviceTicket.create({
+        data: {
+          workspaceId: ws.id,
+          accountId: accounts[(t + weeksAgo) % accounts.length].id,
+          assigneeId: users[3 + (t % 3)].id,
+          number: `T-${ticketCounter++}`,
+          title: ["DSP firmware update", "Camera calibration", "AMC visit", "Display warm-up issue", "Mic gain reset"][t % 5],
+          priority: (["P2", "P3", "P3", "P2", "P4"] as const)[t % 5],
+          status: "RESOLVED",
+          slaDueAt: slaTarget,
+          resolvedAt: resolved,
+          createdAt: created,
+        },
+      });
+    }
+  }
 
   // Subscriptions
   await prisma.subscription.createMany({

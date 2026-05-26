@@ -102,3 +102,63 @@ prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
  ○ Compiling /dashboard ...
  ✓ Compiled /dashboard in 1363ms (1908 modules)
  GET /dashboard 200 in 5436ms
+ ✓ Compiled in 1100ms (1514 modules)
+ ✓ Compiled in 555ms (1514 modules)
+ ✓ Compiled in 659ms (1514 modules)
+ ✓ Compiled in 429ms (1514 modules)
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+prisma:error Error in PostgreSQL connection: Error { kind: Closed, cause: None }
+ ✓ Compiled in 639ms (1514 modules)
+ ○ Compiling /reports ...
+ ✓ Compiled /reports in 2.6s (3298 modules)
+Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.
+  <... label=... value="$2.6M" icon={{$$typeof: ..., render: ...}}>
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.
+  <... label=... value="80.3%" icon={{$$typeof: ..., render: ...}}>
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.
+  <... label=... value="8" icon={{$$typeof: ..., render: ...}}>
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Only plain objects can be passed to Client Components from Server Components. Classes or other objects with methods are not supported.
+  <... label=... value="70" icon={{$$typeof: ..., render: ...}}>
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ ⨯ Error: Functions cannot be passed directly to Client Components unless you explicitly expose it by marking it with "use server". Or maybe you meant to call this function rather than return it.
+  {$$typeof: ..., render: function DollarSign}
+                          ^^^^^^^^^^^^^^^^^^^
+    at stringify (<anonymous>) {
+  digest: '2973586923'
+}
+ ⨯ Error: Functions cannot be passed directly to Client Components unless you explicitly expose it by marking it with "use server". Or maybe you meant to call this function rather than return it.
+  {$$typeof: ..., render: function TrendingUp}
+                          ^^^^^^^^^^^^^^^^^^^
+    at stringify (<anonymous>) {
+  digest: '2891726027'
+}
+ ⨯ Error: Functions cannot be passed directly to Client Components unless you explicitly expose it by marking it with "use server". Or maybe you meant to call this function rather than return it.
+  {$$typeof: ..., render: function Building2}
+                          ^^^^^^^^^^^^^^^^^^
+    at stringify (<anonymous>) {
+  digest: '2959944971'
+}
+ ⨯ Error: Functions cannot be passed directly to Client Components unless you explicitly expose it by marking it with "use server". Or maybe you meant to call this function rather than return it.
+  {$$typeof: ..., render: function Wrench}
+                          ^^^^^^^^^^^^^^^
+    at stringify (<anonymous>) {
+  digest: '94503595'
+}
+ GET /reports 200 in 8568ms
