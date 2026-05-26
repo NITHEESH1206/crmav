@@ -25,7 +25,7 @@ export function Topbar() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" />
           <input
             placeholder="Search projects, clients, tickets, devices…"
-            className="h-10 w-full rounded-xl bg-white/[0.03] border border-white/[0.06] pl-10 pr-20 text-sm text-white placeholder:text-white/35 focus:outline-none focus:border-aether-500/40 focus:ring-2 focus:ring-aether-500/15 transition-all"
+            className="h-10 w-full rounded-xl bg-white/[0.03] border border-white/[0.06] pl-10 pr-20 text-sm text-white placeholder:text-white/35 focus:outline-none focus:border-signal-500/40 focus:ring-2 focus:ring-signal-500/15 transition-all"
           />
           <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1 px-1.5 py-0.5 rounded-md border border-white/[0.08] bg-white/[0.02] text-[10px] text-white/40 font-mono">
             <Command className="h-3 w-3" />K
@@ -34,7 +34,7 @@ export function Topbar() {
 
         <div className="hidden md:flex items-center gap-2 ml-auto">
           <Button variant="ghost" size="sm" className="gap-1.5" onClick={showAssistant}>
-            <Sparkles className="h-3.5 w-3.5 text-aether-400" />
+            <Sparkles className="h-3.5 w-3.5 text-signal-400" />
             <span className="text-xs">Ask AI</span>
           </Button>
           <Button variant="secondary" size="sm" onClick={() => showQuickCreate("todo")}>
@@ -48,7 +48,7 @@ export function Topbar() {
           <DropdownMenuTrigger asChild>
             <button className="relative h-9 w-9 rounded-xl border border-white/[0.06] bg-white/[0.02] flex items-center justify-center text-white/65 hover:text-white hover:bg-white/[0.05] transition-colors">
               <Bell className="h-4 w-4" />
-              <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-aether-500 ring-2 ring-ink-200 animate-pulse" />
+              <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-signal-500 ring-2 ring-ink-200 animate-pulse" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-80">
@@ -66,7 +66,7 @@ export function Topbar() {
               </DropdownMenuItem>
             ))}
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="justify-center text-aether-400 hover:text-aether-300">
+            <DropdownMenuItem className="justify-center text-signal-400 hover:text-signal-300">
               View all notifications
             </DropdownMenuItem>
           </DropdownMenuContent>

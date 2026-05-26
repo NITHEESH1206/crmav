@@ -49,7 +49,7 @@ export function DetailDrawer() {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetContent className="p-0">
         <SheetHeader>
-          <div className="flex items-center gap-2 text-aether-400 text-[11px] uppercase tracking-[0.2em]">
+          <div className="flex items-center gap-2 text-signal-400 text-[11px] uppercase tracking-[0.2em]">
             <Icon className="h-3 w-3" />
             {kindLabel}
           </div>
@@ -100,7 +100,7 @@ export function DetailDrawer() {
                       <TabsTrigger value="related">Related</TabsTrigger>
                     )}
                     <TabsTrigger value="ai">
-                      <Sparkles className="h-3 w-3 mr-1.5 text-aether-400" />
+                      <Sparkles className="h-3 w-3 mr-1.5 text-signal-400" />
                       AI
                     </TabsTrigger>
                   </TabsList>
@@ -149,10 +149,10 @@ export function DetailDrawer() {
                   )}
 
                   <TabsContent value="ai">
-                    <div className="rounded-xl border border-aether-500/20 bg-gradient-to-br from-aether-500/[0.08] to-transparent p-5">
-                      <div className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-aether-400 mb-3">
+                    <div className="rounded-xl border border-signal-500/20 bg-gradient-to-br from-signal-500/[0.08] to-transparent p-5">
+                      <div className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-signal-400 mb-3">
                         <Sparkles className="h-3 w-3" />
-                        Aether AI suggests
+                        Zynex AI suggests
                       </div>
                       <ul className="space-y-2.5 text-sm text-white/75 leading-relaxed">
                         {kind === "opportunity" && (

@@ -146,7 +146,7 @@ export function OpportunityDetail({ opp, users }: { opp: Opp; users: { id: strin
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Sparkles className="h-3.5 w-3.5 text-aether-400" />
+              <Sparkles className="h-3.5 w-3.5 text-signal-400" />
               AI insights
             </CardTitle>
           </CardHeader>

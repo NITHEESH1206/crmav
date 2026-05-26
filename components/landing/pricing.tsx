@@ -60,7 +60,7 @@ export function Pricing() {
     <section id="pricing" className="relative py-32 sm:py-40">
       <div className="container">
         <FadeIn className="text-center max-w-3xl mx-auto">
-          <div className="text-[11px] uppercase tracking-[0.3em] text-aether-400 font-medium">
+          <div className="text-[11px] uppercase tracking-[0.3em] text-signal-400 font-medium">
             Pricing
           </div>
           <h2 className="mt-3 font-display text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-[1.05]">
@@ -82,12 +82,12 @@ export function Pricing() {
               className={cn(
                 "relative rounded-3xl p-7 hover-lift",
                 t.featured
-                  ? "bg-gradient-to-b from-aether-500/[0.12] to-transparent border border-aether-500/30 shadow-[0_0_60px_-20px_rgba(255,107,0,0.5)]"
+                  ? "bg-gradient-to-b from-signal-500/[0.12] to-transparent border border-signal-500/30 shadow-[0_0_60px_-20px_rgba(255,107,0,0.5)]"
                   : "glass-card"
               )}
             >
               {t.featured && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 inline-flex items-center gap-1.5 rounded-full bg-aether-500 px-3 py-1 text-[10px] uppercase tracking-wider text-white font-semibold shadow-glow-sm">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 inline-flex items-center gap-1.5 rounded-full bg-signal-500 px-3 py-1 text-[10px] uppercase tracking-wider text-white font-semibold shadow-glow-sm">
                   <Sparkles className="h-3 w-3" />
                   Most popular
                 </div>
@@ -96,7 +96,7 @@ export function Pricing() {
               <div className="flex items-baseline justify-between">
                 <h3 className="font-display text-xl font-semibold tracking-tight">{t.name}</h3>
                 {t.featured && (
-                  <span className="text-[10px] uppercase tracking-wider text-aether-400">Recommended</span>
+                  <span className="text-[10px] uppercase tracking-wider text-signal-400">Recommended</span>
                 )}
               </div>
               <p className="mt-2 text-sm text-white/45 leading-relaxed">{t.desc}</p>
@@ -127,8 +127,8 @@ export function Pricing() {
               <div className="mt-7 space-y-3">
                 {t.features.map((f, j) => (
                   <div key={j} className="flex items-start gap-2.5 text-sm text-white/65">
-                    <div className="mt-0.5 h-4 w-4 rounded-full bg-aether-500/15 border border-aether-500/30 flex items-center justify-center shrink-0">
-                      <Check className="h-2.5 w-2.5 text-aether-400" strokeWidth={3} />
+                    <div className="mt-0.5 h-4 w-4 rounded-full bg-signal-500/15 border border-signal-500/30 flex items-center justify-center shrink-0">
+                      <Check className="h-2.5 w-2.5 text-signal-400" strokeWidth={3} />
                     </div>
                     <span>{f}</span>
                   </div>

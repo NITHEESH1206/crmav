@@ -6,11 +6,11 @@ import { Badge } from "@/components/ui/badge";
 import { formatCompact } from "@/lib/utils";
 
 const STAGE_META: Record<string, { label: string; color: string; width: number }> = {
-  DISCOVERY: { label: "Discovery", color: "from-aether-300/40 to-aether-300/10", width: 100 },
-  SITE_SURVEY: { label: "Site Survey", color: "from-aether-400/50 to-aether-400/10", width: 84 },
-  PROPOSAL: { label: "Proposal", color: "from-aether-500/60 to-aether-500/10", width: 68 },
-  NEGOTIATION: { label: "Negotiation", color: "from-aether-600/70 to-aether-600/10", width: 52 },
-  CLOSED_WON: { label: "Closed Won", color: "from-aether-700/80 to-aether-700/10", width: 36 },
+  DISCOVERY: { label: "Discovery", color: "from-signal-300/40 to-signal-300/10", width: 100 },
+  SITE_SURVEY: { label: "Site Survey", color: "from-signal-400/50 to-signal-400/10", width: 84 },
+  PROPOSAL: { label: "Proposal", color: "from-signal-500/60 to-signal-500/10", width: 68 },
+  NEGOTIATION: { label: "Negotiation", color: "from-signal-600/70 to-signal-600/10", width: 52 },
+  CLOSED_WON: { label: "Closed Won", color: "from-signal-700/80 to-signal-700/10", width: 36 },
 };
 
 type Stage = { stage: string; count: number; valueCents: number };

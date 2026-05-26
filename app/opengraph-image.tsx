@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "AetherAV CRM — The Enterprise CRM Built For AV Companies";
+export const alt = "ZynexAV CRM — The Enterprise CRM Built For AV Companies";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -12,7 +12,7 @@ export default async function OG() {
         style={{
           width: "100%",
           height: "100%",
-          background: "#050505",
+          background: "#0a0a0a",
           display: "flex",
           flexDirection: "column",
           padding: 80,
@@ -28,7 +28,7 @@ export default async function OG() {
             right: -200,
             width: 700,
             height: 700,
-            background: "radial-gradient(circle, rgba(255,107,0,0.45) 0%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(255,90,31,0.45) 0%, transparent 70%)",
             filter: "blur(40px)",
           }}
         />
@@ -39,39 +39,35 @@ export default async function OG() {
             left: -100,
             width: 800,
             height: 800,
-            background: "radial-gradient(circle, rgba(255,138,51,0.25) 0%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(255,125,63,0.25) 0%, transparent 70%)",
             filter: "blur(40px)",
           }}
         />
 
-        {/* Logo + brand */}
-        <div style={{ display: "flex", alignItems: "center", gap: 16, position: "relative" }}>
-          <div
+        {/* Brand wordmark */}
+        <div style={{ display: "flex", alignItems: "baseline", position: "relative" }}>
+          <span
             style={{
-              width: 52,
-              height: 52,
-              borderRadius: 14,
-              background: "linear-gradient(135deg, #ff8a33 0%, #ff6b00 50%, #b34a00 100%)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow: "0 0 40px rgba(255,107,0,0.6)",
+              fontSize: 44,
+              fontWeight: 900,
+              color: "#f4f2ec",
+              letterSpacing: -2,
+              lineHeight: 1,
             }}
           >
-            <div
-              style={{
-                width: 22,
-                height: 22,
-                background: "#ffffff",
-                clipPath:
-                  "polygon(50% 0%, 65% 35%, 100% 50%, 65% 65%, 50% 100%, 35% 65%, 0% 50%, 35% 35%)",
-              }}
-            />
-          </div>
-          <div style={{ display: "flex", color: "#fff", fontSize: 26, fontWeight: 600, letterSpacing: -0.5 }}>
-            Aether
-            <span style={{ color: "#ff6b00" }}>AV</span>
-          </div>
+            zynex
+          </span>
+          <span
+            style={{
+              fontSize: 44,
+              fontWeight: 900,
+              color: "#ff5a1f",
+              letterSpacing: -2,
+              lineHeight: 1,
+            }}
+          >
+            AV
+          </span>
         </div>
 
         {/* Headline */}
@@ -86,11 +82,11 @@ export default async function OG() {
         >
           <div
             style={{
-              fontSize: 78,
-              fontWeight: 700,
-              color: "#fff",
-              lineHeight: 1.05,
-              letterSpacing: -2.5,
+              fontSize: 82,
+              fontWeight: 800,
+              color: "#f4f2ec",
+              lineHeight: 1.02,
+              letterSpacing: -3,
               maxWidth: 950,
             }}
           >
@@ -98,13 +94,13 @@ export default async function OG() {
           </div>
           <div
             style={{
-              fontSize: 78,
-              fontWeight: 700,
-              background: "linear-gradient(135deg, #fff 0%, #ffd2b3 40%, #ff8a33 100%)",
+              fontSize: 82,
+              fontWeight: 800,
+              background: "linear-gradient(135deg, #f4f2ec 0%, #ffd2b3 40%, #ff7d3f 100%)",
               backgroundClip: "text",
               color: "transparent",
-              lineHeight: 1.05,
-              letterSpacing: -2.5,
+              lineHeight: 1.02,
+              letterSpacing: -3,
               maxWidth: 950,
             }}
           >
@@ -113,7 +109,7 @@ export default async function OG() {
           <div
             style={{
               fontSize: 28,
-              color: "rgba(255,255,255,0.55)",
+              color: "rgba(244,242,236,0.55)",
               marginTop: 12,
               maxWidth: 900,
               lineHeight: 1.4,
@@ -140,8 +136,8 @@ export default async function OG() {
               style={{
                 padding: "10px 18px",
                 borderRadius: 999,
-                background: "rgba(255,107,0,0.10)",
-                border: "1px solid rgba(255,107,0,0.35)",
+                background: "rgba(255,90,31,0.10)",
+                border: "1px solid rgba(255,90,31,0.35)",
                 color: "#ffaf66",
                 fontSize: 18,
                 fontWeight: 500,

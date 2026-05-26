@@ -1,4 +1,4 @@
-// AetherAV CRM — Prisma schema covering all 14 modules + AV-specific tables.
+// ZynexAV CRM — Prisma schema covering all 14 modules + AV-specific tables.
 // Keep this in sync with app/(app)/* modules.
 
 generator client {

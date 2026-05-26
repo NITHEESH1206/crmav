@@ -12,7 +12,8 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" -m 10 http://127.0.0.1:3000/projects)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" -m 10 http://192.168.1.12:3000/projects)",
       "PowerShell(try { \\(Invoke-WebRequest -Uri \"http://localhost:3000/projects\" -UseBasicParsing -TimeoutSec 30\\).StatusCode } catch { \"ERROR: $_\" })",
-      "Bash(curl -s -m 30 http://localhost:3000/projects)"
+      "Bash(curl -s -m 30 http://localhost:3000/projects)",
+      "PowerShell(Get-ChildItem \"D:\\\\Zynex AV CRM\" -File | Where-Object { $_.Extension -in \".png\", \".jpg\", \".jpeg\", \".svg\", \".webp\", \".gif\" } | Select-Object Name, Length)"
     ]
   }
 }

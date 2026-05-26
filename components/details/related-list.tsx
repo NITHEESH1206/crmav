@@ -31,7 +31,7 @@ export function RelatedList({
   return (
     <Card className={className}>
       <CardHeader className="flex-row items-center gap-2">
-        {Icon && <Icon className="h-3.5 w-3.5 text-aether-400" />}
+        {Icon && <Icon className="h-3.5 w-3.5 text-signal-400" />}
         <CardTitle className="text-sm">{title}</CardTitle>
         <Badge variant="secondary" className="ml-auto h-5">{items.length}</Badge>
       </CardHeader>

@@ -42,12 +42,12 @@ export function DetailHeader({
 
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div className="flex items-start gap-4">
-          <div className="h-14 w-14 rounded-2xl border border-aether-500/30 bg-aether-500/10 flex items-center justify-center shrink-0">
-            <Icon className="h-6 w-6 text-aether-400" strokeWidth={1.6} />
+          <div className="h-14 w-14 rounded-2xl border border-signal-500/30 bg-signal-500/10 flex items-center justify-center shrink-0">
+            <Icon className="h-6 w-6 text-signal-400" strokeWidth={1.6} />
           </div>
           <div className="min-w-0">
             {eyebrow && (
-              <div className="text-[11px] uppercase tracking-[0.25em] text-aether-400 font-medium">
+              <div className="text-[11px] uppercase tracking-[0.25em] text-signal-400 font-medium">
                 {eyebrow}
               </div>
             )}

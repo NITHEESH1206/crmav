@@ -37,10 +37,10 @@ export function Hero() {
             className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] backdrop-blur px-3.5 py-1.5 text-xs text-white/70"
           >
             <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-aether-400 opacity-75" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-aether-500" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-signal-400 opacity-75" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-signal-500" />
             </span>
-            <Sparkles className="h-3 w-3 text-aether-400" />
+            <Sparkles className="h-3 w-3 text-signal-400" />
             <span>AI proposals, BOQ generation, signal flow — all built in</span>
           </motion.div>
 
@@ -103,7 +103,7 @@ export function Hero() {
           transition={{ duration: 1.2, delay: 0.5, ease: [0.21, 0.47, 0.32, 0.98] }}
           className="relative mt-20 mx-auto max-w-6xl perspective"
         >
-          <div className="absolute -inset-x-20 -inset-y-10 bg-aether-500/20 blur-[120px] -z-10" />
+          <div className="absolute -inset-x-20 -inset-y-10 bg-signal-500/20 blur-[120px] -z-10" />
           <DashboardPreview />
         </motion.div>
       </div>
@@ -143,7 +143,7 @@ function FloatingAVChips() {
             style={{ top: c.top, left: c.left, right: c.right }}
             className="absolute hidden lg:flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.04] backdrop-blur-xl px-3 py-2 text-xs text-white/70 shadow-soft"
           >
-            <div className="h-6 w-6 rounded-md bg-aether-500/15 flex items-center justify-center text-aether-400">
+            <div className="h-6 w-6 rounded-md bg-signal-500/15 flex items-center justify-center text-signal-400">
               <Icon className="h-3.5 w-3.5" />
             </div>
             <span className="font-mono text-[11px]">{c.label}</span>

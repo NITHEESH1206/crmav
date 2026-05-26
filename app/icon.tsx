@@ -11,22 +11,25 @@ export default function Icon() {
         style={{
           width: "100%",
           height: "100%",
-          background: "linear-gradient(135deg, #ff8a33 0%, #ff6b00 50%, #b34a00 100%)",
+          background: "#0a0a0a",
           borderRadius: 14,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          fontFamily: "sans-serif",
         }}
       >
-        <div
+        <span
           style={{
-            width: 28,
-            height: 28,
-            background: "#ffffff",
-            clipPath:
-              "polygon(50% 0%, 65% 35%, 100% 50%, 65% 65%, 50% 100%, 35% 65%, 0% 50%, 35% 35%)",
+            color: "#ff5a1f",
+            fontSize: 32,
+            fontWeight: 900,
+            letterSpacing: -2,
+            lineHeight: 1,
           }}
-        />
+        >
+          AV
+        </span>
       </div>
     ),
     { ...size }

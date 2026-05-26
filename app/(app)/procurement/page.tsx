@@ -6,7 +6,7 @@ import { listPurchaseOrders, poSummary } from "@/lib/data/procurement";
 
 const stateIcon = (s: string) => (s === "IN_TRANSIT" ? Truck : s === "DELIVERED" ? CheckCircle2 : Clock);
 const stateColor = (s: string) =>
-  s === "IN_TRANSIT" ? "text-aether-400" : s === "DELIVERED" ? "text-emerald-400" : "text-amber-400";
+  s === "IN_TRANSIT" ? "text-signal-400" : s === "DELIVERED" ? "text-emerald-400" : "text-amber-400";
 
 export default async function ProcurementPage() {
   const [pos, summary] = await Promise.all([listPurchaseOrders(), poSummary()]);

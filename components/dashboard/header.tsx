@@ -22,7 +22,7 @@ export function DashboardHeader() {
       className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4"
     >
       <div>
-        <div className="text-[11px] uppercase tracking-[0.25em] text-aether-400 font-medium">
+        <div className="text-[11px] uppercase tracking-[0.25em] text-signal-400 font-medium">
           {greeting}
         </div>
         <h1 className="mt-1.5 font-display text-3xl sm:text-4xl font-semibold tracking-tight">

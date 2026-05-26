@@ -36,7 +36,7 @@ export function AICard({
       <CardHeader className="flex-row items-center justify-between gap-3">
         <div>
           <CardTitle className="flex items-center gap-2">
-            <Sparkles className="h-3.5 w-3.5 text-aether-400" />
+            <Sparkles className="h-3.5 w-3.5 text-signal-400" />
             {title}
           </CardTitle>
           <p className="text-xs text-white/45 mt-1">{description}</p>
@@ -62,7 +62,7 @@ export function AICard({
             <Skeleton className="h-3 w-5/6" />
             <Skeleton className="h-3 w-4/6" />
             <div className="text-[11px] text-white/40 mt-3 flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-aether-500 animate-pulse" />
+              <span className="h-1.5 w-1.5 rounded-full bg-signal-500 animate-pulse" />
               Analyzing with Opus 4.7…
             </div>
           </div>

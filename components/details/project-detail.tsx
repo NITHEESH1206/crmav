@@ -171,7 +171,7 @@ export function ProjectDetail({ project }: { project: Project }) {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Sparkles className="h-3.5 w-3.5 text-aether-400" />
+              <Sparkles className="h-3.5 w-3.5 text-signal-400" />
               AI suggestions
             </CardTitle>
           </CardHeader>
@@ -218,7 +218,7 @@ export function ProjectDetail({ project }: { project: Project }) {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Layers3 className="h-3.5 w-3.5 text-aether-400" />
+            <Layers3 className="h-3.5 w-3.5 text-signal-400" />
             Bill of Quantities
             <Badge variant="secondary" className="ml-auto">{project.boqItems.length} lines</Badge>
           </CardTitle>

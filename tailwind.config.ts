@@ -15,8 +15,8 @@ const config: Config = {
     },
     extend: {
       fontFamily: {
-        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
-        display: ["var(--font-display)", "system-ui", "sans-serif"],
+        sans: ['"PP Neue Montreal"', '"Neue Montreal"', "var(--font-sans)", "system-ui", "sans-serif"],
+        display: ['"PP Neue Montreal"', '"Neue Montreal"', "var(--font-display)", "system-ui", "sans-serif"],
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
       colors: {
@@ -53,25 +53,38 @@ const config: Config = {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
         },
-        aether: {
-          50: "#fff5eb",
-          100: "#ffe6cc",
-          200: "#ffc999",
-          300: "#ffa866",
-          400: "#ff8a33",
-          500: "#ff6b00",
-          600: "#e55f00",
-          700: "#b34a00",
-          800: "#803500",
-          900: "#4d2000",
+        // Signal — ZynexAV brand accent
+        signal: {
+          50:  "#fff2ec",
+          100: "#ffe0d1",
+          200: "#ffbf9c",
+          300: "#ff9c66",
+          400: "#ff7d3f",
+          500: "#ff5a1f",
+          600: "#e64710",
+          700: "#b8350c",
+          800: "#8a2509",
+          900: "#5c1806",
         },
+        // Ink — background tiers
         ink: {
-          50: "#0e0e10",
-          100: "#0b0b0d",
-          200: "#08080a",
-          300: "#050505",
-          400: "#020203",
+          50:  "#1a1a1d",
+          100: "#131316",
+          200: "#0f0f12",
+          300: "#0a0a0a", // base canvas
+          400: "#050505",
           500: "#000000",
+        },
+        // Bone — warm off-white for light surfaces
+        bone: {
+          50:  "#fafaf6",
+          100: "#f4f2ec",
+          200: "#ebe7dd",
+          300: "#ddd6c8",
+          400: "#c4baa8",
+          500: "#a59986",
+          600: "#7a705f",
+          700: "#574f43",
         },
       },
       borderRadius: {
@@ -80,22 +93,22 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       backgroundImage: {
-        "aether-radial":
-          "radial-gradient(circle at 20% 10%, rgba(255,107,0,0.18), transparent 40%), radial-gradient(circle at 80% 90%, rgba(255,107,0,0.12), transparent 50%)",
-        "aether-mesh":
-          "radial-gradient(at 12% 8%, rgba(255,107,0,0.22) 0px, transparent 50%), radial-gradient(at 90% 20%, rgba(255,138,51,0.16) 0px, transparent 50%), radial-gradient(at 40% 95%, rgba(255,107,0,0.18) 0px, transparent 50%)",
+        "signal-radial":
+          "radial-gradient(circle at 20% 10%, rgba(255,90,31,0.18), transparent 40%), radial-gradient(circle at 80% 90%, rgba(255,90,31,0.12), transparent 50%)",
+        "signal-mesh":
+          "radial-gradient(at 12% 8%, rgba(255,90,31,0.22) 0px, transparent 50%), radial-gradient(at 90% 20%, rgba(255,125,63,0.16) 0px, transparent 50%), radial-gradient(at 40% 95%, rgba(255,90,31,0.18) 0px, transparent 50%)",
         "grid-fade":
           "linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px)",
         "shine":
           "linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%)",
       },
       boxShadow: {
-        glow: "0 0 40px -10px rgba(255,107,0,0.55), 0 0 80px -20px rgba(255,107,0,0.35)",
-        "glow-sm": "0 0 22px -6px rgba(255,107,0,0.6)",
+        glow: "0 0 40px -10px rgba(255,90,31,0.55), 0 0 80px -20px rgba(255,90,31,0.35)",
+        "glow-sm": "0 0 22px -6px rgba(255,90,31,0.6)",
         soft: "0 10px 40px -10px rgba(0,0,0,0.55)",
         card: "0 1px 0 0 rgba(255,255,255,0.04) inset, 0 0 0 1px rgba(255,255,255,0.04), 0 20px 50px -20px rgba(0,0,0,0.6)",
         "card-hover":
-          "0 1px 0 0 rgba(255,255,255,0.08) inset, 0 0 0 1px rgba(255,107,0,0.25), 0 30px 60px -20px rgba(0,0,0,0.7), 0 0 30px -8px rgba(255,107,0,0.35)",
+          "0 1px 0 0 rgba(255,255,255,0.08) inset, 0 0 0 1px rgba(255,90,31,0.25), 0 30px 60px -20px rgba(0,0,0,0.7), 0 0 30px -8px rgba(255,90,31,0.35)",
       },
       keyframes: {
         "accordion-down": {

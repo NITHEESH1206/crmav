@@ -110,13 +110,13 @@ export function AssistantDrawer() {
         <SheetHeader>
           <div className="flex items-center justify-between gap-3">
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 text-aether-400 text-[11px] uppercase tracking-[0.2em]">
+              <div className="flex items-center gap-2 text-signal-400 text-[11px] uppercase tracking-[0.2em]">
                 <Sparkles className="h-3 w-3" />
-                Aether AI
+                Zynex AI
               </div>
               <SheetTitle className="flex items-center gap-2 mt-0.5">
                 Assistant
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-aether-500/10 text-aether-400 border border-aether-500/30 normal-case tracking-normal">
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-signal-500/10 text-signal-400 border border-signal-500/30 normal-case tracking-normal">
                   Opus 4.7
                 </span>
               </SheetTitle>
@@ -137,8 +137,8 @@ export function AssistantDrawer() {
         <div ref={scrollRef} className="flex-1 overflow-y-auto px-6 py-4">
           {messages.length === 0 && !streaming && (
             <div className="space-y-6">
-              <div className="rounded-2xl border border-aether-500/20 bg-gradient-to-br from-aether-500/[0.08] to-transparent p-4">
-                <Sparkles className="h-4 w-4 text-aether-400 mb-2" />
+              <div className="rounded-2xl border border-signal-500/20 bg-gradient-to-br from-signal-500/[0.08] to-transparent p-4">
+                <Sparkles className="h-4 w-4 text-signal-400 mb-2" />
                 <div className="text-sm text-white/85">
                   Ask anything AV — equipment recommendations, signal flow tips, BOQ help, or CRM
                   workflow guidance.
@@ -153,7 +153,7 @@ export function AssistantDrawer() {
                     <button
                       key={s}
                       onClick={() => send(s)}
-                      className="w-full text-left text-sm text-white/75 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 py-2.5 hover:border-aether-500/30 hover:bg-white/[0.04] transition-colors"
+                      className="w-full text-left text-sm text-white/75 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 py-2.5 hover:border-signal-500/30 hover:bg-white/[0.04] transition-colors"
                     >
                       {s}
                     </button>
@@ -193,7 +193,7 @@ export function AssistantDrawer() {
               }}
               placeholder="Ask anything…"
               rows={1}
-              className="flex-1 max-h-32 resize-none rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2.5 text-sm text-white placeholder:text-white/35 focus:outline-none focus:border-aether-500/40 focus:ring-2 focus:ring-aether-500/15"
+              className="flex-1 max-h-32 resize-none rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2.5 text-sm text-white placeholder:text-white/35 focus:outline-none focus:border-signal-500/40 focus:ring-2 focus:ring-signal-500/15"
             />
             {streaming ? (
               <Button type="button" size="icon" variant="secondary" onClick={stop}>
@@ -227,7 +227,7 @@ function ChatBubble({ msg, streaming }: { msg: Msg; streaming?: boolean }) {
         className={cn(
           "max-w-[88%] rounded-2xl px-4 py-2.5",
           isUser
-            ? "bg-aether-500/20 border border-aether-500/40 text-white"
+            ? "bg-signal-500/20 border border-signal-500/40 text-white"
             : "bg-white/[0.03] border border-white/[0.06] text-white/90"
         )}
       >
@@ -237,7 +237,7 @@ function ChatBubble({ msg, streaming }: { msg: Msg; streaming?: boolean }) {
           <>
             <Markdown text={msg.content || ""} />
             {streaming && (
-              <span className="inline-block w-1.5 h-3.5 ml-0.5 -mb-0.5 bg-aether-500 animate-pulse rounded-sm" />
+              <span className="inline-block w-1.5 h-3.5 ml-0.5 -mb-0.5 bg-signal-500 animate-pulse rounded-sm" />
             )}
           </>
         )}

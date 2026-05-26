@@ -52,8 +52,8 @@ export default async function CatalogPage() {
             return (
               <Card key={name}>
                 <CardContent className="p-5 flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-aether-500/20 to-aether-500/5 border border-aether-500/30 flex items-center justify-center">
-                    <Icon className="h-5 w-5 text-aether-400" />
+                  <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-signal-500/20 to-signal-500/5 border border-signal-500/30 flex items-center justify-center">
+                    <Icon className="h-5 w-5 text-signal-400" />
                   </div>
                   <div>
                     <div className="text-sm font-medium">{name}</div>
@@ -68,10 +68,10 @@ export default async function CatalogPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {products.map((p) => (
           <Card key={p.id} className="overflow-hidden group hover-lift cursor-pointer">
-            <div className="aspect-[16/9] relative bg-gradient-to-br from-aether-500/10 via-transparent to-transparent border-b border-white/[0.06]">
+            <div className="aspect-[16/9] relative bg-gradient-to-br from-signal-500/10 via-transparent to-transparent border-b border-white/[0.06]">
               <div className="absolute inset-0 grid-pattern opacity-30" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <Cable className="h-12 w-12 text-white/20 group-hover:text-aether-400/60 transition-colors" strokeWidth={1.2} />
+                <Cable className="h-12 w-12 text-white/20 group-hover:text-signal-400/60 transition-colors" strokeWidth={1.2} />
               </div>
               <Badge variant="secondary" className="absolute top-3 left-3">{p.brand}</Badge>
             </div>
@@ -82,7 +82,7 @@ export default async function CatalogPage() {
                 <div className="font-display text-lg font-semibold text-gradient">
                   ${(p.listPriceCents / 100).toLocaleString()}
                 </div>
-                <button className="text-aether-400 text-xs flex items-center gap-1 hover:text-aether-300">
+                <button className="text-signal-400 text-xs flex items-center gap-1 hover:text-signal-300">
                   <Download className="h-3 w-3" />
                   Datasheet
                 </button>
@@ -94,8 +94,8 @@ export default async function CatalogPage() {
 
       <Card className="mt-6">
         <CardContent className="p-5 flex flex-col sm:flex-row items-center gap-4">
-          <div className="h-10 w-10 rounded-xl bg-aether-500/15 border border-aether-500/30 flex items-center justify-center">
-            <Sparkles className="h-4 w-4 text-aether-400" />
+          <div className="h-10 w-10 rounded-xl bg-signal-500/15 border border-signal-500/30 flex items-center justify-center">
+            <Sparkles className="h-4 w-4 text-signal-400" />
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-sm font-semibold">AV Package Builder</div>

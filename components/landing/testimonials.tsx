@@ -61,7 +61,7 @@ export function Testimonials() {
     <section className="relative py-32 sm:py-40 overflow-hidden">
       <div className="container">
         <FadeIn className="text-center max-w-3xl mx-auto">
-          <div className="text-[11px] uppercase tracking-[0.3em] text-aether-400 font-medium">
+          <div className="text-[11px] uppercase tracking-[0.3em] text-signal-400 font-medium">
             Loved by AV teams
           </div>
           <h2 className="mt-3 font-display text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-[1.05]">
@@ -97,10 +97,10 @@ function TestimonialCard({
 }) {
   return (
     <div className="relative rounded-2xl glass-card p-6 hover-lift">
-      <Quote className="h-5 w-5 text-aether-500/60 mb-4" strokeWidth={2.2} />
+      <Quote className="h-5 w-5 text-signal-500/60 mb-4" strokeWidth={2.2} />
       <p className="text-sm text-white/75 leading-relaxed">{quote}</p>
       <div className="mt-5 pt-5 border-t border-white/[0.06] flex items-center gap-3">
-        <div className="h-9 w-9 rounded-full bg-gradient-to-br from-aether-400 to-aether-700 flex items-center justify-center text-xs font-semibold">
+        <div className="h-9 w-9 rounded-full bg-gradient-to-br from-signal-400 to-signal-700 flex items-center justify-center text-xs font-semibold">
           {name
             .split(" ")
             .map((s) => s[0])

@@ -1,5 +1,5 @@
 /**
- * Seed AetherAV with a realistic AV CRM dataset.
+ * Seed ZynexAV with a realistic AV CRM dataset.
  * Run with: `npm run seed`
  */
 
@@ -8,7 +8,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("Seeding AetherAV CRM…");
+  console.log("Seeding ZynexAV CRM…");
 
   // Wipe in dependency order
   await prisma.auditLog.deleteMany();

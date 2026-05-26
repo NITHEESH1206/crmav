@@ -143,7 +143,7 @@ export function KeyboardShortcuts() {
     <Dialog open={helpOpen} onOpenChange={setHelpOpen}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
-          <div className="flex items-center gap-2 text-aether-400 text-[11px] uppercase tracking-[0.2em]">
+          <div className="flex items-center gap-2 text-signal-400 text-[11px] uppercase tracking-[0.2em]">
             <Keyboard className="h-3 w-3" />
             Keyboard shortcuts
           </div>
@@ -172,7 +172,7 @@ export function KeyboardShortcuts() {
             </div>
           ))}
           <div className="pt-4 border-t border-white/[0.06] flex items-center gap-2 text-xs text-white/45">
-            <Sparkles className="h-3 w-3 text-aether-400" />
+            <Sparkles className="h-3 w-3 text-signal-400" />
             New here? Use the <Kbd>?</Kbd> key from anywhere to reopen this.
           </div>
         </div>

@@ -85,7 +85,7 @@ export default async function OpportunitiesPage() {
                       </div>
                       <div className="flex items-center gap-2">
                         {d.aiScore !== null && d.aiScore !== undefined && (
-                          <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-aether-500/10 border border-aether-500/20 text-[10px] text-aether-400">
+                          <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-signal-500/10 border border-signal-500/20 text-[10px] text-signal-400">
                             <Sparkles className="h-2.5 w-2.5" />
                             {d.aiScore}
                           </div>
@@ -101,7 +101,7 @@ export default async function OpportunitiesPage() {
                 </Card>
                 </OpenableRow>
               ))}
-              <button className="rounded-xl border border-dashed border-white/[0.08] text-xs text-white/40 py-3 hover:text-white/70 hover:border-aether-500/40 transition-colors">
+              <button className="rounded-xl border border-dashed border-white/[0.08] text-xs text-white/40 py-3 hover:text-white/70 hover:border-signal-500/40 transition-colors">
                 + Add deal
               </button>
             </div>
@@ -111,8 +111,8 @@ export default async function OpportunitiesPage() {
 
       <Card className="mt-6">
         <CardContent className="p-5 flex flex-col sm:flex-row items-center gap-4">
-          <div className="h-10 w-10 rounded-xl bg-aether-500/15 border border-aether-500/30 flex items-center justify-center">
-            <Sparkles className="h-4 w-4 text-aether-400" />
+          <div className="h-10 w-10 rounded-xl bg-signal-500/15 border border-signal-500/30 flex items-center justify-center">
+            <Sparkles className="h-4 w-4 text-signal-400" />
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-sm font-semibold">AI insight</div>

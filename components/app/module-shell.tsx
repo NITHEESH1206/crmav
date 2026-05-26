@@ -96,7 +96,7 @@ export function ModuleShell({
       >
         <div>
           {eyebrow && (
-            <div className="text-[11px] uppercase tracking-[0.25em] text-aether-400 font-medium">
+            <div className="text-[11px] uppercase tracking-[0.25em] text-signal-400 font-medium">
               {eyebrow}
             </div>
           )}
@@ -142,8 +142,8 @@ export function ModuleShell({
 export function EmptyHint({ message }: { message: string }) {
   return (
     <div className="rounded-2xl glass-card p-10 text-center">
-      <div className="mx-auto w-12 h-12 rounded-2xl bg-aether-500/10 border border-aether-500/20 flex items-center justify-center mb-4">
-        <Plus className="h-5 w-5 text-aether-400" />
+      <div className="mx-auto w-12 h-12 rounded-2xl bg-signal-500/10 border border-signal-500/20 flex items-center justify-center mb-4">
+        <Plus className="h-5 w-5 text-signal-400" />
       </div>
       <p className="text-sm text-white/55">{message}</p>
     </div>

@@ -24,7 +24,7 @@ export function Toaster() {
         classNames: {
           success: "!border-emerald-500/30 !bg-[rgba(11,11,13,0.95)]",
           error: "!border-red-500/30 !bg-[rgba(11,11,13,0.95)]",
-          info: "!border-aether-500/30 !bg-[rgba(11,11,13,0.95)]",
+          info: "!border-signal-500/30 !bg-[rgba(11,11,13,0.95)]",
           warning: "!border-amber-500/30 !bg-[rgba(11,11,13,0.95)]",
           title: "!text-white !font-medium",
           description: "!text-white/60 !text-[11px]",

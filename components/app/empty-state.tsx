@@ -36,7 +36,7 @@ export function EmptyState({
       )}
     >
       {/* Decorative orbs */}
-      <div className="absolute -top-32 left-1/2 -translate-x-1/2 h-64 w-64 bg-aether-500/15 blur-[80px] rounded-full pointer-events-none" />
+      <div className="absolute -top-32 left-1/2 -translate-x-1/2 h-64 w-64 bg-signal-500/15 blur-[80px] rounded-full pointer-events-none" />
       <div className="absolute inset-0 grid-pattern opacity-30 pointer-events-none" />
 
       <div className="relative">
@@ -44,9 +44,9 @@ export function EmptyState({
           initial={{ scale: 0.85, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.15, type: "spring", stiffness: 200, damping: 22 }}
-          className="mx-auto h-16 w-16 rounded-2xl bg-gradient-to-br from-aether-500/20 to-aether-500/[0.04] border border-aether-500/30 flex items-center justify-center shadow-glow-sm"
+          className="mx-auto h-16 w-16 rounded-2xl bg-gradient-to-br from-signal-500/20 to-signal-500/[0.04] border border-signal-500/30 flex items-center justify-center shadow-glow-sm"
         >
-          <Icon className="h-7 w-7 text-aether-400" strokeWidth={1.6} />
+          <Icon className="h-7 w-7 text-signal-400" strokeWidth={1.6} />
         </motion.div>
 
         <h3 className="mt-5 font-display text-2xl font-semibold tracking-tight">{title}</h3>
@@ -66,7 +66,7 @@ export function EmptyState({
         )}
 
         <div className="mt-6 flex items-center justify-center gap-2 text-[11px] text-white/35">
-          <Sparkles className="h-3 w-3 text-aether-400/60" />
+          <Sparkles className="h-3 w-3 text-signal-400/60" />
           Tip: press <kbd className="px-1.5 py-0.5 rounded border border-white/[0.08] bg-white/[0.04] font-mono text-[10px]">N</kbd> anywhere to open quick-create
         </div>
       </div>

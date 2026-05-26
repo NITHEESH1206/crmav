@@ -32,7 +32,7 @@ export function UpcomingMeetings({ events }: { events: Event[] }) {
             {events.length} scheduled
           </p>
         </div>
-        <button className="text-xs text-aether-400 hover:text-aether-300 flex items-center gap-1">
+        <button className="text-xs text-signal-400 hover:text-signal-300 flex items-center gap-1">
           View calendar <ChevronRight className="h-3 w-3" />
         </button>
       </CardHeader>
@@ -50,8 +50,8 @@ export function UpcomingMeetings({ events }: { events: Event[] }) {
               transition={{ duration: 0.4, delay: i * 0.06 }}
               className="flex items-center gap-4 p-3 -mx-3 rounded-xl hover:bg-white/[0.02] transition-colors cursor-pointer group"
             >
-              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-aether-500/15 to-transparent border border-aether-500/20 flex items-center justify-center shrink-0">
-                <Icon className="h-4 w-4 text-aether-400" />
+              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-signal-500/15 to-transparent border border-signal-500/20 flex items-center justify-center shrink-0">
+                <Icon className="h-4 w-4 text-signal-400" />
               </div>
               <div className="min-w-0 flex-1">
                 <div className="text-sm font-medium truncate">{m.title}</div>

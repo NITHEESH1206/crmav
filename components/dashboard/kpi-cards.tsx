@@ -93,13 +93,13 @@ function KpiCard({ kpi }: { kpi: KPI }) {
       variants={staggerItem}
       whileHover={{ y: -4 }}
       transition={{ type: "spring", stiffness: 300, damping: 24 }}
-      className="group relative rounded-2xl glass-card p-5 overflow-hidden hover:shadow-card-hover hover:border-aether-500/20"
+      className="group relative rounded-2xl glass-card p-5 overflow-hidden hover:shadow-card-hover hover:border-signal-500/20"
     >
-      <div className="absolute -top-px left-6 right-6 h-px bg-gradient-to-r from-transparent via-aether-500/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <div className="absolute -top-px left-6 right-6 h-px bg-gradient-to-r from-transparent via-signal-500/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
       <div className="flex items-center justify-between mb-4">
-        <div className="h-9 w-9 rounded-xl border border-white/[0.06] bg-white/[0.02] flex items-center justify-center group-hover:bg-aether-500/[0.08] group-hover:border-aether-500/30 transition-all">
-          <Icon className="h-4 w-4 text-aether-400" strokeWidth={1.8} />
+        <div className="h-9 w-9 rounded-xl border border-white/[0.06] bg-white/[0.02] flex items-center justify-center group-hover:bg-signal-500/[0.08] group-hover:border-signal-500/30 transition-all">
+          <Icon className="h-4 w-4 text-signal-400" strokeWidth={1.8} />
         </div>
         <div
           className={cn(

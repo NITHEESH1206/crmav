@@ -14,7 +14,7 @@ export function FinalCTA() {
         <div className="relative overflow-hidden rounded-[2.5rem] border border-white/[0.08] bg-ink-200/40 backdrop-blur-2xl p-12 sm:p-20">
           <Aurora />
           <div className="absolute inset-0 grid-pattern" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-aether-500/[0.04] to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-signal-500/[0.04] to-transparent" />
 
           {/* Wave bg */}
           <svg

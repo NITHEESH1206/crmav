@@ -21,7 +21,7 @@ export function Particles({ count = 28 }: { count?: number }) {
       {particles.map((p) => (
         <motion.span
           key={p.id}
-          className="absolute rounded-full bg-aether-400/70"
+          className="absolute rounded-full bg-signal-400/70"
           style={{
             left: `${p.x}%`,
             top: `${p.y}%`,

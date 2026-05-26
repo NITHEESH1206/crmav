@@ -31,7 +31,7 @@ export function Trust() {
     <section className="relative py-24 sm:py-32 border-y border-white/[0.04] bg-ink-200/30 backdrop-blur-xl">
       <div className="container">
         <FadeIn className="text-center mb-16">
-          <div className="text-[11px] uppercase tracking-[0.3em] text-aether-400 font-medium">
+          <div className="text-[11px] uppercase tracking-[0.3em] text-signal-400 font-medium">
             Trusted by AV teams worldwide
           </div>
           <h2 className="mt-3 font-display text-3xl sm:text-4xl font-semibold tracking-tight">
@@ -49,7 +49,7 @@ export function Trust() {
               transition={{ duration: 0.8, delay: i * 0.08 }}
               className="relative rounded-2xl glass-card p-6 text-center hover-lift"
             >
-              <div className="absolute -top-px left-6 right-6 h-px bg-gradient-to-r from-transparent via-aether-500/40 to-transparent" />
+              <div className="absolute -top-px left-6 right-6 h-px bg-gradient-to-r from-transparent via-signal-500/40 to-transparent" />
               <CountUp
                 value={s.value}
                 prefix={s.prefix}

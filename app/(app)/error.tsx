@@ -37,10 +37,10 @@ export default function AppError({
             {looksLikeDbError ? (
               <>
                 This page reads from Postgres via Prisma, but the connection isn&apos;t live yet.
-                Set <span className="font-mono text-aether-400">DATABASE_URL</span> in{" "}
-                <span className="font-mono text-aether-400">.env.local</span>, then run{" "}
-                <span className="font-mono text-aether-400">npm run prisma:push</span> and{" "}
-                <span className="font-mono text-aether-400">npm run seed</span>.
+                Set <span className="font-mono text-signal-400">DATABASE_URL</span> in{" "}
+                <span className="font-mono text-signal-400">.env.local</span>, then run{" "}
+                <span className="font-mono text-signal-400">npm run prisma:push</span> and{" "}
+                <span className="font-mono text-signal-400">npm run seed</span>.
               </>
             ) : (
               error.message

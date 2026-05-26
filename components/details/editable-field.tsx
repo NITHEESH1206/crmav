@@ -85,12 +85,12 @@ export function EditableField({
                 if (e.key === "Enter") commit();
                 if (e.key === "Escape") setEditing(false);
               }}
-              className="h-7 flex-1 rounded-md border border-aether-500/40 bg-white/[0.04] px-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-aether-500/20"
+              className="h-7 flex-1 rounded-md border border-signal-500/40 bg-white/[0.04] px-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-signal-500/20"
             />
             <button
               onClick={commit}
               disabled={isPending}
-              className="h-7 w-7 rounded-md bg-aether-500 text-white flex items-center justify-center hover:bg-aether-400 disabled:opacity-50"
+              className="h-7 w-7 rounded-md bg-signal-500 text-white flex items-center justify-center hover:bg-signal-400 disabled:opacity-50"
             >
               <Check className="h-3.5 w-3.5" strokeWidth={2.5} />
             </button>
@@ -162,7 +162,7 @@ export function EditableSelect({
           onChange={(e) => commit(e.target.value)}
           onBlur={() => setEditing(false)}
           disabled={isPending}
-          className="mt-1 h-7 w-full rounded-md border border-aether-500/40 bg-ink-100 px-2 text-sm text-white focus:outline-none"
+          className="mt-1 h-7 w-full rounded-md border border-signal-500/40 bg-ink-100 px-2 text-sm text-white focus:outline-none"
         >
           {options.map((o) => (
             <option key={o.value} value={o.value}>

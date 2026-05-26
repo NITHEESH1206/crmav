@@ -26,7 +26,7 @@ export class AIError extends Error {
   }
 }
 
-/** Default model and tuning for AetherAV. Opus 4.7, adaptive thinking. */
+/** Default model and tuning for ZynexAV. Opus 4.7, adaptive thinking. */
 export const AI_DEFAULTS = {
   model: "claude-opus-4-7" as const,
   max_tokens: 64_000,

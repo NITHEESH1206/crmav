@@ -55,8 +55,8 @@ export default async function InventoryPage() {
           return (
             <Card key={s.l}>
               <CardContent className="p-5">
-                <div className={`h-10 w-10 rounded-xl border flex items-center justify-center mb-3 ${s.alert ? "bg-amber-500/10 border-amber-500/30" : "bg-aether-500/10 border-aether-500/30"}`}>
-                  <Icon className={`h-4 w-4 ${s.alert ? "text-amber-400" : "text-aether-400"}`} />
+                <div className={`h-10 w-10 rounded-xl border flex items-center justify-center mb-3 ${s.alert ? "bg-amber-500/10 border-amber-500/30" : "bg-signal-500/10 border-signal-500/30"}`}>
+                  <Icon className={`h-4 w-4 ${s.alert ? "text-amber-400" : "text-signal-400"}`} />
                 </div>
                 <div className="text-xs text-white/45">{s.l}</div>
                 <div className="font-display text-3xl font-semibold tracking-tight mt-1">{s.v}</div>

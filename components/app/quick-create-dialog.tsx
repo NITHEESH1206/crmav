@@ -40,7 +40,7 @@ export function QuickCreateDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-xl">
         <DialogHeader>
-          <div className="flex items-center gap-2 text-aether-400 text-[11px] uppercase tracking-[0.2em]">
+          <div className="flex items-center gap-2 text-signal-400 text-[11px] uppercase tracking-[0.2em]">
             <Sparkles className="h-3 w-3" />
             Quick create
           </div>
@@ -113,7 +113,7 @@ function Select({
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="h-10 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 text-sm text-white focus:outline-none focus:border-aether-500/50 focus:ring-2 focus:ring-aether-500/20"
+      className="h-10 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 text-sm text-white focus:outline-none focus:border-signal-500/50 focus:ring-2 focus:ring-signal-500/20"
     >
       {placeholder && <option value="">{placeholder}</option>}
       {children}
@@ -317,7 +317,7 @@ function TicketForm({ onDone, lookups }: { onDone: () => void; lookups: Lookups 
           onChange={(e) => setDescription(e.target.value)}
           rows={3}
           placeholder="Symptoms, room, what's been tried…"
-          className="w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-aether-500/50 focus:ring-2 focus:ring-aether-500/20 resize-none"
+          className="w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-signal-500/50 focus:ring-2 focus:ring-signal-500/20 resize-none"
         />
       </div>
       <div className="grid grid-cols-2 gap-3">

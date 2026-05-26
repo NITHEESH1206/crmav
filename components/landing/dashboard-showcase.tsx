@@ -33,11 +33,11 @@ export function DashboardShowcase() {
 
   return (
     <section id="showcase" ref={ref} className="relative py-32 sm:py-40 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-aether-500/[0.04] to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-signal-500/[0.04] to-transparent" />
 
       <div className="container">
         <FadeIn className="max-w-3xl mb-20">
-          <div className="text-[11px] uppercase tracking-[0.3em] text-aether-400 font-medium">
+          <div className="text-[11px] uppercase tracking-[0.3em] text-signal-400 font-medium">
             Cinematic by design
           </div>
           <h2 className="mt-3 font-display text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-[1.05]">
@@ -67,7 +67,7 @@ export function DashboardShowcase() {
           </div>
 
           <motion.div style={{ y }} className="relative">
-            <div className="absolute -inset-x-10 -inset-y-10 bg-aether-500/15 blur-[120px] -z-10" />
+            <div className="absolute -inset-x-10 -inset-y-10 bg-signal-500/15 blur-[120px] -z-10" />
             <div className="rotate-[1.5deg]">
               <DashboardPreview />
             </div>

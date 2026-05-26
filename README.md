@@ -1,4 +1,4 @@
-# AetherAV CRM
+# ZynexAV CRM
 
 > The enterprise CRM built for AV companies, system integrators, AV consultants, and AV service providers.
 

@@ -15,10 +15,10 @@ const buttonVariants = cva(
         ghost:
           "text-white/80 hover:text-white hover:bg-white/[0.05]",
         outline:
-          "border border-white/[0.12] bg-transparent text-white hover:bg-white/[0.04] hover:border-aether-500/40",
+          "border border-white/[0.12] bg-transparent text-white hover:bg-white/[0.04] hover:border-signal-500/40",
         destructive:
           "bg-red-500/90 text-white hover:bg-red-500 shadow-[0_8px_30px_-8px_rgba(239,68,68,0.5)]",
-        link: "text-aether-400 underline-offset-4 hover:underline",
+        link: "text-signal-400 underline-offset-4 hover:underline",
       },
       size: {
         default: "h-10 px-5 py-2",

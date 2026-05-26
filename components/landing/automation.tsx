@@ -5,7 +5,7 @@ import { FileSignature, Bot, Wrench, Receipt, Bell, Workflow } from "lucide-reac
 import { FadeIn } from "@/components/motion/fade-in";
 
 const NODES = [
-  { icon: Bot, label: "AI drafts proposal", color: "from-aether-400 to-aether-600" },
+  { icon: Bot, label: "AI drafts proposal", color: "from-signal-400 to-signal-600" },
   { icon: FileSignature, label: "Client signs quote", color: "from-violet-400 to-violet-600" },
   { icon: Wrench, label: "Project auto-created", color: "from-sky-400 to-sky-600" },
   { icon: Workflow, label: "Tasks assigned to techs", color: "from-emerald-400 to-emerald-600" },
@@ -18,7 +18,7 @@ export function Automation() {
     <section id="automation" className="relative py-32 sm:py-40">
       <div className="container">
         <FadeIn className="text-center max-w-3xl mx-auto">
-          <div className="text-[11px] uppercase tracking-[0.3em] text-aether-400 font-medium">
+          <div className="text-[11px] uppercase tracking-[0.3em] text-signal-400 font-medium">
             Workflow Automation
           </div>
           <h2 className="mt-3 font-display text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-[1.05]">
@@ -30,7 +30,7 @@ export function Automation() {
         </FadeIn>
 
         <div className="mt-20 relative rounded-3xl border border-white/[0.08] bg-ink-200/40 backdrop-blur-2xl p-8 md:p-12 overflow-hidden">
-          <div className="absolute inset-0 bg-aether-mesh opacity-30" />
+          <div className="absolute inset-0 bg-signal-mesh opacity-30" />
           <div className="absolute inset-0 grid-pattern" />
 
           <div className="relative grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -90,7 +90,7 @@ export function Automation() {
 
           {/* Pulse on the line */}
           <motion.div
-            className="hidden lg:block absolute top-[58%] left-12 right-12 h-px bg-gradient-to-r from-transparent via-aether-500/40 to-transparent"
+            className="hidden lg:block absolute top-[58%] left-12 right-12 h-px bg-gradient-to-r from-transparent via-signal-500/40 to-transparent"
             aria-hidden
           />
         </div>

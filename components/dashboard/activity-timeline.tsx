@@ -27,7 +27,7 @@ const KIND_ICON: Record<Item["kind"], LucideIcon> = {
 };
 
 const KIND_ACCENT: Record<Item["kind"], string> = {
-  po: "from-aether-400 to-aether-600",
+  po: "from-signal-400 to-signal-600",
   ticket: "from-sky-400 to-sky-600",
   project: "from-emerald-400 to-emerald-600",
   opp: "from-violet-400 to-violet-600",
@@ -51,7 +51,7 @@ export function ActivityTimeline({ items }: { items: Item[] }) {
       </CardHeader>
       <CardContent>
         <div className="relative">
-          <div className="absolute left-[18px] top-2 bottom-2 w-px bg-gradient-to-b from-aether-500/40 via-white/[0.06] to-transparent" />
+          <div className="absolute left-[18px] top-2 bottom-2 w-px bg-gradient-to-b from-signal-500/40 via-white/[0.06] to-transparent" />
           <div className="space-y-4">
             {items.length === 0 && (
               <div className="text-xs text-white/40 text-center py-8">No recent activity.</div>

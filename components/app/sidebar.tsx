@@ -3,13 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, ChevronsLeft, Plus, HelpCircle } from "lucide-react";
+import { ChevronsLeft, Plus, HelpCircle } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { NAV_ITEMS, NAV_GROUPS } from "@/lib/nav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useQuickCreate } from "@/lib/stores/quick-create";
+import { BrandMark } from "@/components/app/brand-mark";
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -25,24 +26,31 @@ export function Sidebar() {
     >
       <div className="relative m-3 mr-0 flex h-[calc(100vh-24px)] flex-col rounded-2xl glass-panel overflow-hidden">
         {/* Glow bar */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 h-px w-32 bg-gradient-to-r from-transparent via-aether-500/60 to-transparent" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 h-px w-32 bg-gradient-to-r from-transparent via-signal-500/60 to-transparent" />
 
         {/* Brand */}
         <div className="flex items-center justify-between px-4 py-5">
-          <Link href="/" className="flex items-center gap-2.5 min-w-0">
-            <div className="relative h-9 w-9 shrink-0 rounded-xl bg-gradient-to-br from-aether-400 via-aether-500 to-aether-700 shadow-glow-sm flex items-center justify-center">
-              <Sparkles className="h-4 w-4 text-white" strokeWidth={2.5} />
-            </div>
-            <AnimatePresence>
-              {!collapsed && (
+          <Link href="/" className="flex items-center min-w-0">
+            <AnimatePresence mode="wait" initial={false}>
+              {collapsed ? (
                 <motion.div
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                  transition={{ duration: 0.25 }}
-                  className="font-display font-semibold text-[15px] tracking-tight text-white truncate"
+                  key="icon"
+                  initial={{ opacity: 0, scale: 0.85 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.85 }}
+                  transition={{ duration: 0.2 }}
                 >
-                  Aether<span className="text-aether-500">AV</span>
+                  <BrandMark variant="icon" height={28} />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="full"
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -8 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  <BrandMark variant="full" height={22} />
                 </motion.div>
               )}
             </AnimatePresence>
@@ -108,21 +116,21 @@ export function Sidebar() {
                           {active && (
                             <motion.div
                               layoutId="sidebar-active"
-                              className="absolute inset-0 rounded-xl bg-gradient-to-r from-aether-500/[0.18] to-aether-500/[0.04] border border-aether-500/30 shadow-[0_0_24px_-8px_rgba(255,107,0,0.5)]"
+                              className="absolute inset-0 rounded-xl bg-gradient-to-r from-signal-500/[0.18] to-signal-500/[0.04] border border-signal-500/30 shadow-[0_0_24px_-8px_rgba(255,107,0,0.5)]"
                               transition={{ type: "spring", duration: 0.5, bounce: 0.15 }}
                             />
                           )}
                           {active && (
                             <motion.div
                               layoutId="sidebar-indicator"
-                              className="absolute -left-3 top-2 bottom-2 w-1 rounded-full bg-aether-500 shadow-glow-sm"
+                              className="absolute -left-3 top-2 bottom-2 w-1 rounded-full bg-signal-500 shadow-glow-sm"
                               transition={{ type: "spring", duration: 0.5, bounce: 0.15 }}
                             />
                           )}
                           <Icon
                             className={cn(
                               "relative h-4 w-4 shrink-0 transition-colors",
-                              active ? "text-aether-400" : "text-white/55 group-hover:text-white/85"
+                              active ? "text-signal-400" : "text-white/55 group-hover:text-white/85"
                             )}
                           />
                           <AnimatePresence>
@@ -157,7 +165,7 @@ export function Sidebar() {
         <div className="border-t border-white/[0.06] p-3">
           <div
             className={cn(
-              "rounded-xl border border-white/[0.06] bg-gradient-to-b from-aether-500/[0.08] to-transparent p-3 relative overflow-hidden",
+              "rounded-xl border border-white/[0.06] bg-gradient-to-b from-signal-500/[0.08] to-transparent p-3 relative overflow-hidden",
               collapsed && "p-0 border-0 bg-transparent"
             )}
           >

@@ -1,51 +1,54 @@
+@import url("https://fonts.cdnfonts.com/css/pp-neue-montreal");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 4%;
+    --background: 40 18% 94%;
+    --foreground: 0 0% 4%;
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 4%;
+    --card-foreground: 0 0% 4%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 4%;
-    --primary: 22 100% 50%;
+    --popover-foreground: 0 0% 4%;
+    --primary: 16 100% 56%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 240 5% 96%;
-    --secondary-foreground: 240 6% 10%;
-    --muted: 240 5% 96%;
-    --muted-foreground: 240 4% 46%;
-    --accent: 22 100% 50%;
+    --secondary: 40 18% 92%;
+    --secondary-foreground: 0 0% 10%;
+    --muted: 40 18% 92%;
+    --muted-foreground: 0 0% 40%;
+    --accent: 16 100% 56%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 240 6% 90%;
-    --input: 240 6% 90%;
-    --ring: 22 100% 50%;
+    --border: 40 14% 86%;
+    --input: 40 14% 86%;
+    --ring: 16 100% 56%;
     --radius: 0.85rem;
   }
 
   .dark {
-    --background: 240 10% 2%;
-    --foreground: 0 0% 98%;
-    --card: 240 8% 4%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 8% 4%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 22 100% 55%;
+    /* ZynexAV brand: Ink (#0A0A0A), Signal (#FF5A1F), Bone (#F4F2EC) */
+    --background: 0 0% 4%;
+    --foreground: 40 22% 94%;
+    --card: 240 5% 6%;
+    --card-foreground: 40 22% 94%;
+    --popover: 240 5% 6%;
+    --popover-foreground: 40 22% 94%;
+    --primary: 16 100% 56%; /* Signal #FF5A1F */
     --primary-foreground: 0 0% 100%;
-    --secondary: 240 6% 10%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 6% 10%;
-    --muted-foreground: 240 5% 65%;
-    --accent: 22 100% 55%;
+    --secondary: 240 4% 10%;
+    --secondary-foreground: 40 22% 94%;
+    --muted: 240 4% 10%;
+    --muted-foreground: 40 8% 64%;
+    --accent: 16 100% 56%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 6% 14%;
-    --input: 240 6% 14%;
-    --ring: 22 100% 55%;
+    --destructive-foreground: 40 22% 94%;
+    --border: 240 4% 14%;
+    --input: 240 4% 14%;
+    --ring: 16 100% 56%;
   }
 
   * {
@@ -58,12 +61,13 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: "PP Neue Montreal", "Neue Montreal", var(--font-sans), system-ui, -apple-system, sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
   }
 
   ::selection {
-    background: rgba(255, 107, 0, 0.35);
-    color: #fff;
+    background: rgba(255, 90, 31, 0.35);
+    color: #ffffff;
   }
 
   /* Scrollbar */
@@ -81,7 +85,7 @@
     background-clip: content-box;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 107, 0, 0.45);
+    background: rgba(255, 90, 31, 0.45);
     background-clip: content-box;
   }
 }
@@ -105,7 +109,7 @@
     background: linear-gradient(
       180deg,
       rgba(20, 20, 22, 0.65) 0%,
-      rgba(8, 8, 10, 0.65) 100%
+      rgba(10, 10, 10, 0.72) 100%
     );
     @apply backdrop-blur-2xl border border-white/[0.06] rounded-2xl;
   }
@@ -122,10 +126,10 @@
     border-radius: inherit;
     background: linear-gradient(
       135deg,
-      rgba(255, 107, 0, 0.6),
-      rgba(255, 138, 51, 0.2) 30%,
+      rgba(255, 90, 31, 0.6),
+      rgba(255, 125, 63, 0.2) 30%,
       rgba(255, 255, 255, 0.04) 60%,
-      rgba(255, 107, 0, 0.5) 100%
+      rgba(255, 90, 31, 0.5) 100%
     );
     -webkit-mask:
       linear-gradient(#000 0 0) content-box,
@@ -136,14 +140,14 @@
   }
 
   .text-gradient {
-    background: linear-gradient(135deg, #fff 0%, #ffd2b3 40%, #ff8a33 100%);
+    background: linear-gradient(135deg, #f4f2ec 0%, #ffd2b3 40%, #ff7d3f 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
   }
-  .text-gradient-orange {
-    background: linear-gradient(135deg, #ff8a33 0%, #ff6b00 50%, #b34a00 100%);
+  .text-gradient-signal {
+    background: linear-gradient(135deg, #ff7d3f 0%, #ff5a1f 50%, #b8350c 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -153,12 +157,12 @@
   .btn-glow {
     position: relative;
     isolation: isolate;
-    background: linear-gradient(135deg, #ff6b00 0%, #ff8a33 100%);
-    color: #fff;
+    background: linear-gradient(135deg, #ff5a1f 0%, #ff7d3f 100%);
+    color: #ffffff;
     box-shadow:
-      0 0 0 1px rgba(255, 138, 51, 0.5) inset,
-      0 8px 30px -8px rgba(255, 107, 0, 0.6),
-      0 0 0 1px rgba(255, 107, 0, 0.3);
+      0 0 0 1px rgba(255, 125, 63, 0.5) inset,
+      0 8px 30px -8px rgba(255, 90, 31, 0.6),
+      0 0 0 1px rgba(255, 90, 31, 0.3);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .btn-glow::after {
@@ -176,9 +180,9 @@
   .btn-glow:hover {
     transform: translateY(-1px);
     box-shadow:
-      0 0 0 1px rgba(255, 138, 51, 0.6) inset,
-      0 14px 40px -10px rgba(255, 107, 0, 0.8),
-      0 0 30px -6px rgba(255, 107, 0, 0.6);
+      0 0 0 1px rgba(255, 125, 63, 0.6) inset,
+      0 14px 40px -10px rgba(255, 90, 31, 0.8),
+      0 0 30px -6px rgba(255, 90, 31, 0.6);
   }
   .btn-glow:hover::after {
     background-position: 200% 0;
@@ -202,14 +206,14 @@
     opacity: 0.025;
   }
 
-  .ring-aether {
-    box-shadow: 0 0 0 1px rgba(255, 107, 0, 0.4), 0 0 20px -2px rgba(255, 107, 0, 0.5);
+  .ring-signal {
+    box-shadow: 0 0 0 1px rgba(255, 90, 31, 0.4), 0 0 20px -2px rgba(255, 90, 31, 0.5);
   }
 
   .stat-grid {
     background-image:
-      linear-gradient(to right, rgba(255, 107, 0, 0.08) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 107, 0, 0.08) 1px, transparent 1px);
+      linear-gradient(to right, rgba(255, 90, 31, 0.08) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 90, 31, 0.08) 1px, transparent 1px);
     background-size: 28px 28px;
   }
 

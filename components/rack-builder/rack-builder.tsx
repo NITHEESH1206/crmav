@@ -211,7 +211,7 @@ export function RackBuilder({ racks, catalog }: { racks: Rack[]; catalog: Catalo
                 className={cn(
                   "w-full text-left px-2.5 py-2 rounded-lg text-sm transition-colors",
                   r.id === activeId
-                    ? "bg-aether-500/15 text-aether-300 ring-1 ring-aether-500/30"
+                    ? "bg-signal-500/15 text-signal-300 ring-1 ring-signal-500/30"
                     : "text-white/65 hover:bg-white/[0.03]"
                 )}
               >
@@ -233,7 +233,7 @@ export function RackBuilder({ racks, catalog }: { racks: Rack[]; catalog: Catalo
         <CardContent className="p-5">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <div className="text-[10px] uppercase tracking-wider text-aether-400">Editing</div>
+              <div className="text-[10px] uppercase tracking-wider text-signal-400">Editing</div>
               <div className="font-display text-xl font-semibold tracking-tight">{active.name}</div>
             </div>
             <div className="flex items-center gap-2">
@@ -264,7 +264,7 @@ export function RackBuilder({ racks, catalog }: { racks: Rack[]; catalog: Catalo
           <div
             className={cn(
               "relative rounded-2xl border-2 border-white/[0.08] bg-ink-200/40 p-4",
-              dragging && "border-aether-500/50 bg-aether-500/[0.04]"
+              dragging && "border-signal-500/50 bg-signal-500/[0.04]"
             )}
             onDragOver={(e) => {
               e.preventDefault();
@@ -309,7 +309,7 @@ export function RackBuilder({ racks, catalog }: { racks: Rack[]; catalog: Catalo
                         style={{ height: U_HEIGHT_PX }}
                         className={cn(
                           "border-b border-white/[0.03] last:border-b-0",
-                          dragging && "hover:bg-aether-500/15"
+                          dragging && "hover:bg-signal-500/15"
                         )}
                       />
                     );
@@ -332,7 +332,7 @@ export function RackBuilder({ racks, catalog }: { racks: Rack[]; catalog: Catalo
                         bottom: (it.uStart - 1) * U_HEIGHT_PX,
                         height: it.uHeight * U_HEIGHT_PX - 2,
                       }}
-                      className="group rounded-md bg-gradient-to-r from-aether-500/20 via-aether-500/10 to-aether-500/5 border border-aether-500/40 px-3 flex items-center justify-between text-xs hover:from-aether-500/30 hover:border-aether-500/60 transition-colors"
+                      className="group rounded-md bg-gradient-to-r from-signal-500/20 via-signal-500/10 to-signal-500/5 border border-signal-500/40 px-3 flex items-center justify-between text-xs hover:from-signal-500/30 hover:border-signal-500/60 transition-colors"
                     >
                       <div className="flex items-center gap-2 min-w-0">
                         <span className="text-[9px] text-white/45 font-mono shrink-0">
@@ -372,7 +372,7 @@ export function RackBuilder({ racks, catalog }: { racks: Rack[]; catalog: Catalo
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
               placeholder="Filter devices…"
-              className="h-9 w-full rounded-lg border border-white/[0.06] bg-white/[0.02] pl-8 pr-2 text-xs text-white placeholder:text-white/30 focus:outline-none focus:border-aether-500/40"
+              className="h-9 w-full rounded-lg border border-white/[0.06] bg-white/[0.02] pl-8 pr-2 text-xs text-white placeholder:text-white/30 focus:outline-none focus:border-signal-500/40"
             />
           </div>
           <div className="space-y-1.5 max-h-[520px] overflow-y-auto pr-1">
@@ -383,7 +383,7 @@ export function RackBuilder({ racks, catalog }: { racks: Rack[]; catalog: Catalo
                 onDragStart={() => setDragging(c)}
                 onDragEnd={() => setDragging(null)}
                 className={cn(
-                  "group rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5 cursor-grab active:cursor-grabbing hover:border-aether-500/30 hover:bg-white/[0.04] transition-all",
+                  "group rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5 cursor-grab active:cursor-grabbing hover:border-signal-500/30 hover:bg-white/[0.04] transition-all",
                   dragging?.id === c.id && "opacity-50 scale-95"
                 )}
               >
@@ -394,7 +394,7 @@ export function RackBuilder({ racks, catalog }: { racks: Rack[]; catalog: Catalo
                 <div className="text-xs font-medium mt-1.5 leading-tight">{c.name}</div>
                 <button
                   onClick={() => addItem(c)}
-                  className="mt-1.5 w-full text-[10px] text-white/45 hover:text-aether-400 flex items-center justify-center gap-1 py-1 rounded border border-dashed border-white/[0.06] hover:border-aether-500/40 transition-colors"
+                  className="mt-1.5 w-full text-[10px] text-white/45 hover:text-signal-400 flex items-center justify-center gap-1 py-1 rounded border border-dashed border-white/[0.06] hover:border-signal-500/40 transition-colors"
                 >
                   <Plus className="h-2.5 w-2.5" />
                   Add to rack
@@ -429,7 +429,7 @@ function Stat({
           "h-9 w-9 rounded-lg flex items-center justify-center border",
           tone === "warn"
             ? "bg-amber-500/10 border-amber-500/30 text-amber-400"
-            : "bg-aether-500/10 border-aether-500/30 text-aether-400"
+            : "bg-signal-500/10 border-signal-500/30 text-signal-400"
         )}
       >
         <Icon className="h-4 w-4" />

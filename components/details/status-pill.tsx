@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 type Tone = "default" | "success" | "warning" | "info" | "destructive" | "neutral";
 
 const TONE_CLASS: Record<Tone, string> = {
-  default: "bg-aether-500/15 text-aether-300 border-aether-500/30",
+  default: "bg-signal-500/15 text-signal-300 border-signal-500/30",
   success: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
   warning: "bg-amber-500/15 text-amber-300 border-amber-500/30",
   info: "bg-sky-500/15 text-sky-300 border-sky-500/30",
@@ -77,7 +77,7 @@ export function StatusPill({
               className={cn(
                 "h-1.5 w-1.5 rounded-full mr-2",
                 {
-                  default: "bg-aether-500",
+                  default: "bg-signal-500",
                   success: "bg-emerald-500",
                   warning: "bg-amber-500",
                   info: "bg-sky-500",

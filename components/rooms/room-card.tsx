@@ -20,7 +20,7 @@ type Room = {
 };
 
 const TYPE_TINT: Record<string, string> = {
-  BOARDROOM: "from-aether-500/20 to-aether-500/[0.04]",
+  BOARDROOM: "from-signal-500/20 to-signal-500/[0.04]",
   HUDDLE: "from-emerald-500/20 to-emerald-500/[0.04]",
   TRAINING: "from-sky-500/20 to-sky-500/[0.04]",
   STUDIO: "from-violet-500/20 to-violet-500/[0.04]",
@@ -69,7 +69,7 @@ export function RoomCard({ room, index }: { room: Room; index: number }) {
         <div className={`aspect-[16/9] relative bg-gradient-to-br ${tint} border-b border-white/[0.06]`}>
           <div className="absolute inset-0 grid-pattern opacity-30" />
           <div className="absolute inset-0 flex items-center justify-center">
-            <Layers3 className="h-14 w-14 text-white/20 group-hover:text-aether-400/60 transition-colors" strokeWidth={1.2} />
+            <Layers3 className="h-14 w-14 text-white/20 group-hover:text-signal-400/60 transition-colors" strokeWidth={1.2} />
           </div>
           <Badge variant="secondary" className="absolute top-3 left-3 capitalize text-[10px]">
             {room.roomType.toLowerCase().replace("_", " ")}
@@ -139,7 +139,7 @@ function Stat({
 }) {
   return (
     <div className="rounded-md border border-white/[0.06] bg-white/[0.02] py-1.5">
-      <Icon className="h-3 w-3 mx-auto text-aether-400" />
+      <Icon className="h-3 w-3 mx-auto text-signal-400" />
       <div className="text-xs font-mono mt-0.5">{value}</div>
       <div className="text-[9px] text-white/40">{label}</div>
     </div>

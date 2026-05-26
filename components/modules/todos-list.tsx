@@ -44,8 +44,8 @@ export function TodosList({ todos }: { todos: Todo[] }) {
                 }
                 className={`h-5 w-5 rounded-md border flex items-center justify-center transition-all ${
                   t.done
-                    ? "bg-aether-500 border-aether-500 text-white"
-                    : "border-white/[0.12] hover:border-aether-500/50"
+                    ? "bg-signal-500 border-signal-500 text-white"
+                    : "border-white/[0.12] hover:border-signal-500/50"
                 }`}
                 aria-label="Toggle task"
               >

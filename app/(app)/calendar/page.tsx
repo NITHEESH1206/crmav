@@ -39,7 +39,7 @@ export default function CalendarPage() {
             {DAYS.map((d, i) => (
               <div key={d} className="px-3 py-3 text-xs">
                 <div className="text-white/40">{d.split(" ")[0]}</div>
-                <div className={`text-base font-semibold mt-0.5 ${i === 2 ? "text-aether-400" : "text-white"}`}>
+                <div className={`text-base font-semibold mt-0.5 ${i === 2 ? "text-signal-400" : "text-white"}`}>
                   {d.split(" ")[1]}
                 </div>
               </div>
@@ -61,7 +61,7 @@ export default function CalendarPage() {
               const top = (e.start - 8) * 56 + 4;
               const height = e.span * 56 - 8;
               const colors: Record<Evt["variant"], string> = {
-                default: "from-aether-500/30 to-aether-500/10 border-aether-500/40 text-aether-200",
+                default: "from-signal-500/30 to-signal-500/10 border-signal-500/40 text-signal-200",
                 success: "from-emerald-500/30 to-emerald-500/10 border-emerald-500/40 text-emerald-200",
                 warning: "from-amber-500/30 to-amber-500/10 border-amber-500/40 text-amber-200",
                 info: "from-sky-500/30 to-sky-500/10 border-sky-500/40 text-sky-200",

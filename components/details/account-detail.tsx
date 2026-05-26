@@ -138,7 +138,7 @@ export function AccountDetail({ account }: { account: Account }) {
       {/* Contacts */}
       <Card>
         <CardHeader className="flex-row items-center gap-2">
-          <Users className="h-3.5 w-3.5 text-aether-400" />
+          <Users className="h-3.5 w-3.5 text-signal-400" />
           <CardTitle className="text-sm">Contacts</CardTitle>
           <Badge variant="secondary" className="ml-auto">{account.contacts.length}</Badge>
         </CardHeader>
@@ -157,7 +157,7 @@ export function AccountDetail({ account }: { account: Account }) {
                   <div className="min-w-0 flex-1">
                     <div className="text-sm font-medium flex items-center gap-1.5">
                       {c.firstName} {c.lastName}
-                      {c.isPrimary && <Star className="h-3 w-3 fill-aether-400 text-aether-400" />}
+                      {c.isPrimary && <Star className="h-3 w-3 fill-signal-400 text-signal-400" />}
                     </div>
                     <div className="text-[11px] text-white/45">{c.title ?? "—"} · {c.email ?? "no email"}</div>
                   </div>
@@ -226,7 +226,7 @@ export function AccountDetail({ account }: { account: Account }) {
               label: s.plan,
               meta: `Renews ${s.renewsAt?.toLocaleDateString() ?? "—"}`,
               right: (
-                <span className="text-sm font-mono text-aether-400 flex items-center gap-1">
+                <span className="text-sm font-mono text-signal-400 flex items-center gap-1">
                   <RefreshCcw className="h-3 w-3" />
                   ${formatCompact(s.monthlyCents / 100)}/mo
                 </span>

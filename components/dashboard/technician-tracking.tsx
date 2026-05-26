@@ -8,7 +8,7 @@ import { MapPin } from "lucide-react";
 import { initials } from "@/lib/utils";
 
 const COLORS = [
-  "from-aether-400 to-aether-600",
+  "from-signal-400 to-signal-600",
   "from-sky-400 to-sky-600",
   "from-emerald-400 to-emerald-600",
   "from-violet-400 to-violet-600",
@@ -49,7 +49,7 @@ export function TechnicianTracking({
             transition={{ duration: 0.4, delay: i * 0.06 }}
             className="flex items-center gap-3"
           >
-            <Avatar className="h-9 w-9 ring-1 ring-aether-500/20">
+            <Avatar className="h-9 w-9 ring-1 ring-signal-500/20">
               <AvatarFallback className={`bg-gradient-to-br ${COLORS[i % COLORS.length]}`}>
                 {initials(t.name)}
               </AvatarFallback>

@@ -52,8 +52,8 @@ export default async function AccountsPage() {
           return (
             <Card key={s.l}>
               <CardContent className="p-5">
-                <div className="h-10 w-10 rounded-xl border bg-aether-500/10 border-aether-500/30 flex items-center justify-center mb-3">
-                  <Icon className="h-4 w-4 text-aether-400" />
+                <div className="h-10 w-10 rounded-xl border bg-signal-500/10 border-signal-500/30 flex items-center justify-center mb-3">
+                  <Icon className="h-4 w-4 text-signal-400" />
                 </div>
                 <div className="text-xs text-white/45">{s.l}</div>
                 <div className="font-display text-3xl font-semibold tracking-tight mt-1">{s.v}</div>
@@ -83,7 +83,7 @@ export default async function AccountsPage() {
             >
               <div className="flex items-center gap-3">
                 <Avatar className="h-9 w-9 rounded-lg">
-                  <AvatarFallback className="rounded-lg from-aether-500 to-aether-700">{initials(a.name)}</AvatarFallback>
+                  <AvatarFallback className="rounded-lg from-signal-500 to-signal-700">{initials(a.name)}</AvatarFallback>
                 </Avatar>
                 <div className="text-sm font-medium truncate">{a.name}</div>
               </div>

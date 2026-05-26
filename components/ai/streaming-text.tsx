@@ -72,7 +72,7 @@ export function StreamingText({ text, state }: { text: string; state: State }) {
     <div className="relative">
       <Markdown text={text} />
       {state === "streaming" && (
-        <span className="inline-block w-1.5 h-4 ml-0.5 -mb-0.5 bg-aether-500 animate-pulse rounded-sm" />
+        <span className="inline-block w-1.5 h-4 ml-0.5 -mb-0.5 bg-signal-500 animate-pulse rounded-sm" />
       )}
     </div>
   );

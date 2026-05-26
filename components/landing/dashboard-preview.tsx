@@ -24,7 +24,7 @@ export function DashboardPreview() {
           <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/70" />
         </div>
         <div className="mx-auto rounded-md bg-white/[0.04] px-3 py-1 text-[11px] text-white/40 font-mono">
-          app.aetherav.com/dashboard
+          app.ZynexAV.com/dashboard
         </div>
       </div>
 
@@ -47,7 +47,7 @@ export function DashboardPreview() {
                   transition={{ delay: 0.8 + i * 0.06 }}
                   className={`flex items-center gap-2 rounded-lg px-2.5 py-2 text-xs ${
                     item.active
-                      ? "bg-aether-500/15 text-aether-400 ring-1 ring-aether-500/30"
+                      ? "bg-signal-500/15 text-signal-400 ring-1 ring-signal-500/30"
                       : "text-white/40 hover:text-white/70"
                   }`}
                 >
@@ -79,8 +79,8 @@ export function DashboardPreview() {
                   className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3"
                 >
                   <div className="flex items-center justify-between mb-1.5">
-                    <div className="h-6 w-6 rounded-md bg-aether-500/15 flex items-center justify-center">
-                      <Icon className="h-3 w-3 text-aether-400" />
+                    <div className="h-6 w-6 rounded-md bg-signal-500/15 flex items-center justify-center">
+                      <Icon className="h-3 w-3 text-signal-400" />
                     </div>
                     <span className="text-[10px] text-emerald-400 font-mono">{kpi.change}</span>
                   </div>
@@ -104,7 +104,7 @@ export function DashboardPreview() {
                   <div className="text-xs text-white/40">Pipeline Velocity</div>
                   <div className="text-base font-semibold">Last 12 weeks</div>
                 </div>
-                <div className="flex items-center gap-1 text-[10px] text-aether-400">
+                <div className="flex items-center gap-1 text-[10px] text-signal-400">
                   <ArrowUpRight className="h-3 w-3" />
                   <span>+32.4%</span>
                 </div>
@@ -121,7 +121,7 @@ export function DashboardPreview() {
               <div className="text-xs text-white/40 mb-3">Active Technicians</div>
               <div className="space-y-2.5">
                 {[
-                  { name: "M. Chen", task: "Hilton Boardroom", color: "from-aether-500 to-aether-700" },
+                  { name: "M. Chen", task: "Hilton Boardroom", color: "from-signal-500 to-signal-700" },
                   { name: "L. Rivera", task: "Westin DSP recom.", color: "from-sky-500 to-sky-700" },
                   { name: "A. Patel", task: "AMC service call", color: "from-emerald-500 to-emerald-700" },
                 ].map((t, i) => (
@@ -163,7 +163,7 @@ export function DashboardPreview() {
                   transition={{ delay: 1.7 + i * 0.1 }}
                   className="flex items-center gap-2 text-[11px] text-white/55"
                 >
-                  <div className="h-1.5 w-1.5 rounded-full bg-aether-500 shadow-glow-sm" />
+                  <div className="h-1.5 w-1.5 rounded-full bg-signal-500 shadow-glow-sm" />
                   <span>{line}</span>
                 </motion.div>
               ))}

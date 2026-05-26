@@ -208,7 +208,7 @@ export function SignalFlowDesigner({ flows }: { flows: Flow[] }) {
                   className={cn(
                     "w-full text-left px-2.5 py-2 rounded-lg text-sm transition-colors",
                     f.id === activeId
-                      ? "bg-aether-500/15 text-aether-300 ring-1 ring-aether-500/30"
+                      ? "bg-signal-500/15 text-signal-300 ring-1 ring-signal-500/30"
                       : "text-white/65 hover:bg-white/[0.03]"
                   )}
                 >
@@ -252,7 +252,7 @@ export function SignalFlowDesigner({ flows }: { flows: Flow[] }) {
           {/* Toolbar */}
           <div className="flex items-center justify-between p-4 border-b border-white/[0.06] bg-ink-200/40">
             <div>
-              <div className="text-[10px] uppercase tracking-wider text-aether-400">Editing</div>
+              <div className="text-[10px] uppercase tracking-wider text-signal-400">Editing</div>
               <div className="font-display text-lg font-semibold tracking-tight">{active.name}</div>
             </div>
             <div className="flex items-center gap-2">

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Sparkles } from "lucide-react";
+import { BrandMark } from "@/components/app/brand-mark";
 
 const COLUMNS = [
   {
@@ -33,13 +33,8 @@ export function LandingFooter() {
       <div className="container py-20">
         <div className="grid lg:grid-cols-[1.4fr_3fr] gap-12">
           <div>
-            <Link href="/" className="flex items-center gap-2.5">
-              <div className="relative h-9 w-9 rounded-xl bg-gradient-to-br from-aether-400 via-aether-500 to-aether-700 shadow-glow-sm flex items-center justify-center">
-                <Sparkles className="h-4 w-4 text-white" strokeWidth={2.5} />
-              </div>
-              <span className="font-display font-semibold text-lg tracking-tight text-white">
-                Aether<span className="text-aether-500">AV</span>
-              </span>
+            <Link href="/" className="flex items-center">
+              <BrandMark variant="full" height={26} />
             </Link>
             <p className="mt-5 text-sm text-white/45 leading-relaxed max-w-sm">
               The enterprise CRM built for AV companies, system integrators, and consultants. One platform for every workflow your team runs.
@@ -49,7 +44,7 @@ export function LandingFooter() {
                 <a
                   key={s}
                   href="#"
-                  className="h-9 w-9 rounded-lg border border-white/[0.08] bg-white/[0.02] flex items-center justify-center text-[11px] text-white/55 hover:text-white hover:border-aether-500/30 hover:bg-aether-500/[0.06] transition-colors"
+                  className="h-9 w-9 rounded-lg border border-white/[0.08] bg-white/[0.02] flex items-center justify-center text-[11px] text-white/55 hover:text-white hover:border-signal-500/30 hover:bg-signal-500/[0.06] transition-colors"
                 >
                   {s}
                 </a>
@@ -82,7 +77,7 @@ export function LandingFooter() {
 
         <div className="mt-16 pt-8 border-t border-white/[0.06] flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="text-xs text-white/35">
-            © {new Date().getFullYear()} AetherAV, Inc. All rights reserved.
+            © {new Date().getFullYear()} ZynexAV, Inc. All rights reserved.
           </div>
           <div className="flex items-center gap-6 text-xs text-white/35">
             <Link href="#" className="hover:text-white/70 transition-colors">Privacy</Link>

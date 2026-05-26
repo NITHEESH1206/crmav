@@ -50,7 +50,7 @@ export function ExportMenu({
           return (
             <DropdownMenuItem key={f} onClick={() => onExport(f)} className="flex-col items-start gap-0.5 py-2">
               <div className="flex items-center gap-2 w-full">
-                <Icon className="h-3.5 w-3.5 text-aether-400" />
+                <Icon className="h-3.5 w-3.5 text-signal-400" />
                 <span className="font-medium">{meta.label}</span>
               </div>
               <div className="text-[10px] text-white/45 ml-5">{meta.description}</div>

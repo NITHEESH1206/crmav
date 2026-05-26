@@ -10,7 +10,7 @@ export function Markdown({ text }: { text: string }) {
   const html = useMemo(() => render(text), [text]);
   return (
     <div
-      className="prose-aether text-sm leading-relaxed text-white/85 [&>h1]:font-display [&>h1]:text-xl [&>h1]:font-semibold [&>h1]:tracking-tight [&>h1]:text-white [&>h1]:mt-5 [&>h1]:mb-2 [&>h2]:font-display [&>h2]:text-lg [&>h2]:font-semibold [&>h2]:text-white [&>h2]:mt-5 [&>h2]:mb-2 [&>h3]:font-semibold [&>h3]:text-white [&>h3]:mt-4 [&>h3]:mb-1.5 [&>p]:my-2 [&>ul]:my-2 [&>ul]:space-y-1 [&>ul>li]:pl-1 [&>ul>li]:before:content-['•'] [&>ul>li]:before:text-aether-400 [&>ul>li]:before:mr-2 [&_strong]:text-white [&_strong]:font-semibold [&_em]:text-white/95 [&_code]:bg-white/[0.06] [&_code]:border [&_code]:border-white/[0.06] [&_code]:rounded [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:text-[12px] [&_code]:font-mono [&_a]:text-aether-400 [&_a]:underline-offset-2 hover:[&_a]:underline"
+      className="prose-Zynex text-sm leading-relaxed text-white/85 [&>h1]:font-display [&>h1]:text-xl [&>h1]:font-semibold [&>h1]:tracking-tight [&>h1]:text-white [&>h1]:mt-5 [&>h1]:mb-2 [&>h2]:font-display [&>h2]:text-lg [&>h2]:font-semibold [&>h2]:text-white [&>h2]:mt-5 [&>h2]:mb-2 [&>h3]:font-semibold [&>h3]:text-white [&>h3]:mt-4 [&>h3]:mb-1.5 [&>p]:my-2 [&>ul]:my-2 [&>ul]:space-y-1 [&>ul>li]:pl-1 [&>ul>li]:before:content-['•'] [&>ul>li]:before:text-signal-400 [&>ul>li]:before:mr-2 [&_strong]:text-white [&_strong]:font-semibold [&_em]:text-white/95 [&_code]:bg-white/[0.06] [&_code]:border [&_code]:border-white/[0.06] [&_code]:rounded [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:text-[12px] [&_code]:font-mono [&_a]:text-signal-400 [&_a]:underline-offset-2 hover:[&_a]:underline"
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );
