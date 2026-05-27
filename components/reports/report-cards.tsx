@@ -15,9 +15,26 @@ import {
   Cell,
 } from "recharts";
 import { motion } from "framer-motion";
-import { ArrowUpRight, TrendingUp, type LucideIcon } from "lucide-react";
+import {
+  ArrowUpRight,
+  TrendingUp,
+  DollarSign,
+  Building2,
+  Wrench,
+  type LucideIcon,
+} from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+
+// Icon keys map — pass a string from server, resolve to a component on the client.
+// Necessary because Lucide icon components can't cross the server→client RSC boundary.
+const STAT_ICONS = {
+  dollar: DollarSign,
+  trending: TrendingUp,
+  building: Building2,
+  wrench: Wrench,
+} as const;
+type StatIconKey = keyof typeof STAT_ICONS;
 import { formatCompact } from "@/lib/utils";
 
 const TOOLTIP_STYLE = {
@@ -299,12 +316,13 @@ export function HealthDistributionCard({ data }: { data: { range: string; count:
 export function ReportStat({
   label,
   value,
-  icon: Icon,
+  iconKey,
 }: {
   label: string;
   value: string;
-  icon?: LucideIcon;
+  iconKey?: StatIconKey;
 }) {
+  const Icon = iconKey ? STAT_ICONS[iconKey] : null;
   return (
     <Card>
       <CardContent className="p-5">

@@ -17,7 +17,6 @@ import {
   customerHealthDistribution,
   reportsSummary,
 } from "@/lib/data/reports";
-import { DollarSign, TrendingUp, Building2, Wrench } from "lucide-react";
 import { formatCompact } from "@/lib/utils";
 
 export default async function ReportsPage() {
@@ -39,10 +38,10 @@ export default async function ReportsPage() {
     >
       {/* Top stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
-        <ReportStat label="Revenue (paid)" value={`$${formatCompact(summary.revenueYtdCents / 100)}`} icon={DollarSign} />
-        <ReportStat label="Avg project margin" value={`${summary.avgMargin}%`} icon={TrendingUp} />
-        <ReportStat label="Active accounts" value={summary.activeAccounts.toString()} icon={Building2} />
-        <ReportStat label="Tickets resolved" value={summary.resolvedTickets.toString()} icon={Wrench} />
+        <ReportStat label="Revenue (paid)" value={`$${formatCompact(summary.revenueYtdCents / 100)}`} iconKey="dollar" />
+        <ReportStat label="Avg project margin" value={`${summary.avgMargin}%`} iconKey="trending" />
+        <ReportStat label="Active accounts" value={summary.activeAccounts.toString()} iconKey="building" />
+        <ReportStat label="Tickets resolved" value={summary.resolvedTickets.toString()} iconKey="wrench" />
       </div>
 
       {/* Hero row — revenue trend (2 cols) + pipeline funnel */}
