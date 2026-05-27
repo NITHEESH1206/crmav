@@ -16,7 +16,9 @@
       "PowerShell(Get-ChildItem \"D:\\\\Zynex AV CRM\" -File | Where-Object { $_.Extension -in \".png\", \".jpg\", \".jpeg\", \".svg\", \".webp\", \".gif\" } | Select-Object Name, Length)",
       "Bash(curl -s -o /dev/null -w '%{http_code}' -m 60 http://localhost:3000/__TRACKED_VAR__)",
       "Bash(curl -s -o /dev/null -w '%{http_code}' -m 90 http://localhost:3000/__TRACKED_VAR__)",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -m 120 \"http://localhost:3000/reports\")"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -m 120 \"http://localhost:3000/reports\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" -m 120 \"http://localhost:3000/settings\")",
+      "Bash(echo 'settings: __TRACKED_VAR__')"
     ]
   }
 }

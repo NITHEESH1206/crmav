@@ -1,11 +1,7 @@
-"use client";
-
 import { ModuleShell } from "@/components/app/module-shell";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import {
   Building2,
   Users,
@@ -13,10 +9,29 @@ import {
   KeyRound,
   Plug,
   History,
-  Sparkles,
 } from "lucide-react";
+import { CompanyTab } from "@/components/settings/company-tab";
+import { TeamTab } from "@/components/settings/team-tab";
+import { ApiKeysTab } from "@/components/settings/api-keys-tab";
+import { AuditTab } from "@/components/settings/audit-tab";
+import {
+  getWorkspace,
+  listWorkspaceMembers,
+  listApiKeys,
+  listAuditLog,
+} from "@/lib/data/settings";
+import { notFound } from "next/navigation";
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  const [workspace, members, keys, audit] = await Promise.all([
+    getWorkspace(),
+    listWorkspaceMembers(),
+    listApiKeys(),
+    listAuditLog(50),
+  ]);
+
+  if (!workspace) notFound();
+
   return (
     <ModuleShell
       eyebrow="Settings"
@@ -24,7 +39,7 @@ export default function SettingsPage() {
       description="Branding, roles, integrations, notifications, API keys, audit logs."
     >
       <Tabs defaultValue="company">
-        <TabsList>
+        <TabsList className="overflow-x-auto max-w-full">
           <TabsTrigger value="company">
             <Building2 className="h-3.5 w-3.5 mr-1.5" />
             Company
@@ -52,55 +67,11 @@ export default function SettingsPage() {
         </TabsList>
 
         <TabsContent value="company">
-          <Card>
-            <CardHeader>
-              <CardTitle>Company branding</CardTitle>
-            </CardHeader>
-            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div>
-                <label className="text-xs text-white/55 mb-2 block">Company name</label>
-                <Input defaultValue="Soundstage Integration LLC" />
-              </div>
-              <div>
-                <label className="text-xs text-white/55 mb-2 block">Trading currency</label>
-                <Input defaultValue="USD" />
-              </div>
-              <div>
-                <label className="text-xs text-white/55 mb-2 block">Primary contact email</label>
-                <Input defaultValue="ops@soundstage.av" />
-              </div>
-              <div>
-                <label className="text-xs text-white/55 mb-2 block">Time zone</label>
-                <Input defaultValue="America/New_York" />
-              </div>
-              <div className="md:col-span-2 flex justify-end">
-                <Button>Save changes</Button>
-              </div>
-            </CardContent>
-          </Card>
+          <CompanyTab workspace={workspace} />
         </TabsContent>
 
         <TabsContent value="team">
-          <Card>
-            <CardHeader><CardTitle>Roles & permissions</CardTitle></CardHeader>
-            <CardContent className="space-y-3">
-              {[
-                { role: "Owner", members: 1, perms: "Full access" },
-                { role: "Admin", members: 4, perms: "All modules + billing" },
-                { role: "Sales", members: 8, perms: "Opportunities, Accounts" },
-                { role: "Engineer", members: 12, perms: "Projects, Catalog, Catalog edit" },
-                { role: "Service Tech", members: 14, perms: "Service tickets, Time" },
-              ].map((r) => (
-                <div key={r.role} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 flex items-center justify-between">
-                  <div>
-                    <div className="text-sm font-medium">{r.role}</div>
-                    <div className="text-xs text-white/45 mt-0.5">{r.perms}</div>
-                  </div>
-                  <Badge variant="secondary">{r.members} members</Badge>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+          <TeamTab members={members} />
         </TabsContent>
 
         <TabsContent value="notifications">
@@ -141,7 +112,9 @@ export default function SettingsPage() {
                 <CardContent className="p-5 flex items-center justify-between">
                   <div>
                     <div className="text-sm font-medium">{i.name}</div>
-                    <div className="text-[11px] text-white/45 mt-0.5">{i.status === "Connected" ? "Active" : "Not configured"}</div>
+                    <div className="text-[11px] text-white/45 mt-0.5">
+                      {i.status === "Connected" ? "Active" : "Not configured"}
+                    </div>
                   </div>
                   <Badge variant={i.status === "Connected" ? "success" : "secondary"}>
                     {i.status}
@@ -153,49 +126,11 @@ export default function SettingsPage() {
         </TabsContent>
 
         <TabsContent value="api">
-          <Card>
-            <CardHeader><CardTitle>API keys</CardTitle></CardHeader>
-            <CardContent className="space-y-3">
-              {[
-                { name: "Production server", prefix: "ak_live_8c9f…b720", used: "2m ago" },
-                { name: "Crestron sync agent", prefix: "ak_live_44a1…df09", used: "1h ago" },
-                { name: "Mobile app — staging", prefix: "ak_test_91e2…7c14", used: "12d ago" },
-              ].map((k) => (
-                <div key={k.name} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 flex items-center justify-between">
-                  <div>
-                    <div className="text-sm font-medium">{k.name}</div>
-                    <div className="text-xs text-white/45 font-mono mt-0.5">{k.prefix}</div>
-                  </div>
-                  <div className="text-[11px] text-white/45">Used {k.used}</div>
-                </div>
-              ))}
-              <Button className="w-full mt-2">
-                <Sparkles className="h-3.5 w-3.5" />
-                Generate new key
-              </Button>
-            </CardContent>
-          </Card>
+          <ApiKeysTab keys={keys} />
         </TabsContent>
 
         <TabsContent value="audit">
-          <Card>
-            <CardHeader><CardTitle>Audit log</CardTitle></CardHeader>
-            <CardContent className="p-0">
-              {[
-                { who: "Marcus R.", action: "approved PO-2147 ($14,820)", when: "2m ago" },
-                { who: "Lena R.", action: "closed ticket #832 (AMC visit, 1h 18m)", when: "44m ago" },
-                { who: "System", action: "auto-converted quote D-188 to project (Westin DSP)", when: "1h ago" },
-                { who: "Priya M.", action: "uploaded DSP file q-sys-bldg-c-r4.qsys", when: "2h ago" },
-                { who: "Hannah K.", action: "received shipment SH-1182 to Warehouse 02", when: "3h ago" },
-              ].map((row, i) => (
-                <div key={i} className="grid grid-cols-[140px_1fr_120px] gap-3 px-5 py-3 border-b border-white/[0.04]">
-                  <div className="text-sm font-medium">{row.who}</div>
-                  <div className="text-sm text-white/70">{row.action}</div>
-                  <div className="text-[11px] text-white/45 text-right">{row.when}</div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+          <AuditTab entries={audit} />
         </TabsContent>
       </Tabs>
     </ModuleShell>
