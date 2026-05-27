@@ -28,7 +28,11 @@
       "Bash(cmd /c \"npm run build 2>&1 | tail -40\")",
       "Bash(cmd /c \"npm run build > build.log 2>&1 & echo Exit: %ERRORLEVEL%\")",
       "Bash(cmd /c \"npm run build\")",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(npx tsx *)",
+      "Bash(npm install *)",
+      "Bash(npx prisma *)",
+      "Bash(taskkill /F /IM node.exe)"
     ]
   }
 }

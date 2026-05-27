@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Boxes, Server, Network, Layers3, Sparkles, CheckCircle2, AlertTriangle } from "lucide-react";
+import { Boxes, Server, Network, Layers3, Sparkles, CheckCircle2, AlertTriangle, Box } from "lucide-react";
 import { toast } from "sonner";
 import { generateBOQForRoom } from "@/app/actions/rooms";
 
@@ -65,27 +66,33 @@ export function RoomCard({ room, index }: { room: Room; index: number }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.04 }}
     >
-      <Card className="overflow-hidden hover-lift cursor-pointer group">
-        <div className={`aspect-[16/9] relative bg-gradient-to-br ${tint} border-b border-bone-300/55`}>
-          <div className="absolute inset-0 grid-pattern opacity-30" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <Layers3 className="h-14 w-14 text-ink-300/35 group-hover:text-signal-400/60 transition-colors" strokeWidth={1.2} />
-          </div>
-          <Badge variant="secondary" className="absolute top-3 left-3 capitalize text-[10px]">
-            {room.roomType.toLowerCase().replace("_", " ")}
-          </Badge>
-          {room.capacity && (
-            <Badge variant="outline" className="absolute top-3 right-3 text-[10px]">
-              {room.capacity} seats
+      <Card className="overflow-hidden hover-lift group">
+        <Link href={`/rooms/${room.id}`} className="block">
+          <div className={`aspect-[16/9] relative bg-gradient-to-br ${tint} border-b border-bone-300/55 cursor-pointer`}>
+            <div className="absolute inset-0 grid-pattern opacity-30" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Layers3 className="h-14 w-14 text-ink-300/35 group-hover:text-signal-400/60 transition-colors" strokeWidth={1.2} />
+            </div>
+            <Badge variant="secondary" className="absolute top-3 left-3 capitalize text-[10px]">
+              {room.roomType.toLowerCase().replace("_", " ")}
             </Badge>
-          )}
-        </div>
-        <CardContent className="p-4">
-          <div className="text-sm font-medium leading-tight">{room.name}</div>
-          <div className="text-[11px] text-ink-300/55 mt-0.5 truncate">
-            {room.account?.name ?? "Unassigned"}
-            {room.project?.name && ` · ${room.project.name}`}
+            {room.capacity && (
+              <Badge variant="outline" className="absolute top-3 right-3 text-[10px]">
+                {room.capacity} seats
+              </Badge>
+            )}
           </div>
+        </Link>
+        <CardContent className="p-4">
+          <Link href={`/rooms/${room.id}`} className="block">
+            <div className="text-sm font-medium leading-tight hover:text-signal-600 transition-colors">
+              {room.name}
+            </div>
+            <div className="text-[11px] text-ink-300/55 mt-0.5 truncate">
+              {room.account?.name ?? "Unassigned"}
+              {room.project?.name && ` · ${room.project.name}`}
+            </div>
+          </Link>
 
           <div className="mt-3 grid grid-cols-4 gap-1.5 text-center">
             <Stat icon={Boxes} value={room._count.devices} label="Dev." />
@@ -94,16 +101,22 @@ export function RoomCard({ room, index }: { room: Room; index: number }) {
             <Stat icon={Network} value={room._count.signalFlows} label="Flow" />
           </div>
 
-          <div className="mt-3 pt-3 border-t border-bone-300/55">
+          <div className="mt-3 pt-3 border-t border-bone-300/55 flex items-center gap-2">
+            <Link href={`/rooms/${room.id}`} className="flex-1">
+              <Button size="sm" variant="default" className="w-full">
+                <Box className="h-3.5 w-3.5" />
+                Open 3D view
+              </Button>
+            </Link>
             <Button
               size="sm"
               variant="secondary"
-              className="w-full"
               disabled={isPending || !hasProject}
               onClick={genBOQ}
+              title={hasProject ? "Generate BOQ" : "No project linked"}
             >
               <Sparkles className="h-3.5 w-3.5" />
-              {isPending ? "Generating…" : hasProject ? "Generate BOQ" : "No project linked"}
+              {isPending ? "…" : "BOQ"}
             </Button>
             {result && (
               <motion.div

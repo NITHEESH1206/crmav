@@ -1,7 +1,103 @@
 "use server";
 
+import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+
+/* ─── Save user-overridden room dimensions ─── */
+const dimensionsSchema = z.object({
+  roomId: z.string(),
+  lengthM: z.number().min(1).max(50),
+  widthM: z.number().min(1).max(50),
+  heightM: z.number().min(2).max(15),
+});
+
+export async function saveRoomDimensions(input: z.infer<typeof dimensionsSchema>) {
+  const data = dimensionsSchema.parse(input);
+  await prisma.room.update({
+    where: { id: data.roomId },
+    data: {
+      lengthM: data.lengthM,
+      widthM: data.widthM,
+      heightM: data.heightM,
+    },
+  });
+  revalidatePath(`/rooms/${data.roomId}`);
+  revalidatePath("/rooms");
+  return { ok: true };
+}
+
+export async function resetRoomDimensions(roomId: string) {
+  await prisma.room.update({
+    where: { id: roomId },
+    data: { lengthM: null, widthM: null, heightM: null },
+  });
+  revalidatePath(`/rooms/${roomId}`);
+  revalidatePath("/rooms");
+  return { ok: true };
+}
+
+/* ─── Add catalog devices to a room as BOQ items ─── */
+const addItemsSchema = z.object({
+  roomId: z.string(),
+  items: z
+    .array(
+      z.object({
+        catalogId: z.string(),
+        quantity: z.number().int().min(1).max(500),
+      })
+    )
+    .min(1),
+});
+
+export async function addCatalogItemsToRoom(input: z.infer<typeof addItemsSchema>) {
+  const data = addItemsSchema.parse(input);
+  const room = await prisma.room.findUnique({
+    where: { id: data.roomId },
+    select: { projectId: true },
+  });
+  if (!room?.projectId) {
+    return { ok: false, error: "Room has no project — assign one first." };
+  }
+
+  const catalogIds = data.items.map((i) => i.catalogId);
+  const cats = await prisma.catalogItem.findMany({
+    where: { id: { in: catalogIds } },
+  });
+  const byId = new Map(cats.map((c) => [c.id, c]));
+
+  const rows = data.items
+    .map((i) => {
+      const c = byId.get(i.catalogId);
+      if (!c) return null;
+      return {
+        projectId: room.projectId!,
+        roomId: data.roomId,
+        catalogId: c.id,
+        description: c.name,
+        quantity: i.quantity,
+        unitPriceCents: c.listPriceCents,
+      };
+    })
+    .filter(Boolean) as Array<{
+      projectId: string;
+      roomId: string;
+      catalogId: string;
+      description: string;
+      quantity: number;
+      unitPriceCents: number;
+    }>;
+
+  if (rows.length === 0) {
+    return { ok: false, error: "None of the selected items exist in the catalog." };
+  }
+
+  await prisma.bOQItem.createMany({ data: rows });
+  revalidatePath(`/rooms/${data.roomId}`);
+  revalidatePath("/rooms");
+  revalidatePath("/projects");
+  return { ok: true, added: rows.length };
+}
 
 /**
  * Generate BOQ items for the room's parent project, drawn from the room's
