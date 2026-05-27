@@ -9,11 +9,13 @@ import {
   KeyRound,
   Plug,
   History,
+  Shield,
 } from "lucide-react";
 import { CompanyTab } from "@/components/settings/company-tab";
 import { TeamTab } from "@/components/settings/team-tab";
 import { ApiKeysTab } from "@/components/settings/api-keys-tab";
 import { AuditTab } from "@/components/settings/audit-tab";
+import { PermissionsMatrix } from "@/components/settings/permissions-matrix";
 import {
   getWorkspace,
   listWorkspaceMembers,
@@ -48,6 +50,10 @@ export default async function SettingsPage() {
             <Users className="h-3.5 w-3.5 mr-1.5" />
             Team & roles
           </TabsTrigger>
+          <TabsTrigger value="permissions">
+            <Shield className="h-3.5 w-3.5 mr-1.5" />
+            Permissions
+          </TabsTrigger>
           <TabsTrigger value="notifications">
             <Bell className="h-3.5 w-3.5 mr-1.5" />
             Notifications
@@ -74,6 +80,10 @@ export default async function SettingsPage() {
           <TeamTab members={members} />
         </TabsContent>
 
+        <TabsContent value="permissions">
+          <PermissionsMatrix />
+        </TabsContent>
+
         <TabsContent value="notifications">
           <Card>
             <CardContent className="p-6 space-y-3">
@@ -84,7 +94,7 @@ export default async function SettingsPage() {
                 "PO approvals required",
                 "Daily revenue digest",
               ].map((n) => (
-                <div key={n} className="flex items-center justify-between py-2 border-b border-white/[0.04] last:border-0">
+                <div key={n} className="flex items-center justify-between py-2 border-b border-bone-300/45 last:border-0">
                   <span className="text-sm">{n}</span>
                   <div className="flex gap-2">
                     <Badge variant="success">Email</Badge>
@@ -112,7 +122,7 @@ export default async function SettingsPage() {
                 <CardContent className="p-5 flex items-center justify-between">
                   <div>
                     <div className="text-sm font-medium">{i.name}</div>
-                    <div className="text-[11px] text-white/45 mt-0.5">
+                    <div className="text-[11px] text-ink-300/55 mt-0.5">
                       {i.status === "Connected" ? "Active" : "Not configured"}
                     </div>
                   </div>

@@ -2,154 +2,139 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import {
-  ArrowRight,
-  PlayCircle,
-  Sparkles,
-  Cable,
-  MonitorPlay,
-  Radio,
-  Cpu,
-  Headphones,
-  Volume2,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Aurora } from "@/components/motion/aurora";
-import { Particles } from "@/components/motion/particles";
-import { DashboardPreview } from "@/components/landing/dashboard-preview";
+import { ArrowRight, Check } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export function Hero() {
   return (
-    <section className="relative pt-32 pb-32 sm:pt-40 sm:pb-40 overflow-hidden">
-      <Aurora />
-      <Particles count={32} />
-      <div className="absolute inset-0 grid-pattern -z-10" />
+    <section
+      id="home"
+      className="relative pt-40 pb-24 sm:pt-44 sm:pb-28 overflow-hidden"
+    >
+      {/* Soft lavender → signal wash from top */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(255,90,31,0.10),transparent_60%)]"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_50%_40%_at_50%_30%,rgba(10,10,10,0.04),transparent_70%)]"
+      />
 
       <div className="container relative">
-        {/* Floating AV chips */}
-        <FloatingAVChips />
-
         <div className="mx-auto max-w-4xl text-center">
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] backdrop-blur px-3.5 py-1.5 text-xs text-white/70"
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 rounded-full bg-white/85 backdrop-blur border border-bone-300/60 px-5 py-2 text-[13px] font-medium text-ink-300"
           >
             <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-signal-400 opacity-75" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-signal-500 opacity-75" />
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-signal-500" />
             </span>
-            <Sparkles className="h-3 w-3 text-signal-400" />
-            <span>AI proposals, BOQ generation, signal flow — all built in</span>
+            One Platform. Every AV Project.
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.1, ease: [0.21, 0.47, 0.32, 0.98] }}
-            className="mt-7 font-display text-5xl sm:text-6xl md:text-7xl lg:text-[88px] font-semibold tracking-[-0.04em] leading-[0.95]"
+            transition={{ duration: 0.8, delay: 0.08, ease: [0.21, 0.47, 0.32, 0.98] }}
+            className="mt-7 font-display font-bold tracking-[-0.045em] leading-[0.95] text-ink-300 text-5xl sm:text-6xl md:text-7xl lg:text-[88px]"
           >
-            The Enterprise CRM
+            All-in-One CRM to Run
             <br />
-            <span className="text-gradient">Built For AV Companies</span>
+            Your AV Business
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.25, ease: [0.21, 0.47, 0.32, 0.98] }}
-            className="mt-7 mx-auto max-w-2xl text-base sm:text-lg text-white/55 leading-relaxed"
+            transition={{ duration: 0.8, delay: 0.22, ease: [0.21, 0.47, 0.32, 0.98] }}
+            className="mt-7 mx-auto max-w-2xl text-[17px] sm:text-lg text-ink-300/60 leading-relaxed"
           >
-            Manage projects, clients, inventory, procurement, service tickets, billing, and AV operations from one powerful platform engineered for system integrators and consultants.
+            Projects, opportunities, service tickets, inventory, procurement, billing — plus AV-native tools like rack builder, signal flow and device monitoring. Built for integrators, consultants and service teams.
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.4, ease: [0.21, 0.47, 0.32, 0.98] }}
+            transition={{ duration: 0.8, delay: 0.36, ease: [0.21, 0.47, 0.32, 0.98] }}
             className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3"
           >
             <Link href="/dashboard">
-              <Button size="xl">
-                Start Free Trial
-                <ArrowRight className="h-4 w-4" />
-              </Button>
+              <PrimaryPill>Ready to Try Free</PrimaryPill>
             </Link>
-            <Button size="xl" variant="secondary">
-              <PlayCircle className="h-4 w-4" />
-              Book a Demo
-            </Button>
+            <Link href="#features">
+              <OutlinePill>Get Started</OutlinePill>
+            </Link>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.7 }}
-            className="mt-6 flex items-center justify-center gap-6 text-xs text-white/35"
+            transition={{ duration: 0.9, delay: 0.6 }}
+            className="mt-8 flex flex-wrap items-center justify-center gap-x-7 gap-y-2 text-[13px] text-ink-300/55"
           >
-            <span>No credit card required</span>
-            <span className="h-1 w-1 rounded-full bg-white/15" />
-            <span>14-day free trial</span>
-            <span className="h-1 w-1 rounded-full bg-white/15" />
-            <span>Cancel anytime</span>
+            <Tick>No credit card required</Tick>
+            <Tick>Cancel anytime &amp; no hidden charge</Tick>
+            <Tick>14-day money-back guarantee</Tick>
           </motion.div>
         </div>
-
-        {/* 3D Dashboard preview */}
-        <motion.div
-          initial={{ opacity: 0, y: 60, rotateX: 15 }}
-          animate={{ opacity: 1, y: 0, rotateX: 0 }}
-          transition={{ duration: 1.2, delay: 0.5, ease: [0.21, 0.47, 0.32, 0.98] }}
-          className="relative mt-20 mx-auto max-w-6xl perspective"
-        >
-          <div className="absolute -inset-x-20 -inset-y-10 bg-signal-500/20 blur-[120px] -z-10" />
-          <DashboardPreview />
-        </motion.div>
       </div>
     </section>
   );
 }
 
-function FloatingAVChips() {
-  const chips = [
-    { icon: Cable, top: "10%", left: "8%", delay: 0, label: "Crestron DM" },
-    { icon: MonitorPlay, top: "16%", right: "10%", delay: 0.6, label: "85\" Display" },
-    { icon: Radio, top: "55%", left: "4%", delay: 1.2, label: "Shure MXA920" },
-    { icon: Cpu, top: "62%", right: "5%", delay: 1.8, label: "Q-SYS Core" },
-    { icon: Headphones, top: "32%", left: "14%", delay: 0.3, label: "DSP Routing" },
-    { icon: Volume2, top: "44%", right: "16%", delay: 0.9, label: "Genelec 8030C" },
-  ];
-
+function Tick({ children }: { children: React.ReactNode }) {
   return (
-    <>
-      {chips.map((c, i) => {
-        const Icon = c.icon;
-        return (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{
-              opacity: [0, 1, 1, 0.6, 1],
-              scale: [0.8, 1, 1.02, 0.98, 1],
-              y: [0, -10, 4, -6, 0],
-            }}
-            transition={{
-              duration: 8,
-              delay: c.delay,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            style={{ top: c.top, left: c.left, right: c.right }}
-            className="absolute hidden lg:flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.04] backdrop-blur-xl px-3 py-2 text-xs text-white/70 shadow-soft"
-          >
-            <div className="h-6 w-6 rounded-md bg-signal-500/15 flex items-center justify-center text-signal-400">
-              <Icon className="h-3.5 w-3.5" />
-            </div>
-            <span className="font-mono text-[11px]">{c.label}</span>
-          </motion.div>
-        );
-      })}
-    </>
+    <span className="inline-flex items-center gap-1.5">
+      <Check className="h-3.5 w-3.5 text-ink-300/70" strokeWidth={2.4} />
+      {children}
+    </span>
+  );
+}
+
+export function PrimaryPill({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <span
+      className={cn(
+        "group inline-flex items-center gap-2.5 rounded-full bg-ink-300 pl-7 pr-2 py-2 text-[15px] font-medium text-bone-100 hover:bg-ink-200 transition-all hover:shadow-[0_10px_30px_-10px_rgba(10,10,10,0.6)]",
+        className
+      )}
+    >
+      {children}
+      <span className="h-9 w-9 rounded-full bg-bone-100/15 group-hover:bg-signal-500 flex items-center justify-center transition-colors">
+        <ArrowRight className="h-4 w-4 text-bone-100 group-hover:translate-x-0.5 transition-transform" strokeWidth={2.2} />
+      </span>
+    </span>
+  );
+}
+
+export function OutlinePill({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <span
+      className={cn(
+        "group inline-flex items-center gap-2.5 rounded-full bg-white border border-bone-300/70 pl-7 pr-2 py-2 text-[15px] font-medium text-ink-300 hover:border-ink-300/40 transition-all",
+        className
+      )}
+    >
+      {children}
+      <span className="h-9 w-9 rounded-full bg-ink-300 flex items-center justify-center">
+        <ArrowRight className="h-4 w-4 text-bone-100 group-hover:translate-x-0.5 transition-transform" strokeWidth={2.2} />
+      </span>
+    </span>
   );
 }

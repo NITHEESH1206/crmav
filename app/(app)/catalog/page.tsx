@@ -57,7 +57,7 @@ export default async function CatalogPage() {
                   </div>
                   <div>
                     <div className="text-sm font-medium">{name}</div>
-                    <div className="text-xs text-white/40 mt-0.5">{count} products</div>
+                    <div className="text-xs text-ink-300/50 mt-0.5">{count} products</div>
                   </div>
                 </CardContent>
               </Card>
@@ -68,16 +68,16 @@ export default async function CatalogPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {products.map((p) => (
           <Card key={p.id} className="overflow-hidden group hover-lift cursor-pointer">
-            <div className="aspect-[16/9] relative bg-gradient-to-br from-signal-500/10 via-transparent to-transparent border-b border-white/[0.06]">
+            <div className="aspect-[16/9] relative bg-gradient-to-br from-signal-500/10 via-transparent to-transparent border-b border-bone-300/55">
               <div className="absolute inset-0 grid-pattern opacity-30" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <Cable className="h-12 w-12 text-white/20 group-hover:text-signal-400/60 transition-colors" strokeWidth={1.2} />
+                <Cable className="h-12 w-12 text-ink-300/35 group-hover:text-signal-400/60 transition-colors" strokeWidth={1.2} />
               </div>
               <Badge variant="secondary" className="absolute top-3 left-3">{p.brand}</Badge>
             </div>
             <CardContent className="p-4">
               <div className="text-sm font-medium leading-tight">{p.name}</div>
-              <div className="text-[11px] text-white/45 mt-1">{p.category}</div>
+              <div className="text-[11px] text-ink-300/55 mt-1">{p.category}</div>
               <div className="mt-3 flex items-center justify-between">
                 <div className="font-display text-lg font-semibold text-gradient">
                   ${(p.listPriceCents / 100).toLocaleString()}
@@ -99,7 +99,7 @@ export default async function CatalogPage() {
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-sm font-semibold">AV Package Builder</div>
-            <div className="text-xs text-white/55 mt-0.5">
+            <div className="text-xs text-ink-300/65 mt-0.5">
               Pre-configured kits for boardrooms, huddle rooms, training spaces, command centers — drop into any quote.
             </div>
           </div>

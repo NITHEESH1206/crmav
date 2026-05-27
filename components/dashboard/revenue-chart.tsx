@@ -35,7 +35,7 @@ export function RevenueChart() {
       <CardHeader className="flex-row items-start justify-between gap-3">
         <div>
           <CardTitle className="text-base">Revenue performance</CardTitle>
-          <p className="text-xs text-white/45 mt-1">Booked vs. billed — last 12 months</p>
+          <p className="text-xs text-ink-300/55 mt-1">Booked vs. billed — last 12 months</p>
         </div>
         <div className="flex items-center gap-3">
           <Badge variant="success" className="gap-1">
@@ -54,12 +54,12 @@ export function RevenueChart() {
       <CardContent className="pl-2">
         <div className="flex items-baseline gap-6 px-4 mb-2">
           <div>
-            <div className="text-[11px] text-white/40 uppercase tracking-wider">Booked</div>
+            <div className="text-[11px] text-ink-300/50 uppercase tracking-wider">Booked</div>
             <div className="font-display text-2xl font-semibold tracking-tight">$2.96M</div>
           </div>
           <div>
-            <div className="text-[11px] text-white/40 uppercase tracking-wider">Billed</div>
-            <div className="font-display text-2xl font-semibold tracking-tight text-white/70">$2.74M</div>
+            <div className="text-[11px] text-ink-300/50 uppercase tracking-wider">Billed</div>
+            <div className="font-display text-2xl font-semibold tracking-tight text-ink-300/80">$2.74M</div>
           </div>
         </div>
         <div className="h-72">

@@ -187,7 +187,7 @@ export function SignalFlowDesigner({ flows }: { flows: Flow[] }) {
   }
 
   if (!active) {
-    return <div className="text-sm text-white/45">No signal flows yet.</div>;
+    return <div className="text-sm text-ink-300/55">No signal flows yet.</div>;
   }
 
   const maxX = Math.max(1280, ...diagram.nodes.map((n) => n.x + (n.width ?? 220) + 80));
@@ -199,7 +199,7 @@ export function SignalFlowDesigner({ flows }: { flows: Flow[] }) {
       <div className="space-y-5">
         <Card>
           <CardContent className="p-4">
-            <div className="text-[10px] uppercase tracking-wider text-white/45 mb-3">Your flows</div>
+            <div className="text-[10px] uppercase tracking-wider text-ink-300/55 mb-3">Your flows</div>
             <div className="space-y-1">
               {flows.map((f) => (
                 <button
@@ -209,14 +209,14 @@ export function SignalFlowDesigner({ flows }: { flows: Flow[] }) {
                     "w-full text-left px-2.5 py-2 rounded-lg text-sm transition-colors",
                     f.id === activeId
                       ? "bg-signal-500/15 text-signal-300 ring-1 ring-signal-500/30"
-                      : "text-white/65 hover:bg-white/[0.03]"
+                      : "text-ink-300/75 hover:bg-bone-50"
                   )}
                 >
                   <div className="flex items-center gap-2">
                     <Network className="h-3.5 w-3.5" />
                     <span className="truncate">{f.name}</span>
                   </div>
-                  <div className="text-[10px] text-white/40 mt-0.5 ml-5">
+                  <div className="text-[10px] text-ink-300/50 mt-0.5 ml-5">
                     {f.diagram.nodes.length} devices · {f.diagram.edges.length} signals
                   </div>
                 </button>
@@ -227,19 +227,19 @@ export function SignalFlowDesigner({ flows }: { flows: Flow[] }) {
 
         <Card>
           <CardContent className="p-4">
-            <div className="text-[10px] uppercase tracking-wider text-white/45 mb-3">Controls</div>
-            <div className="space-y-2 text-[11px] text-white/55 leading-relaxed">
-              <div>• <span className="text-white/85">Drag header</span> — move device</div>
-              <div>• <span className="text-white/85">Drag canvas</span> — pan view</div>
-              <div>• <span className="text-white/85">Ctrl/⌘ + scroll</span> — zoom</div>
-              <div>• <span className="text-white/85">Hover line</span> — highlight signal</div>
+            <div className="text-[10px] uppercase tracking-wider text-ink-300/55 mb-3">Controls</div>
+            <div className="space-y-2 text-[11px] text-ink-300/65 leading-relaxed">
+              <div>• <span className="text-ink-300/90">Drag header</span> — move device</div>
+              <div>• <span className="text-ink-300/90">Drag canvas</span> — pan view</div>
+              <div>• <span className="text-ink-300/90">Ctrl/⌘ + scroll</span> — zoom</div>
+              <div>• <span className="text-ink-300/90">Hover line</span> — highlight signal</div>
             </div>
-            <div className="mt-3 pt-3 border-t border-white/[0.06] flex items-center justify-between text-[11px]">
-              <span className="text-white/40">Zoom</span>
+            <div className="mt-3 pt-3 border-t border-bone-300/55 flex items-center justify-between text-[11px]">
+              <span className="text-ink-300/50">Zoom</span>
               <div className="flex items-center gap-1">
-                <button onClick={() => setZoom((z) => Math.max(0.4, +(z - 0.1).toFixed(2)))} className="w-6 h-6 rounded border border-white/[0.08] text-white/65 hover:text-white">−</button>
-                <span className="w-10 text-center font-mono text-white/65">{Math.round(zoom * 100)}%</span>
-                <button onClick={() => setZoom((z) => Math.min(1.8, +(z + 0.1).toFixed(2)))} className="w-6 h-6 rounded border border-white/[0.08] text-white/65 hover:text-white">+</button>
+                <button onClick={() => setZoom((z) => Math.max(0.4, +(z - 0.1).toFixed(2)))} className="w-6 h-6 rounded border border-bone-300/65 text-ink-300/75 hover:text-ink-300">−</button>
+                <span className="w-10 text-center font-mono text-ink-300/75">{Math.round(zoom * 100)}%</span>
+                <button onClick={() => setZoom((z) => Math.min(1.8, +(z + 0.1).toFixed(2)))} className="w-6 h-6 rounded border border-bone-300/65 text-ink-300/75 hover:text-ink-300">+</button>
               </div>
             </div>
           </CardContent>
@@ -250,7 +250,7 @@ export function SignalFlowDesigner({ flows }: { flows: Flow[] }) {
       <Card className="overflow-hidden">
         <CardContent className="p-0">
           {/* Toolbar */}
-          <div className="flex items-center justify-between p-4 border-b border-white/[0.06] bg-ink-200/40">
+          <div className="flex items-center justify-between p-4 border-b border-bone-300/55 bg-bone-50">
             <div>
               <div className="text-[10px] uppercase tracking-wider text-signal-400">Editing</div>
               <div className="font-display text-lg font-semibold tracking-tight">{active.name}</div>

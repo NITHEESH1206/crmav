@@ -53,9 +53,9 @@ export default async function BillingPage() {
         {stats.map((s) => (
           <Card key={s.l}>
             <CardContent className="p-5">
-              <div className="text-xs text-white/45">{s.l}</div>
+              <div className="text-xs text-ink-300/55">{s.l}</div>
               <div className="font-display text-3xl font-semibold tracking-tight mt-1">{s.v}</div>
-              <div className="text-[11px] text-white/35 mt-1">{s.sub}</div>
+              <div className="text-[11px] text-ink-300/45 mt-1">{s.sub}</div>
             </CardContent>
           </Card>
         ))}
@@ -65,7 +65,7 @@ export default async function BillingPage() {
         <Card>
           <CardHeader><CardTitle>Recent invoices</CardTitle></CardHeader>
           <CardContent className="p-0">
-            <div className="hidden md:grid grid-cols-[100px_2fr_120px_140px_100px] text-[10px] uppercase tracking-wider text-white/40 px-5 py-3 border-y border-white/[0.04]">
+            <div className="hidden md:grid grid-cols-[100px_2fr_120px_140px_100px] text-[10px] uppercase tracking-wider text-ink-300/50 px-5 py-3 border-y border-bone-300/45">
               <div>Invoice</div>
               <div>Client</div>
               <div>Amount</div>
@@ -73,20 +73,20 @@ export default async function BillingPage() {
               <div>Status</div>
             </div>
             {invoices.map((inv) => (
-              <div key={inv.id} className="grid grid-cols-[1fr_auto] md:grid-cols-[100px_2fr_120px_140px_100px] items-start md:items-center gap-3 px-4 md:px-5 py-3 md:py-3.5 border-b border-white/[0.04] hover:bg-white/[0.015] cursor-pointer">
-                <div className="hidden md:block text-[11px] text-white/40 font-mono">{inv.number}</div>
+              <div key={inv.id} className="grid grid-cols-[1fr_auto] md:grid-cols-[100px_2fr_120px_140px_100px] items-start md:items-center gap-3 px-4 md:px-5 py-3 md:py-3.5 border-b border-bone-300/45 hover:bg-bone-50/50 cursor-pointer">
+                <div className="hidden md:block text-[11px] text-ink-300/50 font-mono">{inv.number}</div>
                 <div className="min-w-0">
                   <div className="text-sm font-medium truncate">{inv.account?.name ?? "—"}</div>
                   <div className="md:hidden mt-1 flex flex-wrap items-center gap-x-2 text-[11px]">
-                    <span className="text-white/40 font-mono">{inv.number}</span>
-                    <span className="text-white/55 font-mono">${formatCompact(inv.totalCents / 100)}</span>
+                    <span className="text-ink-300/50 font-mono">{inv.number}</span>
+                    <span className="text-ink-300/65 font-mono">${formatCompact(inv.totalCents / 100)}</span>
                     {inv.dueAt && (
-                      <span className="text-white/40">· due {formatDate(inv.dueAt, { month: "short", day: "numeric" })}</span>
+                      <span className="text-ink-300/50">· due {formatDate(inv.dueAt, { month: "short", day: "numeric" })}</span>
                     )}
                   </div>
                 </div>
                 <div className="hidden md:block text-sm font-mono">${formatCompact(inv.totalCents / 100)}</div>
-                <div className="hidden md:block text-xs text-white/55">
+                <div className="hidden md:block text-xs text-ink-300/65">
                   {inv.dueAt ? formatDate(inv.dueAt, { month: "short", day: "numeric" }) : "—"}
                 </div>
                 <Badge variant={statusVariant(inv.status)} className="capitalize self-start md:self-center">
@@ -94,7 +94,7 @@ export default async function BillingPage() {
                 </Badge>
               </div>
             ))}
-            {invoices.length === 0 && <div className="px-5 py-8 text-center text-xs text-white/40">No invoices yet.</div>}
+            {invoices.length === 0 && <div className="px-5 py-8 text-center text-xs text-ink-300/50">No invoices yet.</div>}
           </CardContent>
         </Card>
 
@@ -102,22 +102,22 @@ export default async function BillingPage() {
           <CardHeader><CardTitle>Subscriptions</CardTitle></CardHeader>
           <CardContent className="space-y-3">
             {subs.map((s) => (
-              <div key={s.id} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5">
+              <div key={s.id} className="rounded-xl border border-bone-300/55 bg-bone-50/60 p-3.5">
                 <div className="flex items-center justify-between">
                   <div className="text-sm font-medium truncate">{s.account.name}</div>
                   <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
                 </div>
-                <div className="text-[11px] text-white/45 mt-0.5">{s.plan}</div>
+                <div className="text-[11px] text-ink-300/55 mt-0.5">{s.plan}</div>
                 <div className="mt-3 flex items-center justify-between">
                   <div className="text-sm font-mono text-gradient">${(s.monthlyCents / 100).toLocaleString()}/mo</div>
-                  <div className="flex items-center gap-1 text-[11px] text-white/45">
+                  <div className="flex items-center gap-1 text-[11px] text-ink-300/55">
                     <RefreshCcw className="h-3 w-3" />
                     {s.renewsAt ? formatDate(s.renewsAt, { month: "short", year: "numeric" }) : "—"}
                   </div>
                 </div>
               </div>
             ))}
-            {subs.length === 0 && <div className="text-xs text-white/40">No subscriptions.</div>}
+            {subs.length === 0 && <div className="text-xs text-ink-300/50">No subscriptions.</div>}
           </CardContent>
         </Card>
       </div>

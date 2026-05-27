@@ -57,7 +57,7 @@ export function RevenueTrendCard({ data }: { data: { label: string; billed: numb
       <CardHeader className="flex-row items-start justify-between gap-3">
         <div>
           <CardTitle>Revenue trend</CardTitle>
-          <p className="text-xs text-white/45 mt-1">Billed vs. paid — last 12 months</p>
+          <p className="text-xs text-ink-300/55 mt-1">Billed vs. paid — last 12 months</p>
         </div>
         <div className="text-right">
           <div className="font-display text-2xl font-semibold tracking-tight text-gradient">
@@ -107,7 +107,7 @@ export function PipelineFunnelCard({ data }: { data: { stage: string; count: num
     <Card>
       <CardHeader>
         <CardTitle>Pipeline funnel</CardTitle>
-        <p className="text-xs text-white/45 mt-1">{totalCount} deals · by stage</p>
+        <p className="text-xs text-ink-300/55 mt-1">{totalCount} deals · by stage</p>
       </CardHeader>
       <CardContent className="space-y-3">
         {data.map((row, i) => {
@@ -121,12 +121,12 @@ export function PipelineFunnelCard({ data }: { data: { stage: string; count: num
             >
               <div className="flex items-center justify-between text-xs mb-1.5">
                 <div className="flex items-center gap-2">
-                  <span className="text-white/75 font-medium">{row.stage}</span>
-                  <span className="text-white/35 font-mono">{row.count}</span>
+                  <span className="text-ink-300/85 font-medium">{row.stage}</span>
+                  <span className="text-ink-300/45 font-mono">{row.count}</span>
                 </div>
-                <span className="text-white/55 font-mono">${formatCompact(row.value)}</span>
+                <span className="text-ink-300/65 font-mono">${formatCompact(row.value)}</span>
               </div>
-              <div className="relative h-7 rounded-md bg-white/[0.02] border border-white/[0.04] overflow-hidden">
+              <div className="relative h-7 rounded-md bg-bone-50/60 border border-bone-300/45 overflow-hidden">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${width}%` }}
@@ -152,7 +152,7 @@ export function ProfitabilityCard({ data }: { data: { name: string; margin: numb
       <CardHeader className="flex-row items-start justify-between">
         <div>
           <CardTitle>Project profitability</CardTitle>
-          <p className="text-xs text-white/45 mt-1">Gross margin % by project</p>
+          <p className="text-xs text-ink-300/55 mt-1">Gross margin % by project</p>
         </div>
         <Badge variant="success" className="gap-1">
           <TrendingUp className="h-3 w-3" />
@@ -188,7 +188,7 @@ export function SLAComplianceCard({ data }: { data: { label: string; compliance:
       <CardHeader className="flex-row items-start justify-between">
         <div>
           <CardTitle>Service SLA compliance</CardTitle>
-          <p className="text-xs text-white/45 mt-1">% of tickets resolved within SLA · last 12 weeks</p>
+          <p className="text-xs text-ink-300/55 mt-1">% of tickets resolved within SLA · last 12 weeks</p>
         </div>
         <Badge variant={latest >= 90 ? "success" : latest >= 75 ? "warning" : "destructive"}>
           {latest}% this week
@@ -223,10 +223,10 @@ export function UtilizationCard({ data }: { data: { name: string; utilization: n
     <Card>
       <CardHeader>
         <CardTitle>Technician utilization</CardTitle>
-        <p className="text-xs text-white/45 mt-1">Billable hours / 40h target · this week</p>
+        <p className="text-xs text-ink-300/55 mt-1">Billable hours / 40h target · this week</p>
       </CardHeader>
       <CardContent className="space-y-3">
-        {data.length === 0 && <div className="text-xs text-white/40 italic">No time entries this week.</div>}
+        {data.length === 0 && <div className="text-xs text-ink-300/50 italic">No time entries this week.</div>}
         {data.map((u, i) => (
           <motion.div
             key={u.name}
@@ -235,15 +235,15 @@ export function UtilizationCard({ data }: { data: { name: string; utilization: n
             transition={{ delay: i * 0.06 }}
           >
             <div className="flex items-center justify-between text-xs mb-1.5">
-              <span className="text-white/85 font-medium">{u.name}</span>
+              <span className="text-ink-300/90 font-medium">{u.name}</span>
               <div className="flex items-center gap-2">
-                <span className="text-white/45 font-mono">{u.billable}h</span>
+                <span className="text-ink-300/55 font-mono">{u.billable}h</span>
                 <span className={`font-mono font-semibold ${u.utilization >= 80 ? "text-emerald-400" : u.utilization >= 50 ? "text-signal-400" : "text-amber-400"}`}>
                   {u.utilization}%
                 </span>
               </div>
             </div>
-            <div className="relative h-2 rounded-full bg-white/[0.04] overflow-hidden">
+            <div className="relative h-2 rounded-full bg-bone-100/70 overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${Math.min(u.utilization, 100)}%` }}
@@ -278,7 +278,7 @@ export function HealthDistributionCard({ data }: { data: { range: string; count:
       <CardHeader className="flex-row items-start justify-between">
         <div>
           <CardTitle>Customer health</CardTitle>
-          <p className="text-xs text-white/45 mt-1">Account distribution by health score</p>
+          <p className="text-xs text-ink-300/55 mt-1">Account distribution by health score</p>
         </div>
         <Badge variant={pctHealthy >= 70 ? "success" : "warning"}>{pctHealthy}% healthy</Badge>
       </CardHeader>
@@ -331,7 +331,7 @@ export function ReportStat({
             <Icon className="h-4 w-4 text-signal-400" />
           </div>
         )}
-        <div className="text-xs text-white/45">{label}</div>
+        <div className="text-xs text-ink-300/55">{label}</div>
         <div className="font-display text-3xl font-semibold tracking-tight mt-1 text-gradient">{value}</div>
       </CardContent>
     </Card>

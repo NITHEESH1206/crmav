@@ -44,32 +44,32 @@ export function AuditTab({ entries }: { entries: AuditEntry[] }) {
           <History className="h-3.5 w-3.5 text-signal-400" />
           Audit log
         </CardTitle>
-        <p className="text-xs text-white/45 mt-1">
+        <p className="text-xs text-ink-300/55 mt-1">
           Last {entries.length} workspace events
         </p>
       </CardHeader>
       <CardContent className="p-0">
         {entries.length === 0 ? (
-          <div className="px-6 pb-8 text-center text-sm text-white/45">
+          <div className="px-6 pb-8 text-center text-sm text-ink-300/55">
             No events yet. They'll appear here as your team uses the workspace.
           </div>
         ) : (
           entries.map((e) => (
             <div
               key={e.id}
-              className="grid grid-cols-[160px_1fr_120px] gap-3 px-6 py-3 border-t border-white/[0.04] hover:bg-white/[0.02]"
+              className="grid grid-cols-[160px_1fr_120px] gap-3 px-6 py-3 border-t border-bone-300/45 hover:bg-bone-50/60"
             >
               <div className="text-sm font-medium truncate">{e.user?.name ?? "System"}</div>
               <div className="flex items-center gap-2 min-w-0">
-                <Badge className={`border h-5 px-1.5 text-[10px] ${ACTION_TONE[e.action] ?? "bg-white/[0.04] text-white/65 border-white/[0.08]"}`}>
+                <Badge className={`border h-5 px-1.5 text-[10px] ${ACTION_TONE[e.action] ?? "bg-bone-100/70 text-ink-300/75 border-bone-300/65"}`}>
                   {e.action}
                 </Badge>
-                <span className="text-sm text-white/70 truncate">
+                <span className="text-sm text-ink-300/80 truncate">
                   {ACTION_LABEL[e.action] ?? "did something"}{" "}
-                  <span className="text-white/45">{describe(e)}</span>
+                  <span className="text-ink-300/55">{describe(e)}</span>
                 </span>
               </div>
-              <div className="text-[11px] text-white/45 text-right">
+              <div className="text-[11px] text-ink-300/55 text-right">
                 {formatDistanceToNow(e.createdAt, { addSuffix: true })}
               </div>
             </div>

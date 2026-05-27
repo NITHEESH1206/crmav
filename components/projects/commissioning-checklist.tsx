@@ -118,7 +118,7 @@ export function CommissioningChecklist({ projectId }: { projectId: string }) {
             <ClipboardCheck className="h-3.5 w-3.5 text-signal-400" />
             Commissioning checklist
           </CardTitle>
-          <p className="text-xs text-white/45 mt-1">
+          <p className="text-xs text-ink-300/55 mt-1">
             {done} of {total} items signed off
           </p>
         </div>
@@ -142,10 +142,10 @@ export function CommissioningChecklist({ projectId }: { projectId: string }) {
             return (
               <div key={group.id}>
                 <div className="flex items-center justify-between mb-2">
-                  <div className="text-[10px] uppercase tracking-[0.18em] text-white/45 font-semibold">
+                  <div className="text-[10px] uppercase tracking-[0.18em] text-ink-300/55 font-semibold">
                     {group.title}
                   </div>
-                  <div className="text-[10px] text-white/35 font-mono">
+                  <div className="text-[10px] text-ink-300/45 font-mono">
                     {groupDone}/{group.items.length}
                     {groupPct === 100 && <span className="text-emerald-400 ml-1.5">✓</span>}
                   </div>
@@ -160,16 +160,16 @@ export function CommissioningChecklist({ projectId }: { projectId: string }) {
                       className={cn(
                         "w-full flex items-start gap-3 px-2.5 py-2 rounded-lg text-left transition-colors text-sm",
                         item.done
-                          ? "text-white/45 hover:bg-white/[0.02]"
-                          : "text-white/85 hover:bg-white/[0.03]"
+                          ? "text-ink-300/55 hover:bg-bone-50/60"
+                          : "text-ink-300/90 hover:bg-bone-50"
                       )}
                     >
                       <span
                         className={cn(
                           "mt-0.5 h-4 w-4 rounded border flex items-center justify-center shrink-0 transition-all",
                           item.done
-                            ? "bg-signal-500 border-signal-500 text-white"
-                            : "border-white/[0.15] bg-white/[0.02] group-hover:border-signal-500/50"
+                            ? "bg-signal-500 border-signal-500 text-ink-300"
+                            : "border-bone-300/85 bg-bone-50/60 group-hover:border-signal-500/50"
                         )}
                       >
                         {item.done && <Check className="h-2.5 w-2.5" strokeWidth={3} />}

@@ -59,7 +59,7 @@ export default async function ServicePage() {
                 <div className={`h-10 w-10 rounded-xl border ${s.bg} flex items-center justify-center mb-3`}>
                   <Icon className={`h-4 w-4 ${s.color}`} />
                 </div>
-                <div className="text-xs text-white/45">{s.label}</div>
+                <div className="text-xs text-ink-300/55">{s.label}</div>
                 <div className="font-display text-3xl font-semibold tracking-tight mt-1">{s.value}</div>
               </CardContent>
             </Card>
@@ -71,7 +71,7 @@ export default async function ServicePage() {
         <Card>
           <CardHeader><CardTitle>Tickets</CardTitle></CardHeader>
           <CardContent className="p-0">
-            <div className="hidden md:grid grid-cols-[80px_2fr_1fr_60px_100px] text-[10px] uppercase tracking-wider text-white/40 px-5 py-3 border-y border-white/[0.04]">
+            <div className="hidden md:grid grid-cols-[80px_2fr_1fr_60px_100px] text-[10px] uppercase tracking-wider text-ink-300/50 px-5 py-3 border-y border-bone-300/45">
               <div>ID</div>
               <div>Title</div>
               <div>Client</div>
@@ -83,24 +83,24 @@ export default async function ServicePage() {
                 key={t.id}
                 kind="ticket"
                 id={t.id}
-                className="grid grid-cols-[1fr_auto] md:grid-cols-[80px_2fr_1fr_60px_100px] items-start md:items-center gap-3 px-4 md:px-5 py-3 md:py-3.5 border-b border-white/[0.04] hover:bg-white/[0.015]"
+                className="grid grid-cols-[1fr_auto] md:grid-cols-[80px_2fr_1fr_60px_100px] items-start md:items-center gap-3 px-4 md:px-5 py-3 md:py-3.5 border-b border-bone-300/45 hover:bg-bone-50/50"
               >
-                <div className="hidden md:block text-[11px] text-white/40 font-mono">{t.number}</div>
+                <div className="hidden md:block text-[11px] text-ink-300/50 font-mono">{t.number}</div>
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 md:hidden mb-1">
-                    <span className="text-[10px] text-white/40 font-mono">{t.number}</span>
+                    <span className="text-[10px] text-ink-300/50 font-mono">{t.number}</span>
                   </div>
                   <div className="text-sm font-medium truncate">{t.title}</div>
                   <div className="md:hidden mt-1 flex items-center gap-2 flex-wrap text-[11px]">
-                    <span className="text-white/55 truncate">{t.account?.name ?? "—"}</span>
-                    {t.assignee && <span className="text-white/40">· {t.assignee.name}</span>}
+                    <span className="text-ink-300/65 truncate">{t.account?.name ?? "—"}</span>
+                    {t.assignee && <span className="text-ink-300/50">· {t.assignee.name}</span>}
                   </div>
                 </div>
-                <div className="hidden md:block text-xs text-white/55 truncate">{t.account?.name ?? "—"}</div>
+                <div className="hidden md:block text-xs text-ink-300/65 truncate">{t.account?.name ?? "—"}</div>
                 <Badge variant={t.priority === "P1" ? "destructive" : t.priority === "P2" ? "warning" : "secondary"} className="h-5 px-1.5 text-[10px] self-start md:self-center">
                   {t.priority}
                 </Badge>
-                <div className="hidden md:block text-xs text-white/55 truncate">{t.assignee?.name ?? "—"}</div>
+                <div className="hidden md:block text-xs text-ink-300/65 truncate">{t.assignee?.name ?? "—"}</div>
               </OpenableRow>
             ))}
           </CardContent>
@@ -110,14 +110,14 @@ export default async function ServicePage() {
           <CardHeader><CardTitle>AMC contracts</CardTitle></CardHeader>
           <CardContent className="space-y-4">
             {amcs.map((a) => (
-              <div key={a.id} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5">
+              <div key={a.id} className="rounded-xl border border-bone-300/55 bg-bone-50/60 p-3.5">
                 <div className="flex items-center justify-between gap-2">
                   <div className="text-sm font-medium truncate">{a.account.name}</div>
                   <Badge variant={a.tier === "PREMIER" ? "default" : "secondary"} className="capitalize">{a.tier.toLowerCase()}</Badge>
                 </div>
-                <div className="text-[11px] text-white/45 mt-1">Expires {formatDate(a.endDate)}</div>
+                <div className="text-[11px] text-ink-300/55 mt-1">Expires {formatDate(a.endDate)}</div>
                 <div className="mt-3 flex items-center justify-between text-[11px]">
-                  <span className="text-white/55">
+                  <span className="text-ink-300/65">
                     {a.visitsTotal} / {a.visitsUsed} used
                   </span>
                   <span className="text-emerald-400 font-mono">{a.healthScore}% health</span>
@@ -125,7 +125,7 @@ export default async function ServicePage() {
                 <Progress value={a.healthScore} className="mt-2" />
               </div>
             ))}
-            {amcs.length === 0 && <div className="text-xs text-white/40">No AMC contracts.</div>}
+            {amcs.length === 0 && <div className="text-xs text-ink-300/50">No AMC contracts.</div>}
           </CardContent>
         </Card>
       </div>

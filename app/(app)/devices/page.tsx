@@ -12,7 +12,7 @@ export default async function DevicesPage() {
     { label: "Online", value: summary.online, icon: Wifi, tone: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30" },
     { label: "Warning", value: summary.warning, icon: AlertTriangle, tone: "text-amber-400 bg-amber-500/10 border-amber-500/30" },
     { label: "Offline", value: summary.offline, icon: WifiOff, tone: "text-red-400 bg-red-500/10 border-red-500/30" },
-    { label: "Retired", value: summary.retired, icon: PowerOff, tone: "text-white/55 bg-white/[0.04] border-white/[0.08]" },
+    { label: "Retired", value: summary.retired, icon: PowerOff, tone: "text-ink-300/65 bg-bone-100/70 border-bone-300/65" },
   ];
 
   const exportRows = devices.map((d) => ({
@@ -61,7 +61,7 @@ export default async function DevicesPage() {
                 <div className={`h-9 w-9 rounded-xl border flex items-center justify-center mb-3 ${s.tone}`}>
                   <Icon className="h-4 w-4" />
                 </div>
-                <div className="text-xs text-white/45">{s.label}</div>
+                <div className="text-xs text-ink-300/55">{s.label}</div>
                 <div className="font-display text-2xl sm:text-3xl font-semibold tracking-tight mt-1">
                   {s.value}
                 </div>

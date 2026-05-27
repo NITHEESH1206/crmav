@@ -54,7 +54,7 @@ export function EditableField({
 
   return (
     <div className={cn("group", className)}>
-      <div className="text-[10px] uppercase tracking-wider text-white/40">{label}</div>
+      <div className="text-[10px] uppercase tracking-wider text-ink-300/50">{label}</div>
       <AnimatePresence mode="wait" initial={false}>
         {!editing ? (
           <motion.button
@@ -63,10 +63,10 @@ export function EditableField({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setEditing(true)}
-            className="mt-1 flex items-center gap-2 -ml-1 px-1 py-0.5 rounded text-sm text-white/85 hover:bg-white/[0.04] transition-colors w-full text-left"
+            className="mt-1 flex items-center gap-2 -ml-1 px-1 py-0.5 rounded text-sm text-ink-300/90 hover:bg-bone-100/70 transition-colors w-full text-left"
           >
             <span className="truncate">{displayValue ?? (stringify(value) || "—")}</span>
-            <Pencil className="h-3 w-3 text-white/30 opacity-0 group-hover:opacity-100 transition-opacity ml-auto shrink-0" />
+            <Pencil className="h-3 w-3 text-ink-300/45 opacity-0 group-hover:opacity-100 transition-opacity ml-auto shrink-0" />
           </motion.button>
         ) : (
           <motion.div
@@ -85,18 +85,18 @@ export function EditableField({
                 if (e.key === "Enter") commit();
                 if (e.key === "Escape") setEditing(false);
               }}
-              className="h-7 flex-1 rounded-md border border-signal-500/40 bg-white/[0.04] px-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-signal-500/20"
+              className="h-7 flex-1 rounded-md border border-signal-500/40 bg-bone-100/70 px-2 text-sm text-ink-300 focus:outline-none focus:ring-2 focus:ring-signal-500/20"
             />
             <button
               onClick={commit}
               disabled={isPending}
-              className="h-7 w-7 rounded-md bg-signal-500 text-white flex items-center justify-center hover:bg-signal-400 disabled:opacity-50"
+              className="h-7 w-7 rounded-md bg-signal-500 text-ink-300 flex items-center justify-center hover:bg-signal-400 disabled:opacity-50"
             >
               <Check className="h-3.5 w-3.5" strokeWidth={2.5} />
             </button>
             <button
               onClick={() => setEditing(false)}
-              className="h-7 w-7 rounded-md border border-white/[0.08] text-white/55 flex items-center justify-center hover:text-white hover:bg-white/[0.04]"
+              className="h-7 w-7 rounded-md border border-bone-300/65 text-ink-300/65 flex items-center justify-center hover:text-ink-300 hover:bg-bone-100/70"
             >
               <X className="h-3.5 w-3.5" />
             </button>
@@ -146,14 +146,14 @@ export function EditableSelect({
 
   return (
     <div className={cn("group", className)}>
-      <div className="text-[10px] uppercase tracking-wider text-white/40">{label}</div>
+      <div className="text-[10px] uppercase tracking-wider text-ink-300/50">{label}</div>
       {!editing ? (
         <button
           onClick={() => setEditing(true)}
-          className="mt-1 flex items-center gap-2 -ml-1 px-1 py-0.5 rounded text-sm text-white/85 hover:bg-white/[0.04] transition-colors w-full text-left"
+          className="mt-1 flex items-center gap-2 -ml-1 px-1 py-0.5 rounded text-sm text-ink-300/90 hover:bg-bone-100/70 transition-colors w-full text-left"
         >
           <span className="truncate">{current?.label ?? "—"}</span>
-          <Pencil className="h-3 w-3 text-white/30 opacity-0 group-hover:opacity-100 transition-opacity ml-auto shrink-0" />
+          <Pencil className="h-3 w-3 text-ink-300/45 opacity-0 group-hover:opacity-100 transition-opacity ml-auto shrink-0" />
         </button>
       ) : (
         <select
@@ -162,7 +162,7 @@ export function EditableSelect({
           onChange={(e) => commit(e.target.value)}
           onBlur={() => setEditing(false)}
           disabled={isPending}
-          className="mt-1 h-7 w-full rounded-md border border-signal-500/40 bg-ink-100 px-2 text-sm text-white focus:outline-none"
+          className="mt-1 h-7 w-full rounded-md border border-signal-500/40 bg-white px-2 text-sm text-ink-300 focus:outline-none"
         >
           {options.map((o) => (
             <option key={o.value} value={o.value}>

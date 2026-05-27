@@ -385,25 +385,25 @@ export function CalendarWeekView({ initialEvents }: { initialEvents: CalendarEve
   return (
     <div className="rounded-2xl glass-card overflow-hidden" onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerLeave={onPointerUp}>
       {/* Toolbar */}
-      <div className="flex items-center justify-between gap-4 px-5 py-4 border-b border-white/[0.06]">
+      <div className="flex items-center justify-between gap-4 px-5 py-4 border-b border-bone-300/55">
         <div className="flex items-center gap-2">
           <button
             onClick={goToday}
-            className="px-3 h-8 rounded-lg border border-white/[0.08] bg-white/[0.02] text-sm hover:bg-white/[0.05] transition-colors"
+            className="px-3 h-8 rounded-lg border border-bone-300/65 bg-bone-50/60 text-sm hover:bg-bone-100 transition-colors"
           >
             Today
           </button>
-          <div className="flex items-center rounded-lg border border-white/[0.08] bg-white/[0.02] overflow-hidden">
+          <div className="flex items-center rounded-lg border border-bone-300/65 bg-bone-50/60 overflow-hidden">
             <button
               onClick={() => navigate(-1)}
-              className="h-8 w-8 flex items-center justify-center text-white/65 hover:text-white hover:bg-white/[0.05] transition-colors"
+              className="h-8 w-8 flex items-center justify-center text-ink-300/75 hover:text-ink-300 hover:bg-bone-100 transition-colors"
               aria-label="Previous week"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
             <button
               onClick={() => navigate(1)}
-              className="h-8 w-8 flex items-center justify-center text-white/65 hover:text-white hover:bg-white/[0.05] transition-colors border-l border-white/[0.06]"
+              className="h-8 w-8 flex items-center justify-center text-ink-300/75 hover:text-ink-300 hover:bg-bone-100 transition-colors border-l border-bone-300/55"
               aria-label="Next week"
             >
               <ChevronRight className="h-4 w-4" />
@@ -414,7 +414,7 @@ export function CalendarWeekView({ initialEvents }: { initialEvents: CalendarEve
           </div>
         </div>
 
-        <div className="flex items-center gap-4 text-[10px] uppercase tracking-wider text-white/45">
+        <div className="flex items-center gap-4 text-[10px] uppercase tracking-wider text-ink-300/55">
           {Object.entries(EVENT_COLORS).map(([k, v]) => (
             <div key={k} className="flex items-center gap-1.5">
               <span className={cn("h-1.5 w-1.5 rounded-full", v.dot)} />
@@ -425,18 +425,18 @@ export function CalendarWeekView({ initialEvents }: { initialEvents: CalendarEve
       </div>
 
       {/* Day headers */}
-      <div className="grid grid-cols-[64px_repeat(7,1fr)] border-b border-white/[0.04] bg-ink-200/40">
+      <div className="grid grid-cols-[64px_repeat(7,1fr)] border-b border-bone-300/45 bg-bone-50">
         <div />
         {Array.from({ length: 7 }).map((_, i) => {
           const day = addDays(weekStart, i);
           const isToday = isSameDay(day, today);
           return (
             <div key={i} className="px-3 py-3">
-              <div className="text-[10px] uppercase tracking-wider text-white/40">{DAY_NAMES[day.getDay()]}</div>
+              <div className="text-[10px] uppercase tracking-wider text-ink-300/50">{DAY_NAMES[day.getDay()]}</div>
               <div
                 className={cn(
                   "mt-0.5 font-display text-2xl font-semibold tracking-tight",
-                  isToday ? "text-signal-400" : "text-white"
+                  isToday ? "text-signal-400" : "text-ink-300"
                 )}
               >
                 {day.getDate()}
@@ -449,14 +449,14 @@ export function CalendarWeekView({ initialEvents }: { initialEvents: CalendarEve
       {/* Grid */}
       <div ref={gridRef} className="grid grid-cols-[64px_repeat(7,1fr)] relative select-none">
         {/* Hour labels */}
-        <div className="border-r border-white/[0.04]">
+        <div className="border-r border-bone-300/45">
           {Array.from({ length: HOURS_SHOWN }).map((_, i) => {
             const hour = START_HOUR + i;
             return (
               <div
                 key={i}
                 style={{ height: HOUR_HEIGHT }}
-                className="text-[10px] text-white/35 font-mono px-2 pt-1.5 text-right"
+                className="text-[10px] text-ink-300/45 font-mono px-2 pt-1.5 text-right"
               >
                 {timeLabel(hour * 60)}
               </div>
@@ -468,7 +468,7 @@ export function CalendarWeekView({ initialEvents }: { initialEvents: CalendarEve
         {columns.map(({ dayIdx, events: dayEvents }) => (
           <div
             key={dayIdx}
-            className="relative border-r border-white/[0.04] last:border-r-0 cursor-cell"
+            className="relative border-r border-bone-300/45 last:border-r-0 cursor-cell"
             onClick={(e) => onDayClick(dayIdx, e)}
           >
             {/* Hour rows */}
@@ -476,7 +476,7 @@ export function CalendarWeekView({ initialEvents }: { initialEvents: CalendarEve
               <div
                 key={i}
                 style={{ height: HOUR_HEIGHT }}
-                className="border-b border-white/[0.03] last:border-b-0 hover:bg-white/[0.01] transition-colors"
+                className="border-b border-bone-300/40 last:border-b-0 hover:bg-bone-50/40 transition-colors"
               />
             ))}
 
@@ -568,7 +568,7 @@ export function CalendarWeekView({ initialEvents }: { initialEvents: CalendarEve
       </div>
 
       {/* Stats footer */}
-      <div className="grid grid-cols-3 gap-px bg-white/[0.04] border-t border-white/[0.06]">
+      <div className="grid grid-cols-3 gap-px bg-bone-100/70 border-t border-bone-300/55">
         <Stat label="Events this week" value={events.length} />
         <Stat label="Total scheduled hours" value={(events.reduce((s, e) => s + (+new Date(e.endsAt) - +new Date(e.startsAt)), 0) / 3600_000).toFixed(1) + "h"} />
         <Stat label="On-site visits" value={events.filter((e) => e.eventType === "SITE_VISIT" || e.eventType === "INSTALL" || e.eventType === "AMC_VISIT").length} />
@@ -579,8 +579,8 @@ export function CalendarWeekView({ initialEvents }: { initialEvents: CalendarEve
 
 function Stat({ label, value }: { label: string; value: number | string }) {
   return (
-    <div className="bg-ink-200/30 px-5 py-3">
-      <div className="text-[10px] uppercase tracking-wider text-white/45">{label}</div>
+    <div className="bg-bone-50/70 px-5 py-3">
+      <div className="text-[10px] uppercase tracking-wider text-ink-300/55">{label}</div>
       <div className="font-display text-xl font-semibold tracking-tight mt-0.5">{value}</div>
     </div>
   );
@@ -632,7 +632,7 @@ function CreateBubble({
         }}
         onBlur={onCommit}
         placeholder="New event…"
-        className="w-full bg-transparent border-0 outline-none text-[11px] font-semibold text-white placeholder:text-white/35"
+        className="w-full bg-transparent border-0 outline-none text-[11px] font-semibold text-ink-300 placeholder:text-ink-300/45"
       />
     </div>
   );

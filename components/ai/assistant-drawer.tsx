@@ -125,7 +125,7 @@ export function AssistantDrawer() {
             {messages.length > 0 && (
               <button
                 onClick={reset}
-                className="text-[11px] text-white/45 hover:text-white flex items-center gap-1 mr-8"
+                className="text-[11px] text-ink-300/55 hover:text-ink-300 flex items-center gap-1 mr-8"
               >
                 <RefreshCcw className="h-3 w-3" /> Reset
               </button>
@@ -139,13 +139,13 @@ export function AssistantDrawer() {
             <div className="space-y-6">
               <div className="rounded-2xl border border-signal-500/20 bg-gradient-to-br from-signal-500/[0.08] to-transparent p-4">
                 <Sparkles className="h-4 w-4 text-signal-400 mb-2" />
-                <div className="text-sm text-white/85">
+                <div className="text-sm text-ink-300/90">
                   Ask anything AV — equipment recommendations, signal flow tips, BOQ help, or CRM
                   workflow guidance.
                 </div>
               </div>
               <div>
-                <div className="text-[10px] uppercase tracking-wider text-white/40 mb-2.5">
+                <div className="text-[10px] uppercase tracking-wider text-ink-300/50 mb-2.5">
                   Try
                 </div>
                 <div className="space-y-1.5">
@@ -153,7 +153,7 @@ export function AssistantDrawer() {
                     <button
                       key={s}
                       onClick={() => send(s)}
-                      className="w-full text-left text-sm text-white/75 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 py-2.5 hover:border-signal-500/30 hover:bg-white/[0.04] transition-colors"
+                      className="w-full text-left text-sm text-ink-300/85 rounded-xl border border-bone-300/55 bg-bone-50/60 px-3 py-2.5 hover:border-signal-500/30 hover:bg-bone-100/70 transition-colors"
                     >
                       {s}
                     </button>
@@ -174,7 +174,7 @@ export function AssistantDrawer() {
         </div>
 
         {/* Composer */}
-        <div className="border-t border-white/[0.06] p-3 bg-ink-200/40">
+        <div className="border-t border-bone-300/55 p-3 bg-bone-50">
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -193,7 +193,7 @@ export function AssistantDrawer() {
               }}
               placeholder="Ask anything…"
               rows={1}
-              className="flex-1 max-h-32 resize-none rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2.5 text-sm text-white placeholder:text-white/35 focus:outline-none focus:border-signal-500/40 focus:ring-2 focus:ring-signal-500/15"
+              className="flex-1 max-h-32 resize-none rounded-xl border border-bone-300/65 bg-bone-50 px-3 py-2.5 text-sm text-ink-300 placeholder:text-ink-300/45 focus:outline-none focus:border-signal-500/40 focus:ring-2 focus:ring-signal-500/15"
             />
             {streaming ? (
               <Button type="button" size="icon" variant="secondary" onClick={stop}>
@@ -205,7 +205,7 @@ export function AssistantDrawer() {
               </Button>
             )}
           </form>
-          <div className="mt-1.5 text-[10px] text-white/35 px-1">
+          <div className="mt-1.5 text-[10px] text-ink-300/45 px-1">
             Enter to send · Shift+Enter for newline
           </div>
         </div>
@@ -227,8 +227,8 @@ function ChatBubble({ msg, streaming }: { msg: Msg; streaming?: boolean }) {
         className={cn(
           "max-w-[88%] rounded-2xl px-4 py-2.5",
           isUser
-            ? "bg-signal-500/20 border border-signal-500/40 text-white"
-            : "bg-white/[0.03] border border-white/[0.06] text-white/90"
+            ? "bg-signal-500/20 border border-signal-500/40 text-ink-300"
+            : "bg-bone-50 border border-bone-300/55 text-ink-300/95"
         )}
       >
         {isUser ? (

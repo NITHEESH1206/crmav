@@ -88,7 +88,7 @@ export function DetailDrawer() {
                 className="p-6 space-y-6"
               >
                 {data.description && (
-                  <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 text-sm text-white/70 leading-relaxed">
+                  <div className="rounded-xl border border-bone-300/55 bg-bone-50/60 p-4 text-sm text-ink-300/80 leading-relaxed">
                     {data.description}
                   </div>
                 )}
@@ -114,8 +114,8 @@ export function DetailDrawer() {
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: i * 0.03 }}
                         >
-                          <div className="text-[10px] uppercase tracking-wider text-white/40">{f.label}</div>
-                          <div className="text-sm text-white/85 mt-0.5 capitalize truncate">{f.value}</div>
+                          <div className="text-[10px] uppercase tracking-wider text-ink-300/50">{f.label}</div>
+                          <div className="text-sm text-ink-300/90 mt-0.5 capitalize truncate">{f.value}</div>
                         </motion.div>
                       ))}
                     </div>
@@ -125,20 +125,20 @@ export function DetailDrawer() {
                     <TabsContent value="related" className="space-y-5">
                       {Object.entries(data.related).map(([group, items]) => (
                         <div key={group}>
-                          <div className="text-[10px] uppercase tracking-wider text-white/40 mb-2">
-                            {group} <span className="text-white/30">· {items.length}</span>
+                          <div className="text-[10px] uppercase tracking-wider text-ink-300/50 mb-2">
+                            {group} <span className="text-ink-300/45">· {items.length}</span>
                           </div>
                           {items.length === 0 ? (
-                            <div className="text-xs text-white/40 italic">None</div>
+                            <div className="text-xs text-ink-300/50 italic">None</div>
                           ) : (
                             <div className="space-y-1.5">
                               {items.map((it: any, i: number) => (
                                 <div
                                   key={i}
-                                  className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2 flex items-center justify-between"
+                                  className="rounded-lg border border-bone-300/55 bg-bone-50/60 px-3 py-2 flex items-center justify-between"
                                 >
-                                  <div className="text-sm text-white/85 truncate">{it.label}</div>
-                                  <div className="text-[11px] text-white/45 font-mono shrink-0 ml-3">{it.meta}</div>
+                                  <div className="text-sm text-ink-300/90 truncate">{it.label}</div>
+                                  <div className="text-[11px] text-ink-300/55 font-mono shrink-0 ml-3">{it.meta}</div>
                                 </div>
                               ))}
                             </div>
@@ -154,7 +154,7 @@ export function DetailDrawer() {
                         <Sparkles className="h-3 w-3" />
                         Zynex AI suggests
                       </div>
-                      <ul className="space-y-2.5 text-sm text-white/75 leading-relaxed">
+                      <ul className="space-y-2.5 text-sm text-ink-300/85 leading-relaxed">
                         {kind === "opportunity" && (
                           <>
                             <li>• Send a follow-up — last interaction was 6 days ago.</li>
@@ -192,7 +192,7 @@ export function DetailDrawer() {
           </AnimatePresence>
         </div>
 
-        <div className="border-t border-white/[0.06] p-4 flex items-center justify-between gap-2 bg-ink-200/40">
+        <div className="border-t border-bone-300/55 p-4 flex items-center justify-between gap-2 bg-bone-50">
           <Button variant="ghost" size="sm" disabled={!kind || !id} onClick={() => {
             if (!kind || !id) return;
             router.push(`${DETAIL_PATH[kind]}/${id}`);

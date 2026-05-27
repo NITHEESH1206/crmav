@@ -92,6 +92,82 @@ Structure:
 
 Under 350 words. End with the single most important thing for the AE to know.`;
 
+export const PROJECT_SUMMARY_PROMPT = `${AV_DOMAIN_PRIMER}
+
+# Task: Project status summary
+
+Produce a concise status update PMs can paste into a client email or stand-up doc.
+
+Structure (use markdown):
+- **Status** — one sentence: phase, % complete, on/off track.
+- **What shipped this week** — 2-3 bullets, concrete deliverables.
+- **What's blocking** — bullets, with the owner if obvious from the data.
+- **Next 7 days** — bullets, the actual next moves.
+- **Risks** — only if real risks exist in the data.
+
+Under 200 words. Plain, factual. If a field is missing in the data, write "—" rather than guessing.`;
+
+export const PROJECT_RISK_PROMPT = `${AV_DOMAIN_PRIMER}
+
+# Task: Project risk assessment
+
+Given the project data (phase, milestones, BOQ, tickets, time entries, vendor PO status), produce a structured risk brief for the PM.
+
+Structure:
+- **Top risks** — 3-5 bullets, each: <risk> · <severity Low/Med/High> · <evidence from the data>.
+- **Schedule outlook** — on-time / slipping by ~X weeks / re-baseline needed, with reasoning.
+- **Margin outlook** — protected / pressured / eroding, with reasoning.
+- **Recommended actions** — 3 concrete moves, each assigned to a role (PM / Engineer / Procurement / Finance).
+
+Under 280 words. Be specific. Cite milestone names and PO numbers from the data.`;
+
+export const BOQ_GENERATION_PROMPT = `${AV_DOMAIN_PRIMER}
+
+# Task: Generate a Bill of Quantities
+
+Given a project's room mix (room types, capacity, count) — or a single room with type and capacity — produce a sensible BOQ as a markdown table the user can paste or accept.
+
+Rules:
+- Use real AV manufacturer + model names (Crestron DM-NVX-360, Q-SYS Core 110f, Shure MXA920, etc.).
+- One row per device. Columns: **Item** | **Brand** | **Model** | **Qty** | **Unit price (USD)** | **Subtotal**.
+- Group rows under H3 headings per room.
+- After each room: a one-line **Total** for that room.
+- Final **Project total** at the bottom.
+- Prices are educated estimates — write \`(est)\` after the unit price.
+- Keep it realistic: a typical boardroom-12 BOQ is 12-22 lines, not 60.
+
+End with a one-paragraph note: assumptions made, what the engineer should verify.`;
+
+export const CHECKLIST_PROMPT = `${AV_DOMAIN_PRIMER}
+
+# Task: Generate a commissioning checklist
+
+Given the project's room list and device list, produce a commissioning checklist organised by group.
+
+Structure as markdown with H3 headings per group:
+- **Engineering sign-off** (drawings, BOQ frozen, signal flow approved)
+- **Procurement & logistics** (all deliveries received, RMA closed)
+- **Installation** (rack mounted, cable schedule complete, labels on)
+- **Commissioning** (DSP loaded, control programmed, network tests, audio levels, video patterns)
+- **Handover** (client training, as-built docs, warranty registered)
+
+Each item: a checkbox (\`- [ ]\`) + a verb-led action + the owner role in brackets at the end ([Engineer], [Tech], [PM]).
+Mention named devices from the data when relevant (e.g., "Load DSP file to Q-SYS Core 110f [Engineer]").
+Aim for 25-40 items total. Don't bloat.`;
+
+export const EMAIL_FOLLOWUP_PROMPT = `${AV_DOMAIN_PRIMER}
+
+# Task: Draft a follow-up email
+
+Given the opportunity context, draft a short, professional follow-up email from the sales engineer to the client contact.
+
+Structure:
+- **Subject line** (one line, after a "Subject:" prefix)
+- **Body** (4-6 sentences max)
+- **Signature placeholder** (use [Name] / [Title])
+
+Tone: confident, helpful, not pushy. Reference the specific deal context (rooms, timing, manufacturer mix) so it doesn't feel templated. Always end with one specific ask (call time, doc to review, decision needed).`;
+
 export const CHAT_ASSISTANT_PROMPT = `${AV_DOMAIN_PRIMER}
 
 # Task: Interactive AV CRM assistant

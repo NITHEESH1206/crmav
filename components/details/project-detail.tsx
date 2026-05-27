@@ -24,6 +24,9 @@ import { updateProject } from "@/app/actions/update";
 import { formatCompact, initials } from "@/lib/utils";
 import { CommissioningChecklist } from "@/components/projects/commissioning-checklist";
 import { ProjectDocuments } from "@/components/projects/project-documents";
+import { StageBar, type Stage, type StageState } from "@/components/app/stage-bar";
+import { GenerateButton } from "@/components/ai/generate-button";
+import { Permit } from "@/lib/permissions/permit";
 
 type Project = {
   id: string;
@@ -71,6 +74,8 @@ export function ProjectDetail({ project }: { project: Project }) {
       : 0;
 
   const doneMilestones = project.milestones.filter((m) => m.done).length;
+  const spine = buildProjectSpine(project);
+  const nextPhase = NEXT_PHASE[project.phase];
 
   return (
     <div className="space-y-6">
@@ -101,9 +106,58 @@ export function ProjectDetail({ project }: { project: Project }) {
               onChange={(v) => updateProject({ id: project.id, riskLevel: v as typeof project.riskLevel as never })}
             />
             <Badge variant="secondary">${formatCompact(project.contractValueCents / 100)}</Badge>
-            <Badge variant="success">{margin}% margin</Badge>
+            <Permit field="margin">
+              <Badge variant="success">{margin}% margin</Badge>
+            </Permit>
           </>
         }
+        actions={
+          <GenerateButton
+            entityId={project.id}
+            entityLabel={project.name}
+            sourceLabel={project.account?.name}
+            size="sm"
+            options={[
+              {
+                kind: "project-status-summary",
+                label: "Status summary",
+                description: "Paste-ready stand-up update for client or team",
+              },
+              {
+                kind: "project-risk-brief",
+                label: "Risk brief",
+                description: "Schedule, margin, and risk outlook with actions",
+              },
+              {
+                kind: "project-boq-from-rooms",
+                label: "Suggested BOQ",
+                description: "Auto-draft equipment list from room types",
+              },
+              {
+                kind: "project-commissioning-checklist",
+                label: "Commissioning checklist",
+                description: "Per-group task list from devices on file",
+              },
+            ]}
+          />
+        }
+      />
+
+      {/* Workflow spine */}
+      <StageBar
+        stages={spine}
+        currentNote={`${project.phase.toLowerCase()} · ${project.progress}% complete`}
+        nextGate={nextPhase ? `Move to ${nextPhase.toLowerCase()}` : "Wrap up & close"}
+        onPromote={
+          nextPhase
+            ? () =>
+                updateProject({
+                  id: project.id,
+                  phase: nextPhase as typeof project.phase as never,
+                })
+            : undefined
+        }
+        promoteLabel={nextPhase ? `Promote to ${nextPhase.toLowerCase()}` : "Close project"}
       />
 
       {/* Progress strip */}
@@ -111,13 +165,13 @@ export function ProjectDetail({ project }: { project: Project }) {
         <CardContent className="p-5">
           <div className="flex items-end justify-between mb-3">
             <div>
-              <div className="text-[10px] uppercase tracking-wider text-white/40">Project progress</div>
+              <div className="text-[10px] uppercase tracking-wider text-ink-300/50">Project progress</div>
               <div className="font-display text-3xl font-semibold tracking-tight">{project.progress}%</div>
             </div>
             <div className="text-right">
-              <div className="text-[10px] uppercase tracking-wider text-white/40">Milestones</div>
+              <div className="text-[10px] uppercase tracking-wider text-ink-300/50">Milestones</div>
               <div className="font-display text-3xl font-semibold tracking-tight">
-                {doneMilestones}<span className="text-white/40">/{project.milestones.length || "—"}</span>
+                {doneMilestones}<span className="text-ink-300/50">/{project.milestones.length || "—"}</span>
               </div>
             </div>
           </div>
@@ -160,11 +214,11 @@ export function ProjectDetail({ project }: { project: Project }) {
               onSave={(v) => updateProject({ id: project.id, dueDate: v || null })}
             />
             <div>
-              <div className="text-[10px] uppercase tracking-wider text-white/40">BOQ subtotal</div>
+              <div className="text-[10px] uppercase tracking-wider text-ink-300/50">BOQ subtotal</div>
               <div className="mt-1 text-sm font-mono">${formatCompact(boqTotal / 100)}</div>
             </div>
             <div>
-              <div className="text-[10px] uppercase tracking-wider text-white/40">Est. cost</div>
+              <div className="text-[10px] uppercase tracking-wider text-ink-300/50">Est. cost</div>
               <div className="mt-1 text-sm font-mono">${formatCompact(boqCost / 100)}</div>
             </div>
           </CardContent>
@@ -177,7 +231,7 @@ export function ProjectDetail({ project }: { project: Project }) {
               AI suggestions
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-2.5 text-sm text-white/75 leading-relaxed">
+          <CardContent className="space-y-2.5 text-sm text-ink-300/85 leading-relaxed">
             <p>• Margin {margin >= 30 ? "looks healthy" : "is tight — flag any cost overrun > 3%"}.</p>
             <p>• {project.rooms.length} rooms configured — consider rack design for each.</p>
             <p>• Schedule commissioning walkthrough this week.</p>
@@ -201,18 +255,18 @@ export function ProjectDetail({ project }: { project: Project }) {
         </CardHeader>
         <CardContent className="p-0">
           {project.milestones.length === 0 ? (
-            <div className="px-6 pb-6 text-xs text-white/40 italic">No milestones yet.</div>
+            <div className="px-6 pb-6 text-xs text-ink-300/50 italic">No milestones yet.</div>
           ) : (
-            <div className="border-t border-white/[0.04]">
+            <div className="border-t border-bone-300/45">
               {project.milestones.map((m) => (
-                <div key={m.id} className="flex items-center gap-3 px-6 py-3 border-b border-white/[0.04] last:border-b-0">
+                <div key={m.id} className="flex items-center gap-3 px-6 py-3 border-b border-bone-300/45 last:border-b-0">
                   {m.done ? (
                     <CheckCircle2 className="h-4 w-4 text-emerald-400" />
                   ) : (
-                    <Circle className="h-4 w-4 text-white/30" />
+                    <Circle className="h-4 w-4 text-ink-300/45" />
                   )}
                   <div className="flex-1 text-sm">{m.name}</div>
-                  <div className="text-xs text-white/45">
+                  <div className="text-xs text-ink-300/55">
                     {m.dueDate?.toLocaleDateString() ?? "—"}
                   </div>
                 </div>
@@ -233,22 +287,22 @@ export function ProjectDetail({ project }: { project: Project }) {
         </CardHeader>
         <CardContent className="p-0">
           {project.boqItems.length === 0 ? (
-            <div className="px-6 pb-6 text-xs text-white/40 italic">
+            <div className="px-6 pb-6 text-xs text-ink-300/50 italic">
               No BOQ items yet. Generate from /rooms.
             </div>
           ) : (
-            <div className="border-t border-white/[0.04]">
-              <div className="grid grid-cols-[2fr_60px_100px_100px] text-[10px] uppercase tracking-wider text-white/40 px-6 py-2 border-b border-white/[0.04] bg-white/[0.01]">
+            <div className="border-t border-bone-300/45">
+              <div className="grid grid-cols-[2fr_60px_100px_100px] text-[10px] uppercase tracking-wider text-ink-300/50 px-6 py-2 border-b border-bone-300/45 bg-bone-50/40">
                 <div>Item</div>
                 <div className="text-right">Qty</div>
                 <div className="text-right">Unit</div>
                 <div className="text-right">Subtotal</div>
               </div>
               {project.boqItems.map((b) => (
-                <div key={b.id} className="grid grid-cols-[2fr_60px_100px_100px] px-6 py-2.5 border-b border-white/[0.04] last:border-b-0 text-sm">
+                <div key={b.id} className="grid grid-cols-[2fr_60px_100px_100px] px-6 py-2.5 border-b border-bone-300/45 last:border-b-0 text-sm">
                   <div className="truncate">{b.description}</div>
                   <div className="text-right font-mono">{b.quantity}</div>
-                  <div className="text-right font-mono text-white/55">
+                  <div className="text-right font-mono text-ink-300/65">
                     ${(b.unitPriceCents / 100).toLocaleString()}
                   </div>
                   <div className="text-right font-mono">
@@ -311,7 +365,7 @@ export function ProjectDetail({ project }: { project: Project }) {
           meta: i.issuedAt?.toLocaleDateString() ?? "—",
           badge: { label: i.status, tone: i.status === "PAID" ? "success" : i.status === "OVERDUE" ? "destructive" : "secondary" },
           right: (
-            <span className="text-sm font-mono text-white/85">
+            <span className="text-sm font-mono text-ink-300/90">
               ${formatCompact(i.totalCents / 100)}
             </span>
           ),
@@ -320,4 +374,54 @@ export function ProjectDetail({ project }: { project: Project }) {
       />
     </div>
   );
+}
+
+/** Map ProjectPhase → the canonical workflow spine. */
+const PHASE_TO_SPINE: Record<string, string> = {
+  ENGINEERING: "proj",
+  PROCUREMENT: "proj",
+  INSTALLATION: "rack",
+  COMMISSIONING: "comm",
+  HANDOVER: "amc",
+  CLOSED: "amc",
+};
+
+/** Phase progression. Returns the *next* phase, or null if already at the end. */
+const NEXT_PHASE: Record<string, string | null> = {
+  ENGINEERING: "PROCUREMENT",
+  PROCUREMENT: "INSTALLATION",
+  INSTALLATION: "COMMISSIONING",
+  COMMISSIONING: "HANDOVER",
+  HANDOVER: "CLOSED",
+  CLOSED: null,
+};
+
+const SPINE_KEYS = ["opp", "prop", "proj", "rack", "flow", "comm", "amc"] as const;
+const SPINE_LABELS: Record<string, string> = {
+  opp: "Opportunity",
+  prop: "Proposal",
+  proj: "Project",
+  rack: "Rack",
+  flow: "Signal Flow",
+  comm: "Commissioning",
+  amc: "AMC",
+};
+
+function buildProjectSpine(project: { phase: string; opportunity: { id: string } | null }): Stage[] {
+  const currentKey = PHASE_TO_SPINE[project.phase] ?? "proj";
+  const currentIdx = SPINE_KEYS.indexOf(currentKey as (typeof SPINE_KEYS)[number]);
+  return SPINE_KEYS.map((key, i) => {
+    let state: StageState;
+    if (key === "opp" || key === "prop") {
+      // Opp & Prop are "done" if a linked opportunity exists; otherwise skipped (todo).
+      state = project.opportunity ? "done" : i < currentIdx ? "done" : "todo";
+    } else if (i < currentIdx) {
+      state = "done";
+    } else if (i === currentIdx) {
+      state = "current";
+    } else {
+      state = "todo";
+    }
+    return { key, label: SPINE_LABELS[key], state };
+  });
 }

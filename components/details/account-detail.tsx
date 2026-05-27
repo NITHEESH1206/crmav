@@ -115,11 +115,11 @@ export function AccountDetail({ account }: { account: Account }) {
               onSave={(v) => updateAccount({ id: account.id, healthScore: parseInt(v, 10) })}
             />
             <div>
-              <div className="text-[10px] uppercase tracking-wider text-white/40">Lifetime value</div>
+              <div className="text-[10px] uppercase tracking-wider text-ink-300/50">Lifetime value</div>
               <div className="mt-1 text-sm font-mono">${(account.ltvCents / 100).toLocaleString()}</div>
             </div>
             <div>
-              <div className="text-[10px] uppercase tracking-wider text-white/40">Recurring MRR</div>
+              <div className="text-[10px] uppercase tracking-wider text-ink-300/50">Recurring MRR</div>
               <div className="mt-1 text-sm font-mono">${(mrr / 100).toLocaleString()}/mo</div>
             </div>
           </CardContent>
@@ -144,11 +144,11 @@ export function AccountDetail({ account }: { account: Account }) {
         </CardHeader>
         <CardContent className="p-0">
           {account.contacts.length === 0 ? (
-            <div className="px-6 pb-6 text-xs text-white/40 italic">No contacts yet.</div>
+            <div className="px-6 pb-6 text-xs text-ink-300/50 italic">No contacts yet.</div>
           ) : (
-            <div className="border-t border-white/[0.04]">
+            <div className="border-t border-bone-300/45">
               {account.contacts.map((c) => (
-                <div key={c.id} className="flex items-center gap-3 px-6 py-3 border-b border-white/[0.04] last:border-b-0">
+                <div key={c.id} className="flex items-center gap-3 px-6 py-3 border-b border-bone-300/45 last:border-b-0">
                   <Avatar className="h-9 w-9">
                     <AvatarFallback className="text-[10px]">
                       {initials(`${c.firstName} ${c.lastName}`)}
@@ -159,7 +159,7 @@ export function AccountDetail({ account }: { account: Account }) {
                       {c.firstName} {c.lastName}
                       {c.isPrimary && <Star className="h-3 w-3 fill-signal-400 text-signal-400" />}
                     </div>
-                    <div className="text-[11px] text-white/45">{c.title ?? "—"} · {c.email ?? "no email"}</div>
+                    <div className="text-[11px] text-ink-300/55">{c.title ?? "—"} · {c.email ?? "no email"}</div>
                   </div>
                 </div>
               ))}
@@ -210,7 +210,7 @@ export function AccountDetail({ account }: { account: Account }) {
               tone: i.status === "PAID" ? "success" : i.status === "OVERDUE" ? "destructive" : "secondary",
             },
             right: (
-              <span className="text-sm font-mono text-white/85">
+              <span className="text-sm font-mono text-ink-300/90">
                 ${formatCompact(i.totalCents / 100)}
               </span>
             ),

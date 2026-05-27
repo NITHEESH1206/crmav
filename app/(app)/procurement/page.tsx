@@ -53,7 +53,7 @@ export default async function ProcurementPage() {
         {stats.map((s) => (
           <Card key={s.l}>
             <CardContent className="p-5">
-              <div className="text-xs text-white/45">{s.l}</div>
+              <div className="text-xs text-ink-300/55">{s.l}</div>
               <div className="font-display text-3xl font-semibold tracking-tight mt-1">{s.v}</div>
             </CardContent>
           </Card>
@@ -63,7 +63,7 @@ export default async function ProcurementPage() {
       <Card>
         <CardHeader><CardTitle>Purchase orders</CardTitle></CardHeader>
         <CardContent className="p-0">
-          <div className="grid grid-cols-[100px_1fr_120px_120px_100px] text-[10px] uppercase tracking-wider text-white/40 px-5 py-3 border-y border-white/[0.04]">
+          <div className="grid grid-cols-[100px_1fr_120px_120px_100px] text-[10px] uppercase tracking-wider text-ink-300/50 px-5 py-3 border-y border-bone-300/45">
             <div>PO</div>
             <div>Vendor</div>
             <div>Value</div>
@@ -73,11 +73,11 @@ export default async function ProcurementPage() {
           {pos.map((po) => {
             const Icon = stateIcon(po.status);
             return (
-              <div key={po.id} className="grid grid-cols-[100px_1fr_120px_120px_100px] items-center gap-3 px-5 py-3.5 border-b border-white/[0.04] hover:bg-white/[0.015] cursor-pointer">
-                <div className="text-[11px] text-white/40 font-mono">{po.number}</div>
+              <div key={po.id} className="grid grid-cols-[100px_1fr_120px_120px_100px] items-center gap-3 px-5 py-3.5 border-b border-bone-300/45 hover:bg-bone-50/50 cursor-pointer">
+                <div className="text-[11px] text-ink-300/50 font-mono">{po.number}</div>
                 <div className="text-sm font-medium">{po.vendor.name}</div>
                 <div className="text-sm font-mono">${formatCompact(po.totalCents / 100)}</div>
-                <div className="text-xs text-white/55">
+                <div className="text-xs text-ink-300/65">
                   {po.expectedDate ? formatDate(po.expectedDate, { month: "short", day: "numeric" }) : "—"}
                 </div>
                 <div className="flex items-center gap-1.5">
@@ -87,7 +87,7 @@ export default async function ProcurementPage() {
               </div>
             );
           })}
-          {pos.length === 0 && <div className="px-5 py-8 text-center text-xs text-white/40">No purchase orders.</div>}
+          {pos.length === 0 && <div className="px-5 py-8 text-center text-xs text-ink-300/50">No purchase orders.</div>}
         </CardContent>
       </Card>
     </ModuleShell>

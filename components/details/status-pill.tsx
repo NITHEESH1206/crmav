@@ -19,7 +19,7 @@ const TONE_CLASS: Record<Tone, string> = {
   warning: "bg-amber-500/15 text-amber-300 border-amber-500/30",
   info: "bg-sky-500/15 text-sky-300 border-sky-500/30",
   destructive: "bg-red-500/15 text-red-300 border-red-500/30",
-  neutral: "bg-white/[0.04] text-white/70 border-white/[0.08]",
+  neutral: "bg-bone-100/70 text-ink-300/80 border-bone-300/65",
 };
 
 export function StatusPill({

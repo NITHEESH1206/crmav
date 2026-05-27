@@ -46,7 +46,7 @@ export default async function TimeEntriesPage() {
         {stats.map((s) => (
           <Card key={s.l}>
             <CardContent className="p-5">
-              <div className="text-xs text-white/45">{s.l}</div>
+              <div className="text-xs text-ink-300/55">{s.l}</div>
               <div className="font-display text-3xl font-semibold tracking-tight mt-1">{s.v}</div>
             </CardContent>
           </Card>
@@ -56,7 +56,7 @@ export default async function TimeEntriesPage() {
       <Card>
         <CardHeader><CardTitle>Weekly timesheet</CardTitle></CardHeader>
         <CardContent className="p-0">
-          <div className="grid grid-cols-[2fr_1.5fr_100px_100px_160px] text-[10px] uppercase tracking-wider text-white/40 px-5 py-3 border-y border-white/[0.04]">
+          <div className="grid grid-cols-[2fr_1.5fr_100px_100px_160px] text-[10px] uppercase tracking-wider text-ink-300/50 px-5 py-3 border-y border-bone-300/45">
             <div>Technician</div>
             <div>Top project</div>
             <div>Hours</div>
@@ -64,14 +64,14 @@ export default async function TimeEntriesPage() {
             <div>Utilization</div>
           </div>
           {entries.map((e) => (
-            <div key={e.tech} className="grid grid-cols-[2fr_1.5fr_100px_100px_160px] items-center gap-3 px-5 py-3.5 border-b border-white/[0.04]">
+            <div key={e.tech} className="grid grid-cols-[2fr_1.5fr_100px_100px_160px] items-center gap-3 px-5 py-3.5 border-b border-bone-300/45">
               <div className="flex items-center gap-3">
                 <Avatar className="h-8 w-8">
                   <AvatarFallback className="text-[10px]">{initials(e.tech)}</AvatarFallback>
                 </Avatar>
                 <div className="text-sm font-medium">{e.tech}</div>
               </div>
-              <div className="text-xs text-white/55 truncate">{e.project}</div>
+              <div className="text-xs text-ink-300/65 truncate">{e.project}</div>
               <div className="text-sm font-mono">{e.hours}h</div>
               <div className="text-sm font-mono text-emerald-400">{e.billable}h</div>
               <div className="flex items-center gap-2">
@@ -80,7 +80,7 @@ export default async function TimeEntriesPage() {
               </div>
             </div>
           ))}
-          {entries.length === 0 && <div className="px-5 py-8 text-center text-xs text-white/40">No time entries this week.</div>}
+          {entries.length === 0 && <div className="px-5 py-8 text-center text-xs text-ink-300/50">No time entries this week.</div>}
         </CardContent>
       </Card>
     </ModuleShell>

@@ -66,10 +66,10 @@ export function RoomCard({ room, index }: { room: Room; index: number }) {
       transition={{ duration: 0.4, delay: index * 0.04 }}
     >
       <Card className="overflow-hidden hover-lift cursor-pointer group">
-        <div className={`aspect-[16/9] relative bg-gradient-to-br ${tint} border-b border-white/[0.06]`}>
+        <div className={`aspect-[16/9] relative bg-gradient-to-br ${tint} border-b border-bone-300/55`}>
           <div className="absolute inset-0 grid-pattern opacity-30" />
           <div className="absolute inset-0 flex items-center justify-center">
-            <Layers3 className="h-14 w-14 text-white/20 group-hover:text-signal-400/60 transition-colors" strokeWidth={1.2} />
+            <Layers3 className="h-14 w-14 text-ink-300/35 group-hover:text-signal-400/60 transition-colors" strokeWidth={1.2} />
           </div>
           <Badge variant="secondary" className="absolute top-3 left-3 capitalize text-[10px]">
             {room.roomType.toLowerCase().replace("_", " ")}
@@ -82,7 +82,7 @@ export function RoomCard({ room, index }: { room: Room; index: number }) {
         </div>
         <CardContent className="p-4">
           <div className="text-sm font-medium leading-tight">{room.name}</div>
-          <div className="text-[11px] text-white/45 mt-0.5 truncate">
+          <div className="text-[11px] text-ink-300/55 mt-0.5 truncate">
             {room.account?.name ?? "Unassigned"}
             {room.project?.name && ` · ${room.project.name}`}
           </div>
@@ -94,7 +94,7 @@ export function RoomCard({ room, index }: { room: Room; index: number }) {
             <Stat icon={Network} value={room._count.signalFlows} label="Flow" />
           </div>
 
-          <div className="mt-3 pt-3 border-t border-white/[0.06]">
+          <div className="mt-3 pt-3 border-t border-bone-300/55">
             <Button
               size="sm"
               variant="secondary"
@@ -138,10 +138,10 @@ function Stat({
   label: string;
 }) {
   return (
-    <div className="rounded-md border border-white/[0.06] bg-white/[0.02] py-1.5">
+    <div className="rounded-md border border-bone-300/55 bg-bone-50/60 py-1.5">
       <Icon className="h-3 w-3 mx-auto text-signal-400" />
       <div className="text-xs font-mono mt-0.5">{value}</div>
-      <div className="text-[9px] text-white/40">{label}</div>
+      <div className="text-[9px] text-ink-300/50">{label}</div>
     </div>
   );
 }

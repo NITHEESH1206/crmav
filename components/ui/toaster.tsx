@@ -26,8 +26,8 @@ export function Toaster() {
           error: "!border-red-500/30 !bg-[rgba(11,11,13,0.95)]",
           info: "!border-signal-500/30 !bg-[rgba(11,11,13,0.95)]",
           warning: "!border-amber-500/30 !bg-[rgba(11,11,13,0.95)]",
-          title: "!text-white !font-medium",
-          description: "!text-white/60 !text-[11px]",
+          title: "!text-ink-300 !font-medium",
+          description: "!text-ink-300/70 !text-[11px]",
         },
       }}
     />

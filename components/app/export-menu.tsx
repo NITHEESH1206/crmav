@@ -53,7 +53,7 @@ export function ExportMenu({
                 <Icon className="h-3.5 w-3.5 text-signal-400" />
                 <span className="font-medium">{meta.label}</span>
               </div>
-              <div className="text-[10px] text-white/45 ml-5">{meta.description}</div>
+              <div className="text-[10px] text-ink-300/55 ml-5">{meta.description}</div>
             </DropdownMenuItem>
           );
         })}

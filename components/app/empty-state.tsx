@@ -31,7 +31,7 @@ export function EmptyState({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       className={cn(
-        "relative rounded-3xl border border-white/[0.06] bg-gradient-to-b from-white/[0.02] to-transparent p-12 text-center overflow-hidden",
+        "relative rounded-3xl border border-bone-300/55 bg-gradient-to-b from-white/[0.02] to-transparent p-12 text-center overflow-hidden",
         className
       )}
     >
@@ -50,7 +50,7 @@ export function EmptyState({
         </motion.div>
 
         <h3 className="mt-5 font-display text-2xl font-semibold tracking-tight">{title}</h3>
-        <p className="mt-2 text-sm text-white/55 max-w-md mx-auto leading-relaxed">
+        <p className="mt-2 text-sm text-ink-300/65 max-w-md mx-auto leading-relaxed">
           {description}
         </p>
 
@@ -65,9 +65,9 @@ export function EmptyState({
           </Button>
         )}
 
-        <div className="mt-6 flex items-center justify-center gap-2 text-[11px] text-white/35">
+        <div className="mt-6 flex items-center justify-center gap-2 text-[11px] text-ink-300/45">
           <Sparkles className="h-3 w-3 text-signal-400/60" />
-          Tip: press <kbd className="px-1.5 py-0.5 rounded border border-white/[0.08] bg-white/[0.04] font-mono text-[10px]">N</kbd> anywhere to open quick-create
+          Tip: press <kbd className="px-1.5 py-0.5 rounded border border-bone-300/65 bg-bone-100/70 font-mono text-[10px]">N</kbd> anywhere to open quick-create
         </div>
       </div>
     </motion.div>

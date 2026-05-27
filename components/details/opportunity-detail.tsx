@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,9 +8,11 @@ import { DetailHeader } from "@/components/details/detail-header";
 import { EditableField, EditableSelect } from "@/components/details/editable-field";
 import { StatusPill } from "@/components/details/status-pill";
 import { RelatedList } from "@/components/details/related-list";
-import { ProposalDialog } from "@/components/ai/proposal-dialog";
 import { updateOpportunity } from "@/app/actions/update";
 import { formatCompact } from "@/lib/utils";
+import { StageBar, type Stage, type StageState } from "@/components/app/stage-bar";
+import { GenerateButton } from "@/components/ai/generate-button";
+import { ProvenanceBadge } from "@/components/ai/provenance-badge";
 
 type Opp = {
   id: string;
@@ -39,7 +40,6 @@ const STAGE_OPTS = [
 ];
 
 export function OpportunityDetail({ opp, users }: { opp: Opp; users: { id: string; name: string }[] }) {
-  const [proposalOpen, setProposalOpen] = useState(false);
   return (
     <div className="space-y-6">
       <DetailHeader
@@ -77,11 +77,30 @@ export function OpportunityDetail({ opp, users }: { opp: Opp; users: { id: strin
         }
         actions={
           <>
-            <Button variant="secondary" size="sm" onClick={() => setProposalOpen(true)}>
-              <FileSignature className="h-3.5 w-3.5" />
-              Generate proposal
-            </Button>
-            <Button size="sm">
+            <GenerateButton
+              entityId={opp.id}
+              entityLabel={opp.name}
+              sourceLabel={opp.account?.name}
+              size="sm"
+              options={[
+                {
+                  kind: "opportunity-proposal",
+                  label: "Proposal",
+                  description: "Full client-ready proposal narrative",
+                },
+                {
+                  kind: "opportunity-email-followup",
+                  label: "Follow-up email",
+                  description: "Short stage-aware client email",
+                },
+                {
+                  kind: "opportunity-account-brief",
+                  label: "Account brief",
+                  description: "QBR-ready account summary",
+                },
+              ]}
+            />
+            <Button size="sm" variant="secondary">
               <MessageSquare className="h-3.5 w-3.5" />
               Email client
             </Button>
@@ -89,11 +108,21 @@ export function OpportunityDetail({ opp, users }: { opp: Opp; users: { id: strin
         }
       />
 
-      <ProposalDialog
-        opportunityId={opp.id}
-        opportunityName={opp.name}
-        open={proposalOpen}
-        onOpenChange={setProposalOpen}
+      <StageBar
+        stages={buildOppSpine(opp)}
+        currentNote={`Stage · ${opp.stage.toLowerCase().replace("_", " ")}`}
+        nextGate={NEXT_STAGE[opp.stage] ?? "Close the deal"}
+        onPromote={
+          NEXT_STAGE[opp.stage]
+            ? () =>
+                updateOpportunity({
+                  id: opp.id,
+                  stage: NEXT_STAGE[opp.stage] as typeof opp.stage as never,
+                })
+            : undefined
+        }
+        promoteLabel={NEXT_STAGE[opp.stage] ? `Move to ${NEXT_STAGE[opp.stage]!.toLowerCase().replace("_", " ")}` : "Mark as won"}
+        promoteDisabled={opp.stage === "CLOSED_WON" || opp.stage === "CLOSED_LOST"}
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-[1.6fr_1fr] gap-5">
@@ -137,8 +166,8 @@ export function OpportunityDetail({ opp, users }: { opp: Opp; users: { id: strin
               onSave={(v) => updateOpportunity({ id: opp.id, ownerId: v || null })}
             />
             <div>
-              <div className="text-[10px] uppercase tracking-wider text-white/40">Created</div>
-              <div className="mt-1 text-sm text-white/85">{opp.createdAt.toLocaleString()}</div>
+              <div className="text-[10px] uppercase tracking-wider text-ink-300/50">Created</div>
+              <div className="mt-1 text-sm text-ink-300/90">{opp.createdAt.toLocaleString()}</div>
             </div>
           </CardContent>
         </Card>
@@ -146,19 +175,16 @@ export function OpportunityDetail({ opp, users }: { opp: Opp; users: { id: strin
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Sparkles className="h-3.5 w-3.5 text-signal-400" />
+              <Sparkles className="h-3.5 w-3.5 text-signal-500" />
               AI insights
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-2.5 text-sm text-white/75 leading-relaxed">
-            <p>• Similar deals at this stage close in 14–22 days on average.</p>
-            <p>• Account health is {opp.account ? "strong" : "unknown"} — outreach likely well-received.</p>
-            <p>• Recommended next step: schedule a discovery call within 3 days.</p>
-            <p>• Suggested BOQ template: Boardroom Premium (Crestron + Q-SYS + Shure).</p>
-            <Button variant="secondary" size="sm" className="w-full mt-3">
-              <Sparkles className="h-3.5 w-3.5" />
-              Run deeper AI analysis
-            </Button>
+          <CardContent className="space-y-2.5 text-sm text-ink-300/85 leading-relaxed">
+            <ProvenanceBadge date={opp.createdAt} className="mb-3" />
+            <p>· Similar deals at this stage close in 14–22 days on average.</p>
+            <p>· Account health is {opp.account ? "strong" : "unknown"} — outreach likely well-received.</p>
+            <p>· Recommended next step: schedule a discovery call within 3 days.</p>
+            <p>· Suggested BOQ template: Boardroom Premium (Crestron + Q-SYS + Shure).</p>
           </CardContent>
         </Card>
       </div>
@@ -200,4 +226,48 @@ export function OpportunityDetail({ opp, users }: { opp: Opp; users: { id: strin
       </div>
     </div>
   );
+}
+
+/** Opportunity stage → next stage progression. */
+const NEXT_STAGE: Record<string, string | null> = {
+  DISCOVERY: "SITE_SURVEY",
+  SITE_SURVEY: "PROPOSAL",
+  PROPOSAL: "NEGOTIATION",
+  NEGOTIATION: "CLOSED_WON",
+  CLOSED_WON: null,
+  CLOSED_LOST: null,
+};
+
+const OPP_STAGE_TO_SPINE: Record<string, string> = {
+  DISCOVERY: "opp",
+  SITE_SURVEY: "opp",
+  PROPOSAL: "prop",
+  NEGOTIATION: "prop",
+  CLOSED_WON: "proj",
+  CLOSED_LOST: "opp",
+};
+
+const SPINE_KEYS = ["opp", "prop", "proj", "rack", "flow", "comm", "amc"] as const;
+const SPINE_LABELS: Record<string, string> = {
+  opp: "Opportunity",
+  prop: "Proposal",
+  proj: "Project",
+  rack: "Rack",
+  flow: "Signal Flow",
+  comm: "Commissioning",
+  amc: "AMC",
+};
+
+function buildOppSpine(opp: { stage: string; project: { id: string } | null }): Stage[] {
+  const currentKey = OPP_STAGE_TO_SPINE[opp.stage] ?? "opp";
+  const currentIdx = SPINE_KEYS.indexOf(currentKey as (typeof SPINE_KEYS)[number]);
+  return SPINE_KEYS.map((key, i) => {
+    let state: StageState;
+    if (i < currentIdx) state = "done";
+    else if (i === currentIdx) state = "current";
+    else state = "todo";
+    // If project exists and we're still in opp/prop, mark project as in-progress hint.
+    if (key === "proj" && opp.project && i > currentIdx) state = "done";
+    return { key, label: SPINE_LABELS[key], state };
+  });
 }

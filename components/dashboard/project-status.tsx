@@ -23,11 +23,11 @@ export function ProjectStatus({ projects, totalActive }: { projects: Project[]; 
     <Card>
       <CardHeader>
         <CardTitle>Active projects</CardTitle>
-        <p className="text-xs text-white/45 mt-1">{projects.length} of {totalActive} shown</p>
+        <p className="text-xs text-ink-300/55 mt-1">{projects.length} of {totalActive} shown</p>
       </CardHeader>
       <CardContent className="space-y-4">
         {projects.length === 0 && (
-          <div className="text-xs text-white/40 text-center py-8">No active projects.</div>
+          <div className="text-xs text-ink-300/50 text-center py-8">No active projects.</div>
         )}
         {projects.map((p, i) => (
           <motion.div
@@ -35,12 +35,12 @@ export function ProjectStatus({ projects, totalActive }: { projects: Project[]; 
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: i * 0.06 }}
-            className="group p-3 -mx-3 rounded-xl hover:bg-white/[0.02] transition-colors cursor-pointer"
+            className="group p-3 -mx-3 rounded-xl hover:bg-bone-50/60 transition-colors cursor-pointer"
           >
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0 flex-1">
                 <div className="text-sm font-medium truncate">{p.name}</div>
-                <div className="flex items-center gap-1.5 mt-0.5 text-[11px] text-white/40">
+                <div className="flex items-center gap-1.5 mt-0.5 text-[11px] text-ink-300/50">
                   <Building2 className="h-3 w-3" />
                   <span className="truncate">{p.account?.name ?? "—"}</span>
                 </div>
@@ -54,9 +54,9 @@ export function ProjectStatus({ projects, totalActive }: { projects: Project[]; 
             </div>
             <div className="mt-3 flex items-center gap-3">
               <Progress value={p.progress} className="flex-1" />
-              <span className="text-[11px] text-white/55 font-mono w-8 text-right">{p.progress}%</span>
+              <span className="text-[11px] text-ink-300/65 font-mono w-8 text-right">{p.progress}%</span>
             </div>
-            <div className="mt-1.5 text-[10px] text-white/35">
+            <div className="mt-1.5 text-[10px] text-ink-300/45">
               Due {p.dueDate ? formatDate(p.dueDate, { month: "short", day: "numeric" }) : "—"}
             </div>
           </motion.div>

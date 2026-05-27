@@ -73,9 +73,9 @@ export function ApiKeysTab({ keys }: { keys: ApiKey[] }) {
       </CardHeader>
       <CardContent className="space-y-3">
         {keys.length === 0 && (
-          <div className="rounded-xl border border-dashed border-white/[0.08] p-8 text-center">
+          <div className="rounded-xl border border-dashed border-bone-300/65 p-8 text-center">
             <KeyRound className="h-6 w-6 text-signal-400 mx-auto mb-2" />
-            <div className="text-sm text-white/55">
+            <div className="text-sm text-ink-300/65">
               No API keys yet. Generate one to access the ZynexAV API.
             </div>
           </div>
@@ -83,20 +83,20 @@ export function ApiKeysTab({ keys }: { keys: ApiKey[] }) {
         {keys.map((k) => (
           <div
             key={k.id}
-            className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5"
+            className="flex items-center gap-3 rounded-xl border border-bone-300/55 bg-bone-50/60 p-3.5"
           >
             <div className="h-9 w-9 rounded-lg bg-signal-500/10 border border-signal-500/30 flex items-center justify-center shrink-0">
               <KeyRound className="h-4 w-4 text-signal-400" />
             </div>
             <div className="min-w-0 flex-1">
               <div className="text-sm font-medium truncate">{k.name}</div>
-              <div className="text-xs text-white/45 font-mono mt-0.5 truncate">{k.prefix}</div>
+              <div className="text-xs text-ink-300/55 font-mono mt-0.5 truncate">{k.prefix}</div>
             </div>
-            <div className="hidden sm:block text-[11px] text-white/40 text-right">
+            <div className="hidden sm:block text-[11px] text-ink-300/50 text-right">
               {k.lastUsedAt
                 ? `Used ${formatDistanceToNow(k.lastUsedAt, { addSuffix: true })}`
                 : "Never used"}
-              <div className="text-white/30 mt-0.5">
+              <div className="text-ink-300/45 mt-0.5">
                 Created {formatDistanceToNow(k.createdAt, { addSuffix: true })}
               </div>
             </div>
@@ -104,7 +104,7 @@ export function ApiKeysTab({ keys }: { keys: ApiKey[] }) {
               onClick={() => revoke(k.id, k.name)}
               disabled={pending}
               aria-label="Revoke key"
-              className="h-8 w-8 rounded-md text-white/40 hover:text-red-400 hover:bg-red-500/10 transition-colors flex items-center justify-center"
+              className="h-8 w-8 rounded-md text-ink-300/50 hover:text-red-400 hover:bg-red-500/10 transition-colors flex items-center justify-center"
             >
               <Trash2 className="h-3.5 w-3.5" />
             </button>
@@ -122,7 +122,7 @@ export function ApiKeysTab({ keys }: { keys: ApiKey[] }) {
             </DialogDescription>
           </DialogHeader>
           <div className="px-6 pb-2">
-            <label className="text-xs text-white/65 mb-1.5 block">Key name</label>
+            <label className="text-xs text-ink-300/75 mb-1.5 block">Key name</label>
             <Input
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -155,8 +155,8 @@ export function ApiKeysTab({ keys }: { keys: ApiKey[] }) {
           </DialogHeader>
           <div className="px-6 pb-2 space-y-4">
             <div>
-              <label className="text-xs text-white/65 mb-1.5 block">{revealed?.name}</label>
-              <div className="rounded-xl border border-signal-500/40 bg-signal-500/[0.06] p-3 font-mono text-[12px] text-bone-100 break-all">
+              <label className="text-xs text-ink-300/75 mb-1.5 block">{revealed?.name}</label>
+              <div className="rounded-xl border border-signal-500/40 bg-signal-500/[0.06] p-3 font-mono text-[12px] text-ink-300 break-all">
                 {revealed?.rawKey}
               </div>
             </div>

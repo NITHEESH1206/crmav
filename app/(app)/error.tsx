@@ -33,7 +33,7 @@ export default function AppError({
           <h2 className="font-display text-2xl font-semibold tracking-tight">
             {looksLikeDbError ? "Database not connected" : "Something went sideways"}
           </h2>
-          <p className="mt-2 text-sm text-white/55 leading-relaxed">
+          <p className="mt-2 text-sm text-ink-300/65 leading-relaxed">
             {looksLikeDbError ? (
               <>
                 This page reads from Postgres via Prisma, but the connection isn&apos;t live yet.
@@ -52,7 +52,7 @@ export default function AppError({
               Retry
             </Button>
             {error.digest && (
-              <span className="text-[11px] text-white/35 font-mono">{error.digest}</span>
+              <span className="text-[11px] text-ink-300/45 font-mono">{error.digest}</span>
             )}
           </div>
         </CardContent>

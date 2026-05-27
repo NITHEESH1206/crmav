@@ -27,7 +27,7 @@ export function TechnicianTracking({
       <CardHeader className="flex-row items-start justify-between gap-3">
         <div>
           <CardTitle>Technician tracking</CardTitle>
-          <p className="text-xs text-white/45 mt-1">{techs.length} active · live updates</p>
+          <p className="text-xs text-ink-300/55 mt-1">{techs.length} active · live updates</p>
         </div>
         <div className="flex items-center gap-1.5 text-[11px] text-emerald-400">
           <span className="relative flex h-1.5 w-1.5">
@@ -39,7 +39,7 @@ export function TechnicianTracking({
       </CardHeader>
       <CardContent className="space-y-3">
         {techs.length === 0 && (
-          <div className="text-xs text-white/40 text-center py-8">No technicians on the roster.</div>
+          <div className="text-xs text-ink-300/50 text-center py-8">No technicians on the roster.</div>
         )}
         {techs.map((t, i) => (
           <motion.div
@@ -61,14 +61,14 @@ export function TechnicianTracking({
                   {t.status}
                 </Badge>
               </div>
-              <div className="flex items-center gap-1 text-[11px] text-white/45 truncate">
+              <div className="flex items-center gap-1 text-[11px] text-ink-300/55 truncate">
                 <MapPin className="h-2.5 w-2.5" />
                 {t.location}
               </div>
             </div>
             <div className="text-right shrink-0">
               <div className="text-xs font-mono">{t.utilization}%</div>
-              <div className="text-[10px] text-white/35">util.</div>
+              <div className="text-[10px] text-ink-300/45">util.</div>
             </div>
           </motion.div>
         ))}

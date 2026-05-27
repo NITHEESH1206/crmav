@@ -28,12 +28,12 @@ export function TodosList({ todos }: { todos: Todo[] }) {
     <Card>
       <CardContent className="p-0">
         {optimisticTodos.length === 0 ? (
-          <div className="p-10 text-center text-sm text-white/45">No tasks. Enjoy the quiet.</div>
+          <div className="p-10 text-center text-sm text-ink-300/55">No tasks. Enjoy the quiet.</div>
         ) : (
           optimisticTodos.map((t) => (
             <div
               key={t.id}
-              className="grid grid-cols-[28px_1fr_1fr_80px_120px_100px] items-center gap-3 px-5 py-3.5 border-b border-white/[0.04] hover:bg-white/[0.015] transition-colors"
+              className="grid grid-cols-[28px_1fr_1fr_80px_120px_100px] items-center gap-3 px-5 py-3.5 border-b border-bone-300/45 hover:bg-bone-50/50 transition-colors"
             >
               <button
                 onClick={() =>
@@ -44,22 +44,22 @@ export function TodosList({ todos }: { todos: Todo[] }) {
                 }
                 className={`h-5 w-5 rounded-md border flex items-center justify-center transition-all ${
                   t.done
-                    ? "bg-signal-500 border-signal-500 text-white"
-                    : "border-white/[0.12] hover:border-signal-500/50"
+                    ? "bg-signal-500 border-signal-500 text-ink-300"
+                    : "border-bone-300/80 hover:border-signal-500/50"
                 }`}
                 aria-label="Toggle task"
               >
                 {t.done && <Check className="h-3 w-3" strokeWidth={3} />}
               </button>
-              <div className={`text-sm ${t.done ? "line-through text-white/35" : "text-white"}`}>{t.title}</div>
-              <div className="text-xs text-white/50 truncate">{t.project?.name ?? "—"}</div>
+              <div className={`text-sm ${t.done ? "line-through text-ink-300/45" : "text-ink-300"}`}>{t.title}</div>
+              <div className="text-xs text-ink-300/60 truncate">{t.project?.name ?? "—"}</div>
               <Badge
                 variant={t.priority === "P1" ? "destructive" : t.priority === "P2" ? "warning" : "secondary"}
                 className="h-5 px-1.5 text-[10px]"
               >
                 {t.priority}
               </Badge>
-              <div className="text-xs text-white/55">
+              <div className="text-xs text-ink-300/65">
                 {t.dueDate ? formatDate(t.dueDate, { month: "short", day: "numeric" }) : "—"}
               </div>
               <div className="flex items-center gap-2">
@@ -68,7 +68,7 @@ export function TodosList({ todos }: { todos: Todo[] }) {
                     <Avatar className="h-6 w-6">
                       <AvatarFallback className="text-[9px]">{initials(t.assignee.name)}</AvatarFallback>
                     </Avatar>
-                    <span className="text-[11px] text-white/55">{t.assignee.name.split(" ")[0]}</span>
+                    <span className="text-[11px] text-ink-300/65">{t.assignee.name.split(" ")[0]}</span>
                   </>
                 )}
               </div>

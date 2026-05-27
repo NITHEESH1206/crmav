@@ -2,175 +2,209 @@
 
 import { motion } from "framer-motion";
 import {
-  Target,
-  FolderKanban,
-  LifeBuoy,
-  Boxes,
+  Layers,
+  LineChart,
+  Wrench,
   Cable,
   Network,
   Sparkles,
-  FileText,
-  ShoppingCart,
-  Receipt,
-  Activity,
-  MonitorCheck,
+  ShieldCheck,
+  Boxes,
+  Cpu,
 } from "lucide-react";
-import { FadeIn } from "@/components/motion/fade-in";
-import { cn } from "@/lib/utils";
-
-const FEATURES = [
-  {
-    icon: Target,
-    title: "Sales Pipeline & Opportunities",
-    desc: "Stage-aware kanban, AI deal scoring, quotation builder with live AV catalog pricing.",
-    big: true,
-  },
-  {
-    icon: FolderKanban,
-    title: "AV Project Management",
-    desc: "Room-wise BOQ tracking, Gantt timelines, milestones, real-time profitability.",
-  },
-  {
-    icon: LifeBuoy,
-    title: "Service Desk & AMC",
-    desc: "SLA-aware tickets, preventive maintenance, technician dispatch, client portal.",
-  },
-  {
-    icon: Boxes,
-    title: "Inventory & RMA",
-    desc: "Serial-number tracking, barcode scanning, multi-warehouse, device lifecycle.",
-  },
-  {
-    icon: ShoppingCart,
-    title: "Procurement",
-    desc: "Vendor management, quote comparison, approval workflows, shipment tracking.",
-  },
-  {
-    icon: Cable,
-    title: "AV Rack Builder",
-    desc: "Drag-and-drop rack layouts with auto-generated wiring and signal flow.",
-    big: true,
-  },
-  {
-    icon: Network,
-    title: "Signal Flow Designer",
-    desc: "Visual AV signal flows. Crestron, Q-SYS, Extron, Biamp integrations native.",
-  },
-  {
-    icon: MonitorCheck,
-    title: "Device Health Monitoring",
-    desc: "Live IP tracking, uptime checks, DSP config storage, commissioning checklists.",
-  },
-  {
-    icon: Receipt,
-    title: "Billing & Subscriptions",
-    desc: "Invoices, recurring billing, AMC contracts, Stripe payments, multi-currency.",
-  },
-];
+import { PrimaryPill } from "@/components/landing/hero";
 
 export function Features() {
   return (
-    <section id="features" className="relative py-32 sm:py-40">
+    <section id="features" className="relative py-24 sm:py-32">
       <div className="container">
-        <FadeIn className="max-w-3xl">
-          <div className="text-[11px] uppercase tracking-[0.3em] text-signal-400 font-medium">
-            Built end-to-end
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.7 }}
+          className="text-center max-w-3xl mx-auto"
+        >
+          <div className="inline-flex items-center rounded-full bg-white border border-bone-300/60 px-4 py-1.5 text-[13px] font-medium text-ink-300">
+            Core Features
           </div>
-          <h2 className="mt-3 font-display text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-[1.05]">
-            Every part of your AV business — <span className="text-gradient">one platform.</span>
+          <h2 className="mt-6 font-display font-bold tracking-[-0.04em] leading-[1.02] text-4xl sm:text-5xl md:text-6xl text-ink-300">
+            Boost Productivity with These
+            <br />
+            Game-Changing Features
           </h2>
-          <p className="mt-5 text-base text-white/55 leading-relaxed">
-            From the first lead to the final commissioning checklist, ZynexAV brings every workflow your team runs into a single, beautifully designed CRM.
-          </p>
-        </FadeIn>
+        </motion.div>
 
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-[minmax(220px,_auto)]">
-          {FEATURES.map((f, i) => {
-            const Icon = f.icon;
-            return (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.7, delay: (i % 3) * 0.08 }}
-                className={cn(
-                  "group relative rounded-3xl p-6 lg:p-7 glass-card hover-lift overflow-hidden",
-                  f.big && "lg:col-span-1 lg:row-span-2"
-                )}
-              >
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <div className="absolute inset-0 bg-gradient-to-br from-signal-500/[0.08] via-transparent to-transparent" />
-                  <div className="absolute -top-px left-8 right-8 h-px bg-gradient-to-r from-transparent via-signal-500/60 to-transparent" />
-                </div>
-
-                <div className="relative flex flex-col h-full">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="h-10 w-10 rounded-xl border border-white/[0.08] bg-white/[0.03] flex items-center justify-center group-hover:border-signal-500/30 group-hover:bg-signal-500/[0.08] transition-all duration-500">
-                      <Icon className="h-4.5 w-4.5 text-signal-400" strokeWidth={1.8} />
-                    </div>
-                  </div>
-
-                  <h3 className="font-display text-xl font-semibold tracking-tight">{f.title}</h3>
-                  <p className="mt-2 text-sm text-white/50 leading-relaxed">{f.desc}</p>
-
-                  {f.big && (
-                    <div className="mt-6 flex-1 flex items-end">
-                      <FeatureVisual variant={i} />
-                    </div>
-                  )}
-                </div>
-              </motion.div>
-            );
-          })}
+        <div className="mt-14 grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <LeadCard />
+          <AnalyticsCard />
+          <CollaborationCard />
         </div>
       </div>
     </section>
   );
 }
 
-function FeatureVisual({ variant }: { variant: number }) {
-  // Two distinct micro-visuals for the "big" cards
-  if (variant === 0) {
-    // Sales pipeline mini board
-    return (
-      <div className="relative w-full grid grid-cols-3 gap-2">
-        {["Discovery", "Quote", "Won"].map((col, i) => (
-          <div key={col} className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2.5">
-            <div className="text-[10px] uppercase tracking-wider text-white/35 mb-2">{col}</div>
-            <div className="space-y-1.5">
-              <div className="h-8 rounded-md bg-white/[0.04] border border-white/[0.04]" />
-              {i === 0 && <div className="h-8 rounded-md bg-white/[0.04] border border-white/[0.04]" />}
-              {i === 2 && (
-                <div className="h-8 rounded-md bg-signal-500/15 border border-signal-500/30 flex items-center px-2 text-[10px] text-signal-400 font-mono">
-                  $128k
-                </div>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  }
-  // Rack builder visual
+/* ───────── Large dark feature card (BOQ / Projects) ───────── */
+function LeadCard() {
   return (
-    <div className="relative w-full">
-      <div className="rounded-lg border border-white/[0.06] bg-ink-200/40 p-2 space-y-1">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.8 }}
+      className="relative lg:col-span-1 rounded-[28px] bg-ink-300 text-bone-100 p-7 sm:p-8 overflow-hidden min-h-[520px] flex flex-col"
+    >
+      <div className="h-11 w-11 rounded-2xl bg-bone-100/10 flex items-center justify-center mb-5">
+        <Layers className="h-5 w-5 text-signal-500" strokeWidth={1.8} />
+      </div>
+
+      <h3 className="font-display text-2xl sm:text-[26px] font-bold tracking-[-0.02em] leading-tight">
+        Projects &amp; BOQ Management
+      </h3>
+      <p className="mt-3 text-[14px] text-bone-100/60 leading-relaxed max-w-sm">
+        Stay organised with room-wise BOQ tracking, live profitability and milestone-aware Gantt — every device, hour and cost in one view.
+      </p>
+
+      <ul className="mt-6 space-y-2.5 text-[14px]">
         {[
-          { u: "1U", label: "Q-SYS Core 110f", color: "from-signal-500 to-signal-700" },
-          { u: "2U", label: "Crestron DM-NVX-360", color: "from-sky-500 to-sky-700" },
-          { u: "1U", label: "Extron SMP 351", color: "from-emerald-500 to-emerald-700" },
-          { u: "2U", label: "Biamp Tesira Forté", color: "from-violet-500 to-violet-700" },
-        ].map((r, i) => (
+          "BOQ & commissioning tracking",
+          "Real-time project profitability",
+          "Vendor & procurement workflows",
+        ].map((f) => (
+          <li key={f} className="flex items-center gap-2.5">
+            <span className="h-4 w-4 rounded-sm bg-signal-500 flex items-center justify-center">
+              <svg viewBox="0 0 12 12" className="h-2.5 w-2.5">
+                <path d="M2 6.5L4.7 9 10 3.5" stroke="#0A0A0A" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
+            <span>{f}</span>
+          </li>
+        ))}
+      </ul>
+
+      <div className="mt-7">
+        <PrimaryPill>Get Started</PrimaryPill>
+      </div>
+
+      {/* Mini dashboard mock anchored to bottom */}
+      <div className="mt-8 relative flex-1 -mb-7 -mx-2 sm:-mx-3">
+        <div className="absolute inset-x-2 sm:inset-x-3 top-0 rounded-t-2xl border border-bone-100/10 bg-bone-100 text-ink-300 p-3 shadow-[0_-12px_40px_-12px_rgba(0,0,0,0.6)]">
+          <div className="flex items-center justify-between mb-3">
+            <div className="text-[12px] font-semibold">Income Tracker</div>
+            <span className="text-[10px] text-ink-300/40 px-2 py-0.5 rounded-full bg-bone-100 border border-bone-300/60">
+              Week ▾
+            </span>
+          </div>
+          <svg viewBox="0 0 200 60" className="w-full h-[60px]" preserveAspectRatio="none">
+            <line x1="0" y1="50" x2="200" y2="50" stroke="#ddd6c8" strokeDasharray="2 3" />
+            <path d="M0,40 L25,38 L50,30 L75,32 L100,20 L125,22 L150,12 L175,16 L200,8" stroke="#0A0A0A" strokeWidth="1.5" fill="none" />
+            <circle cx="100" cy="20" r="3" fill="#FF5A1F" stroke="#fff" strokeWidth="1.2" />
+          </svg>
+          <div className="mt-2 inline-flex items-center gap-1 rounded-md bg-ink-300 text-bone-100 px-2 py-0.5 text-[10px] font-medium">
+            $2,567
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+/* ───────── Light card — Analytics ───────── */
+function AnalyticsCard() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.8, delay: 0.08 }}
+      className="relative rounded-[28px] bg-bone-50 border border-bone-300/50 p-7 sm:p-8 min-h-[520px] flex flex-col"
+    >
+      <div className="h-11 w-11 rounded-2xl bg-white border border-bone-300/60 flex items-center justify-center mb-5">
+        <LineChart className="h-5 w-5 text-ink-300" strokeWidth={1.8} />
+      </div>
+
+      <h3 className="font-display text-2xl font-bold tracking-[-0.02em] leading-tight text-ink-300">
+        Advanced Analytics &amp;
+        <br /> Reporting
+      </h3>
+      <p className="mt-3 text-[14px] text-ink-300/60 leading-relaxed">
+        Pipeline, revenue, SLA, utilisation and customer health — live from your Neon-backed data warehouse.
+      </p>
+
+      {/* Mini weekly chart */}
+      <div className="mt-auto rounded-2xl bg-white border border-bone-300/50 p-4">
+        <div className="flex items-center justify-between">
+          <div className="text-[12px] font-semibold text-ink-300">Weekly Overview</div>
+          <span className="text-[10px] px-2 py-0.5 rounded-full bg-ink-300 text-bone-100">20 views</span>
+        </div>
+        <div className="mt-3 h-[110px] flex items-end gap-2">
+          {[28, 42, 18, 60, 35, 92, 50].map((h, i) => (
+            <div key={i} className="flex-1 flex items-end h-full">
+              <div
+                className={`w-full rounded-t-md ${
+                  i === 5 ? "bg-ink-300" : "bg-bone-300"
+                }`}
+                style={{ height: `${h}%` }}
+              />
+            </div>
+          ))}
+        </div>
+        <div className="mt-2 flex justify-between text-[10px] text-ink-300/40 font-medium">
+          {["M", "T", "W", "T", "F", "S", "S"].map((d, i) => (
+            <span key={i}>{d}</span>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+/* ───────── Light card — Collaboration / AV-native tools ───────── */
+function CollaborationCard() {
+  const icons = [
+    { Icon: Cable, tone: "bg-white" },
+    { Icon: Cpu, tone: "bg-white" },
+    { Icon: Network, tone: "bg-white" },
+    { Icon: Wrench, tone: "bg-white" },
+    { Icon: Sparkles, tone: "bg-ink-300 text-bone-100" },
+    { Icon: ShieldCheck, tone: "bg-white" },
+  ];
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.8, delay: 0.16 }}
+      className="relative rounded-[28px] bg-bone-50 border border-bone-300/50 p-7 sm:p-8 min-h-[520px] flex flex-col"
+    >
+      <div className="h-11 w-11 rounded-2xl bg-white border border-bone-300/60 flex items-center justify-center mb-5">
+        <Boxes className="h-5 w-5 text-ink-300" strokeWidth={1.8} />
+      </div>
+
+      <h3 className="font-display text-2xl font-bold tracking-[-0.02em] leading-tight text-ink-300">
+        AV-Native Tools &amp;
+        <br /> Collaboration
+      </h3>
+      <p className="mt-3 text-[14px] text-ink-300/60 leading-relaxed">
+        Rack builder, signal flow designer, device monitoring, AI proposals — every AV-specific workflow built in.
+      </p>
+
+      {/* Icon grid */}
+      <div className="mt-auto grid grid-cols-3 gap-3">
+        {icons.map(({ Icon, tone }, i) => (
           <div
             key={i}
-            className={`relative flex items-center gap-2 rounded-md bg-gradient-to-r ${r.color} bg-opacity-15 border border-white/[0.06] px-2 py-1.5`}
+            className={`aspect-square rounded-2xl ${tone} border border-bone-300/50 flex items-center justify-center`}
           >
-            <span className="text-[9px] text-white/50 font-mono">{r.u}</span>
-            <span className="text-[10px] text-white font-medium">{r.label}</span>
+            <Icon className={`h-5 w-5 ${tone.includes("ink-300") ? "" : "text-ink-300/80"}`} strokeWidth={1.7} />
           </div>
         ))}
       </div>
-    </div>
+
+      <p className="mt-5 text-[13px] text-ink-300/55 leading-relaxed">
+        We work better together with your stack — Crestron, Q-SYS, Extron, Biamp natively supported.
+      </p>
+    </motion.div>
   );
 }

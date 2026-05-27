@@ -28,7 +28,7 @@ export function DashboardHeader() {
         <h1 className="mt-1.5 font-display text-3xl sm:text-4xl font-semibold tracking-tight">
           Welcome back, Marcus
         </h1>
-        <p className="mt-1.5 text-sm text-white/45">
+        <p className="mt-1.5 text-sm text-ink-300/55">
           Here&apos;s what&apos;s happening across your AV operations today.
         </p>
       </div>

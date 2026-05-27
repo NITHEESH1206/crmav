@@ -12,20 +12,53 @@
     --card-foreground: 0 0% 4%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 4%;
-    --primary: 16 100% 56%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 0 0% 4%;             /* Ink primary — Linear/Stripe-style */
+    --primary-foreground: 40 22% 94%;
     --secondary: 40 18% 92%;
     --secondary-foreground: 0 0% 10%;
     --muted: 40 18% 92%;
     --muted-foreground: 0 0% 40%;
-    --accent: 16 100% 56%;
+    --accent: 16 100% 56%;          /* Signal — only for AI/highlight */
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 84% 60%;
+    --destructive: 0 64% 38%;
     --destructive-foreground: 0 0% 100%;
     --border: 40 14% 86%;
     --input: 40 14% 86%;
-    --ring: 16 100% 56%;
-    --radius: 0.85rem;
+    --ring: 0 0% 4%;
+    --radius: 0.5rem;               /* Tighter — Linear-feel */
+
+    /* ── Density tokens — read by primitives that opt in ── */
+    --row-h:           44px;
+    --row-pad-y:       0.625rem;
+    --row-pad-x:       1.25rem;
+    --header-h:        96px;
+    --header-h-compact: 48px;
+    --section-gap:     1.5rem;
+    --card-pad:        1.5rem;
+    --field-pad-y:     0.5rem;
+    --field-pad-x:     0.875rem;
+  }
+
+  :root[data-density="compact"] {
+    --row-h:           36px;
+    --row-pad-y:       0.4375rem;
+    --row-pad-x:       1rem;
+    --header-h:        80px;
+    --section-gap:     1.125rem;
+    --card-pad:        1.125rem;
+    --field-pad-y:     0.375rem;
+    --field-pad-x:     0.75rem;
+  }
+
+  :root[data-density="mission"] {
+    --row-h:           30px;
+    --row-pad-y:       0.25rem;
+    --row-pad-x:       0.875rem;
+    --header-h:        64px;
+    --section-gap:     0.875rem;
+    --card-pad:        0.875rem;
+    --field-pad-y:     0.25rem;
+    --field-pad-x:     0.625rem;
   }
 
   .dark {
@@ -66,8 +99,8 @@
   }
 
   ::selection {
-    background: rgba(255, 90, 31, 0.35);
-    color: #ffffff;
+    background: rgba(255, 90, 31, 0.25);
+    color: #0a0a0a;
   }
 
   /* Scrollbar */
@@ -79,39 +112,35 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(10, 10, 10, 0.12);
     border-radius: 9999px;
     border: 2px solid transparent;
     background-clip: content-box;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 90, 31, 0.45);
+    background: rgba(255, 90, 31, 0.55);
     background-clip: content-box;
   }
 }
 
 @layer components {
   .glass {
-    @apply bg-white/[0.03] backdrop-blur-xl border border-white/[0.06];
+    @apply bg-white/70 backdrop-blur-xl border border-bone-300/60;
   }
   .glass-strong {
-    @apply bg-white/[0.05] backdrop-blur-2xl border border-white/[0.08];
+    @apply bg-white/85 backdrop-blur-2xl border border-bone-300/70;
   }
   .glass-card {
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.04) 0%,
-      rgba(255, 255, 255, 0.015) 100%
-    );
-    @apply backdrop-blur-xl border border-white/[0.06] rounded-2xl;
+    background: #ffffff;
+    @apply border border-bone-300/50 rounded-2xl shadow-[0_1px_0_0_rgba(255,255,255,0.6)_inset,0_14px_40px_-26px_rgba(10,10,10,0.18)];
   }
   .glass-panel {
     background: linear-gradient(
       180deg,
-      rgba(20, 20, 22, 0.65) 0%,
-      rgba(10, 10, 10, 0.72) 100%
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(250, 250, 246, 0.92) 100%
     );
-    @apply backdrop-blur-2xl border border-white/[0.06] rounded-2xl;
+    @apply backdrop-blur-2xl border border-bone-300/60 rounded-2xl shadow-[0_20px_60px_-30px_rgba(10,10,10,0.22)];
   }
 
   .gradient-border {
@@ -126,10 +155,10 @@
     border-radius: inherit;
     background: linear-gradient(
       135deg,
-      rgba(255, 90, 31, 0.6),
-      rgba(255, 125, 63, 0.2) 30%,
-      rgba(255, 255, 255, 0.04) 60%,
-      rgba(255, 90, 31, 0.5) 100%
+      rgba(255, 90, 31, 0.5),
+      rgba(255, 125, 63, 0.18) 30%,
+      rgba(10, 10, 10, 0.06) 60%,
+      rgba(255, 90, 31, 0.4) 100%
     );
     -webkit-mask:
       linear-gradient(#000 0 0) content-box,
@@ -140,7 +169,7 @@
   }
 
   .text-gradient {
-    background: linear-gradient(135deg, #f4f2ec 0%, #ffd2b3 40%, #ff7d3f 100%);
+    background: linear-gradient(135deg, #0a0a0a 0%, #b8350c 60%, #ff5a1f 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -190,14 +219,14 @@
 
   .grid-pattern {
     background-image:
-      linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      linear-gradient(to right, rgba(10, 10, 10, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(10, 10, 10, 0.05) 1px, transparent 1px);
     background-size: 56px 56px;
     mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 80%);
   }
 
   .dot-pattern {
-    background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+    background-image: radial-gradient(rgba(10, 10, 10, 0.1) 1px, transparent 1px);
     background-size: 22px 22px;
   }
 
@@ -227,6 +256,52 @@
   /* Marquee for testimonial / logo scrolls */
   .marquee {
     mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+  }
+
+  /* ── Typography primitives ── */
+  .t-display-lg   { @apply text-display-lg  font-display text-ink-300; }
+  .t-heading-lg   { @apply text-heading-lg  font-display text-ink-300; }
+  .t-heading-md   { @apply text-heading-md  font-display text-ink-300; }
+  .t-heading-sm   { @apply text-heading-sm  font-sans    text-ink-300; }
+  .t-body         { @apply text-body        font-sans    text-ink-300; }
+  .t-body-sm      { @apply text-body-sm     font-sans    text-ink-300/85; }
+  .t-caption      { @apply text-caption     font-sans    text-ink-300/65; }
+  .t-micro        { @apply text-micro       font-sans    uppercase text-ink-300/55; }
+  .t-mono         { @apply font-mono tabular-nums text-ink-300; }
+
+  /* ── Density-aware row + card utilities ── */
+  .row-dense {
+    min-height: var(--row-h);
+    padding-top: var(--row-pad-y);
+    padding-bottom: var(--row-pad-y);
+    padding-left: var(--row-pad-x);
+    padding-right: var(--row-pad-x);
+  }
+  .card-dense {
+    padding: var(--card-pad);
+  }
+  .section-gap {
+    gap: var(--section-gap);
+  }
+  .field-dense {
+    padding-top: var(--field-pad-y);
+    padding-bottom: var(--field-pad-y);
+    padding-left: var(--field-pad-x);
+    padding-right: var(--field-pad-x);
+  }
+
+  /* ── Status pills (semantic, muted — never compete with Signal) ── */
+  .pill-success { @apply bg-status-success-bg text-status-success-fg; }
+  .pill-warning { @apply bg-status-warning-bg text-status-warning-fg; }
+  .pill-danger  { @apply bg-status-danger-bg  text-status-danger-fg;  }
+  .pill-info    { @apply bg-status-info-bg    text-status-info-fg;    }
+  .pill-neutral { @apply bg-status-neutral-bg text-status-neutral-fg; }
+
+  /* ── Kbd chip — keyboard shortcut hints in menus + palettes ── */
+  .kbd {
+    @apply inline-flex items-center justify-center min-w-[20px] h-[20px] px-1.5 rounded
+           border border-bone-300/70 bg-white text-[10.5px] font-mono text-ink-300/75
+           shadow-[0_1px_0_0_rgba(0,0,0,0.04)];
   }
 }
 

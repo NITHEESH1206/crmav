@@ -37,7 +37,7 @@ const STATUS_META: Record<
   ONLINE: { label: "Online", tone: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30", icon: Wifi },
   WARNING: { label: "Warning", tone: "bg-amber-500/15 text-amber-300 border-amber-500/30", icon: AlertTriangle },
   OFFLINE: { label: "Offline", tone: "bg-red-500/15 text-red-300 border-red-500/30", icon: WifiOff },
-  RETIRED: { label: "Retired", tone: "bg-white/[0.05] text-white/55 border-white/[0.08]", icon: PowerOff },
+  RETIRED: { label: "Retired", tone: "bg-bone-100 text-ink-300/65 border-bone-300/65", icon: PowerOff },
 };
 
 const STATUS_DOT: Record<DeviceRow["status"], string> = {
@@ -86,7 +86,7 @@ export function DevicesList({ devices }: { devices: DeviceRow[] }) {
                     "px-2.5 h-7 rounded-md text-[11px] uppercase tracking-wider border transition-colors",
                     active
                       ? "bg-signal-500/15 border-signal-500/40 text-signal-300"
-                      : "border-white/[0.08] bg-white/[0.02] text-white/55 hover:text-white"
+                      : "border-bone-300/65 bg-bone-50/60 text-ink-300/65 hover:text-ink-300"
                   )}
                 >
                   {s === "ALL" ? "All" : STATUS_META[s].label}
@@ -96,7 +96,7 @@ export function DevicesList({ devices }: { devices: DeviceRow[] }) {
           </div>
         </div>
         <div className="relative mt-3">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-white/40" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-ink-300/50" />
           <Input
             placeholder="Search by serial, IP, MAC, model, brand, room…"
             value={query}
@@ -108,7 +108,7 @@ export function DevicesList({ devices }: { devices: DeviceRow[] }) {
 
       <CardContent className="p-0">
         {/* Desktop header */}
-        <div className="hidden md:grid grid-cols-[2fr_1fr_140px_120px_140px_100px] text-[10px] uppercase tracking-wider text-white/40 px-5 py-3 border-y border-white/[0.04]">
+        <div className="hidden md:grid grid-cols-[2fr_1fr_140px_120px_140px_100px] text-[10px] uppercase tracking-wider text-ink-300/50 px-5 py-3 border-y border-bone-300/45">
           <div>Device</div>
           <div>Room / Site</div>
           <div>IP address</div>
@@ -118,7 +118,7 @@ export function DevicesList({ devices }: { devices: DeviceRow[] }) {
         </div>
 
         {filtered.length === 0 ? (
-          <div className="px-6 py-12 text-center text-sm text-white/45">
+          <div className="px-6 py-12 text-center text-sm text-ink-300/55">
             No devices match your filters.
           </div>
         ) : (
@@ -131,7 +131,7 @@ export function DevicesList({ devices }: { devices: DeviceRow[] }) {
                 initial={{ opacity: 0, y: 4 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.25, delay: Math.min(i * 0.02, 0.3) }}
-                className="grid grid-cols-[1fr_auto] md:grid-cols-[2fr_1fr_140px_120px_140px_100px] items-start md:items-center gap-3 px-4 md:px-5 py-3 md:py-3.5 border-b border-white/[0.04] hover:bg-white/[0.015] transition-colors"
+                className="grid grid-cols-[1fr_auto] md:grid-cols-[2fr_1fr_140px_120px_140px_100px] items-start md:items-center gap-3 px-4 md:px-5 py-3 md:py-3.5 border-b border-bone-300/45 hover:bg-bone-50/50 transition-colors"
               >
                 {/* Device cell */}
                 <div className="min-w-0 flex items-start gap-2.5">
@@ -141,7 +141,7 @@ export function DevicesList({ devices }: { devices: DeviceRow[] }) {
                     </div>
                     <span
                       className={cn(
-                        "absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full ring-2 ring-ink-200",
+                        "absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full ring-2 ring-white",
                         STATUS_DOT[d.status]
                       )}
                     />
@@ -150,11 +150,11 @@ export function DevicesList({ devices }: { devices: DeviceRow[] }) {
                     <div className="text-sm font-medium truncate">
                       {d.catalogItem?.name ?? "Unknown device"}
                     </div>
-                    <div className="text-[11px] text-white/45 truncate font-mono">
+                    <div className="text-[11px] text-ink-300/55 truncate font-mono">
                       {d.serialNumber ?? "no serial"}
                     </div>
                     {/* Mobile-only meta strip */}
-                    <div className="md:hidden mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-white/55">
+                    <div className="md:hidden mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-ink-300/65">
                       {d.room && (
                         <>
                           <Building2 className="h-3 w-3" />
@@ -176,21 +176,21 @@ export function DevicesList({ devices }: { devices: DeviceRow[] }) {
                 {/* Room/Site (desktop) */}
                 <div className="hidden md:block min-w-0">
                   <div className="text-sm truncate">{d.room?.account?.name ?? "—"}</div>
-                  <div className="text-[11px] text-white/45 truncate">{d.room?.name ?? "—"}</div>
+                  <div className="text-[11px] text-ink-300/55 truncate">{d.room?.name ?? "—"}</div>
                 </div>
 
                 {/* IP */}
-                <div className="hidden md:block text-xs font-mono text-white/65">
+                <div className="hidden md:block text-xs font-mono text-ink-300/75">
                   {d.ipAddress ?? "—"}
                 </div>
 
                 {/* Firmware */}
-                <div className="hidden md:block text-xs font-mono text-white/45">
+                <div className="hidden md:block text-xs font-mono text-ink-300/55">
                   {d.firmware ?? "—"}
                 </div>
 
                 {/* Last seen */}
-                <div className="hidden md:block text-xs text-white/45">
+                <div className="hidden md:block text-xs text-ink-300/55">
                   {d.lastSeenAt
                     ? d.status === "RETIRED"
                       ? "Retired"

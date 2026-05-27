@@ -18,7 +18,17 @@
       "Bash(curl -s -o /dev/null -w '%{http_code}' -m 90 http://localhost:3000/__TRACKED_VAR__)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" -m 120 \"http://localhost:3000/reports\")",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" -m 120 \"http://localhost:3000/settings\")",
-      "Bash(echo 'settings: __TRACKED_VAR__')"
+      "Bash(echo 'settings: __TRACKED_VAR__')",
+      "Bash(cmd /c \"npx tsc --noEmit 2>&1 | head -60\")",
+      "Bash(cmd /c \"npx tsc --noEmit\")",
+      "Bash(where python *)",
+      "Bash(where python3 *)",
+      "Bash(python scripts/theme-flip.py)",
+      "Bash(cmd /c \"npx tsc --noEmit 2>&1\")",
+      "Bash(cmd /c \"npm run build 2>&1 | tail -40\")",
+      "Bash(cmd /c \"npm run build > build.log 2>&1 & echo Exit: %ERRORLEVEL%\")",
+      "Bash(cmd /c \"npm run build\")",
+      "Bash(npm run *)"
     ]
   }
 }

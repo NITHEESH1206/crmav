@@ -81,23 +81,23 @@ export function TeamTab({ members }: { members: User[] }) {
         {grouped.map(({ role, users }) => (
           <div key={role.value}>
             <div className="flex items-baseline justify-between mb-2">
-              <div className="text-[10px] uppercase tracking-[0.18em] text-white/45 font-semibold">
+              <div className="text-[10px] uppercase tracking-[0.18em] text-ink-300/55 font-semibold">
                 {role.label}
               </div>
-              <div className="text-[10px] text-white/40">{role.desc}</div>
+              <div className="text-[10px] text-ink-300/50">{role.desc}</div>
             </div>
             <div className="space-y-1">
               {users.map((u) => (
                 <div
                   key={u.id}
-                  className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 py-2.5"
+                  className="flex items-center gap-3 rounded-xl border border-bone-300/55 bg-bone-50/60 px-3 py-2.5"
                 >
                   <Avatar className="h-9 w-9 shrink-0">
                     <AvatarFallback className="text-[10px]">{initials(u.name)}</AvatarFallback>
                   </Avatar>
                   <div className="min-w-0 flex-1">
                     <div className="text-sm font-medium truncate">{u.name}</div>
-                    <div className="text-[11px] text-white/45 truncate">{u.email}</div>
+                    <div className="text-[11px] text-ink-300/55 truncate">{u.email}</div>
                   </div>
                   {u.jobTitle && (
                     <Badge variant="secondary" className="hidden sm:inline-flex">{u.jobTitle}</Badge>
@@ -106,7 +106,7 @@ export function TeamTab({ members }: { members: User[] }) {
                     value={u.role}
                     onChange={(e) => changeRole(u.id, e.target.value)}
                     disabled={pending || u.role === "OWNER"}
-                    className="h-8 rounded-md border border-white/[0.08] bg-white/[0.02] px-2 text-xs text-bone-100 focus:outline-none focus:border-signal-500/40 disabled:opacity-50"
+                    className="h-8 rounded-md border border-bone-300/65 bg-bone-50/60 px-2 text-xs text-ink-300 focus:outline-none focus:border-signal-500/40 disabled:opacity-50"
                   >
                     {ROLES.map((r) => (
                       <option key={r.value} value={r.value}>{r.label}</option>
@@ -116,7 +116,7 @@ export function TeamTab({ members }: { members: User[] }) {
                     onClick={() => remove(u.id, u.name)}
                     disabled={pending || u.role === "OWNER"}
                     aria-label="Remove member"
-                    className="h-8 w-8 rounded-md text-white/40 hover:text-red-400 hover:bg-red-500/10 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
+                    className="h-8 w-8 rounded-md text-ink-300/50 hover:text-red-400 hover:bg-red-500/10 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>
@@ -126,7 +126,7 @@ export function TeamTab({ members }: { members: User[] }) {
           </div>
         ))}
         {members.length === 0 && (
-          <div className="text-sm text-white/45 text-center py-6">No members yet.</div>
+          <div className="text-sm text-ink-300/55 text-center py-6">No members yet.</div>
         )}
       </CardContent>
 
@@ -174,24 +174,24 @@ function InviteDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (v:
         <div className="px-6 pb-2 space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs text-white/65 mb-1.5 block">Name</label>
+              <label className="text-xs text-ink-300/75 mb-1.5 block">Name</label>
               <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Jane Doe" autoFocus />
             </div>
             <div>
-              <label className="text-xs text-white/65 mb-1.5 block">Job title</label>
+              <label className="text-xs text-ink-300/75 mb-1.5 block">Job title</label>
               <Input value={jobTitle} onChange={(e) => setJobTitle(e.target.value)} placeholder="Sales Engineer" />
             </div>
           </div>
           <div>
-            <label className="text-xs text-white/65 mb-1.5 block">Email</label>
+            <label className="text-xs text-ink-300/75 mb-1.5 block">Email</label>
             <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="jane@company.com" />
           </div>
           <div>
-            <label className="text-xs text-white/65 mb-1.5 block">Role</label>
+            <label className="text-xs text-ink-300/75 mb-1.5 block">Role</label>
             <select
               value={role}
               onChange={(e) => setRole(e.target.value as typeof role)}
-              className="h-10 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 text-sm text-bone-100 focus:outline-none focus:border-signal-500/40"
+              className="h-10 w-full rounded-xl border border-bone-300/65 bg-bone-50 px-3 text-sm text-ink-300 focus:outline-none focus:border-signal-500/40"
             >
               {ROLES.filter((r) => r.value !== "OWNER").map((r) => (
                 <option key={r.value} value={r.value}>{r.label} — {r.desc}</option>

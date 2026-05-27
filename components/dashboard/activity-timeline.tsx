@@ -39,7 +39,7 @@ export function ActivityTimeline({ items }: { items: Item[] }) {
       <CardHeader className="flex-row items-center justify-between">
         <div>
           <CardTitle>Activity</CardTitle>
-          <p className="text-xs text-white/45 mt-1">Across all modules · live data</p>
+          <p className="text-xs text-ink-300/55 mt-1">Across all modules · live data</p>
         </div>
         <div className="flex items-center gap-1.5 text-[11px] text-emerald-400">
           <span className="relative flex h-1.5 w-1.5">
@@ -54,7 +54,7 @@ export function ActivityTimeline({ items }: { items: Item[] }) {
           <div className="absolute left-[18px] top-2 bottom-2 w-px bg-gradient-to-b from-signal-500/40 via-white/[0.06] to-transparent" />
           <div className="space-y-4">
             {items.length === 0 && (
-              <div className="text-xs text-white/40 text-center py-8">No recent activity.</div>
+              <div className="text-xs text-ink-300/50 text-center py-8">No recent activity.</div>
             )}
             {items.map((a, i) => {
               const Icon = KIND_ICON[a.kind];
@@ -72,16 +72,16 @@ export function ActivityTimeline({ items }: { items: Item[] }) {
                       KIND_ACCENT[a.kind]
                     )}
                   >
-                    <Icon className="h-4 w-4 text-white" strokeWidth={2.2} />
+                    <Icon className="h-4 w-4 text-ink-300" strokeWidth={2.2} />
                   </div>
                   <div className="min-w-0 flex-1 pt-1">
                     <div className="flex items-center justify-between gap-3">
                       <div className="text-sm font-medium truncate">{a.title}</div>
-                      <div className="text-[10px] text-white/40 shrink-0">
+                      <div className="text-[10px] text-ink-300/50 shrink-0">
                         {formatDistanceToNow(a.at, { addSuffix: true })}
                       </div>
                     </div>
-                    <div className="text-[12px] text-white/50 mt-0.5">{a.meta}</div>
+                    <div className="text-[12px] text-ink-300/60 mt-0.5">{a.meta}</div>
                   </div>
                 </motion.div>
               );

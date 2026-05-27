@@ -3,190 +3,268 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronsLeft, Plus, HelpCircle } from "lucide-react";
-import { useState } from "react";
+import { ChevronsLeft, Plus, ChevronRight, Search } from "lucide-react";
+import { useState, useMemo } from "react";
 import { cn } from "@/lib/utils";
-import { NAV_ITEMS, NAV_GROUPS } from "@/lib/nav";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { NAV_ITEMS, NAV_GROUPS, type NavItem, type NavGroup } from "@/lib/nav";
 import { useQuickCreate } from "@/lib/stores/quick-create";
-import { BrandMark } from "@/components/app/brand-mark";
 
 export function Sidebar() {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const showQuickCreate = useQuickCreate((s) => s.show);
 
+  // Group items once
+  const { pinned, grouped, workspace } = useMemo(() => {
+    const pinned = NAV_ITEMS.filter((i) => i.group === "Pinned");
+    const workspace = NAV_ITEMS.filter((i) => i.group === "Workspace");
+    const grouped: Record<NavGroup, NavItem[]> = {} as Record<NavGroup, NavItem[]>;
+    for (const g of NAV_GROUPS) {
+      grouped[g] = NAV_ITEMS.filter((i) => i.group === g);
+    }
+    return { pinned, grouped, workspace };
+  }, []);
+
+  // Auto-expand the group containing the active route
+  const activeGroup = useMemo<NavGroup | null>(() => {
+    const match = NAV_ITEMS.find(
+      (i) => pathname === i.href || (i.href !== "/dashboard" && pathname.startsWith(i.href))
+    );
+    return (match?.group as NavGroup) ?? null;
+  }, [pathname]);
+
+  const [openGroups, setOpenGroups] = useState<Set<NavGroup>>(
+    () => new Set<NavGroup>(activeGroup ? [activeGroup] : ["Sell"])
+  );
+
+  const toggleGroup = (g: NavGroup) =>
+    setOpenGroups((prev) => {
+      const next = new Set(prev);
+      if (next.has(g)) {
+        next.delete(g);
+      } else {
+        next.add(g);
+      }
+      return next;
+    });
+
   return (
     <aside
       className={cn(
-        "fixed inset-y-0 left-0 z-40 hidden lg:flex flex-col transition-[width] duration-500 ease-out",
-        collapsed ? "w-[76px]" : "w-[260px]"
+        "fixed inset-y-0 left-0 z-40 hidden lg:flex flex-col transition-[width] duration-300 ease-out",
+        collapsed ? "w-[68px]" : "w-[244px]"
       )}
     >
-      <div className="relative m-3 mr-0 flex h-[calc(100vh-24px)] flex-col rounded-2xl glass-panel overflow-hidden">
-        {/* Glow bar */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 h-px w-32 bg-gradient-to-r from-transparent via-signal-500/60 to-transparent" />
-
-        {/* Brand */}
-        <div className="flex items-center justify-between px-4 py-5">
-          <Link href="/" className="flex items-center min-w-0">
+      <div className="relative m-2 mr-0 flex h-[calc(100vh-16px)] flex-col rounded-lg bg-white border border-bone-300/60 overflow-hidden">
+        {/* ── Workspace switcher row ── */}
+        <button
+          type="button"
+          className="flex items-center justify-between gap-2 px-3 py-3 border-b border-bone-300/55 hover:bg-bone-50/70 transition-colors"
+          aria-label="Switch workspace"
+        >
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="h-7 w-7 rounded-md bg-ink-300 text-bone-100 flex items-center justify-center text-[11px] font-bold shrink-0">
+              SA
+            </div>
             <AnimatePresence mode="wait" initial={false}>
-              {collapsed ? (
+              {!collapsed && (
                 <motion.div
-                  key="icon"
-                  initial={{ opacity: 0, scale: 0.85 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.85 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <BrandMark variant="icon" height={28} />
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="full"
-                  initial={{ opacity: 0, x: -8 }}
+                  key="ws-label"
+                  initial={{ opacity: 0, x: -4 }}
                   animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -8 }}
-                  transition={{ duration: 0.25 }}
+                  exit={{ opacity: 0, x: -4 }}
+                  transition={{ duration: 0.15 }}
+                  className="min-w-0 text-left"
                 >
-                  <BrandMark variant="full" height={22} />
+                  <div className="text-[13px] font-semibold text-ink-300 truncate leading-tight">
+                    Soundstage AV
+                  </div>
+                  <div className="text-[10.5px] text-ink-300/55 leading-tight">Workspace · ⌘\</div>
                 </motion.div>
               )}
             </AnimatePresence>
-          </Link>
+          </div>
+          {!collapsed && <ChevronRight className="h-3.5 w-3.5 text-ink-300/40 shrink-0" />}
+        </button>
+
+        {/* ── Search / palette trigger ── */}
+        <div className="px-2 pt-2">
           <button
-            onClick={() => setCollapsed((c) => !c)}
-            className="h-7 w-7 rounded-md border border-white/[0.06] bg-white/[0.02] flex items-center justify-center text-white/45 hover:text-white hover:bg-white/[0.05] transition-colors"
-            aria-label="Toggle sidebar"
+            type="button"
+            className={cn(
+              "w-full flex items-center gap-2 rounded-md border border-bone-300/55 bg-bone-50 px-2.5 py-1.5 text-[12.5px] text-ink-300/55 hover:bg-bone-100 hover:border-bone-300/80 transition-colors",
+              collapsed && "justify-center px-0"
+            )}
           >
-            <ChevronsLeft className={cn("h-3.5 w-3.5 transition-transform duration-300", collapsed && "rotate-180")} />
+            <Search className="h-3.5 w-3.5 shrink-0" />
+            {!collapsed && (
+              <>
+                <span className="flex-1 text-left">Search…</span>
+                <span className="kbd">⌘K</span>
+              </>
+            )}
           </button>
         </div>
 
-        {/* Quick add */}
-        <div className="px-3 pb-3">
-          <Button
-            onClick={() => showQuickCreate("todo")}
-            className={cn("w-full justify-start", collapsed && "px-0 justify-center")}
-            size="sm"
-          >
-            <Plus className="h-3.5 w-3.5" />
-            {!collapsed && <span>New action</span>}
-          </Button>
+        {/* ── Pinned (Dashboard + Calendar) ── */}
+        <div className="px-2 pt-2 pb-1">
+          <div className="space-y-0.5">
+            {pinned.map((item) => (
+              <NavRow key={item.href} item={item} pathname={pathname} collapsed={collapsed} />
+            ))}
+          </div>
         </div>
 
-        {/* Nav */}
-        <nav className="flex-1 overflow-y-auto px-3 py-2 scrollbar-thin">
+        {/* ── Quick create ── */}
+        <div className="px-2 pb-1">
+          <button
+            type="button"
+            onClick={() => showQuickCreate("todo")}
+            className={cn(
+              "w-full flex items-center gap-2 rounded-md bg-ink-300 text-bone-100 px-2.5 py-1.5 text-[12.5px] font-medium hover:bg-ink-200 transition-colors",
+              collapsed && "justify-center px-0"
+            )}
+          >
+            <Plus className="h-3.5 w-3.5 shrink-0" />
+            {!collapsed && (
+              <>
+                <span className="flex-1 text-left">New</span>
+                <span className="kbd">N</span>
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* ── Grouped nav ── */}
+        <nav className="flex-1 overflow-y-auto px-2 py-1 scrollbar-thin">
           {NAV_GROUPS.map((group) => {
-            const items = NAV_ITEMS.filter((i) => i.group === group);
+            const items = grouped[group];
+            if (!items || items.length === 0) return null;
+            const isOpen = collapsed ? true : openGroups.has(group);
             return (
-              <div key={group} className="mb-5">
-                <AnimatePresence>
-                  {!collapsed && (
+              <div key={group} className="mb-1">
+                {!collapsed && (
+                  <button
+                    type="button"
+                    onClick={() => toggleGroup(group)}
+                    className="w-full flex items-center justify-between px-2 pt-3 pb-1 text-[10.5px] uppercase tracking-[0.14em] text-ink-300/45 font-semibold hover:text-ink-300/70 transition-colors"
+                  >
+                    <span>{group}</span>
+                    <ChevronRight
+                      className={cn(
+                        "h-3 w-3 transition-transform duration-200",
+                        isOpen && "rotate-90"
+                      )}
+                    />
+                  </button>
+                )}
+                <AnimatePresence initial={false}>
+                  {isOpen && (
                     <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="px-2.5 mb-1.5 text-[10px] uppercase tracking-[0.18em] text-white/35 font-semibold"
+                      key="group-items"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.18, ease: "easeOut" }}
+                      className="overflow-hidden"
                     >
-                      {group}
+                      <div className="space-y-0.5 pt-0.5">
+                        {items.map((item) => (
+                          <NavRow
+                            key={item.href}
+                            item={item}
+                            pathname={pathname}
+                            collapsed={collapsed}
+                          />
+                        ))}
+                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
-                <div className="space-y-0.5">
-                  {items.map((item) => {
-                    const Icon = item.icon;
-                    const active =
-                      pathname === item.href ||
-                      (item.href !== "/dashboard" && pathname.startsWith(item.href));
-
-                    return (
-                      <Link key={item.href} href={item.href} className="block group">
-                        <motion.div
-                          layout
-                          className={cn(
-                            "relative flex items-center gap-3 rounded-xl px-2.5 py-2 text-sm transition-all",
-                            collapsed && "justify-center",
-                            active
-                              ? "text-white bg-white/[0.04]"
-                              : "text-white/55 hover:text-white hover:bg-white/[0.03]"
-                          )}
-                        >
-                          {active && (
-                            <motion.div
-                              layoutId="sidebar-active"
-                              className="absolute inset-0 rounded-xl bg-gradient-to-r from-signal-500/[0.18] to-signal-500/[0.04] border border-signal-500/30 shadow-[0_0_24px_-8px_rgba(255,107,0,0.5)]"
-                              transition={{ type: "spring", duration: 0.5, bounce: 0.15 }}
-                            />
-                          )}
-                          {active && (
-                            <motion.div
-                              layoutId="sidebar-indicator"
-                              className="absolute -left-3 top-2 bottom-2 w-1 rounded-full bg-signal-500 shadow-glow-sm"
-                              transition={{ type: "spring", duration: 0.5, bounce: 0.15 }}
-                            />
-                          )}
-                          <Icon
-                            className={cn(
-                              "relative h-4 w-4 shrink-0 transition-colors",
-                              active ? "text-signal-400" : "text-white/55 group-hover:text-white/85"
-                            )}
-                          />
-                          <AnimatePresence>
-                            {!collapsed && (
-                              <motion.span
-                                initial={{ opacity: 0, x: -8 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -8 }}
-                                transition={{ duration: 0.2 }}
-                                className="relative flex-1 truncate"
-                              >
-                                {item.label}
-                              </motion.span>
-                            )}
-                          </AnimatePresence>
-                          {!collapsed && item.badge && (
-                            <Badge variant="default" className="relative h-5 px-1.5 text-[10px]">
-                              {item.badge}
-                            </Badge>
-                          )}
-                        </motion.div>
-                      </Link>
-                    );
-                  })}
-                </div>
               </div>
             );
           })}
         </nav>
 
-        {/* Footer */}
-        <div className="border-t border-white/[0.06] p-3">
-          <div
-            className={cn(
-              "rounded-xl border border-white/[0.06] bg-gradient-to-b from-signal-500/[0.08] to-transparent p-3 relative overflow-hidden",
-              collapsed && "p-0 border-0 bg-transparent"
-            )}
-          >
-            {!collapsed ? (
-              <>
-                <div className="text-xs font-semibold mb-1">Trial: 14 days left</div>
-                <div className="text-[11px] text-white/45 mb-3 leading-snug">
-                  Upgrade to unlock unlimited users & AMC automation.
-                </div>
-                <Button size="sm" className="w-full">
-                  Upgrade plan
-                </Button>
-              </>
-            ) : (
-              <button className="h-9 w-9 mx-auto flex items-center justify-center rounded-lg text-white/55 hover:text-white hover:bg-white/[0.04]">
-                <HelpCircle className="h-4 w-4" />
-              </button>
-            )}
+        {/* ── Workspace (bottom) ── */}
+        <div className="border-t border-bone-300/55 px-2 py-2">
+          <div className="space-y-0.5">
+            {workspace.map((item) => (
+              <NavRow key={item.href} item={item} pathname={pathname} collapsed={collapsed} />
+            ))}
           </div>
         </div>
+
+        {/* ── Collapse toggle ── */}
+        <button
+          type="button"
+          onClick={() => setCollapsed((c) => !c)}
+          className="absolute -right-3 top-16 h-6 w-6 rounded-full bg-white border border-bone-300/65 flex items-center justify-center text-ink-300/55 hover:text-ink-300 hover:border-bone-300/85 transition-colors shadow-[0_2px_6px_-2px_rgba(10,10,10,0.12)]"
+          aria-label="Toggle sidebar"
+        >
+          <ChevronsLeft
+            className={cn("h-3 w-3 transition-transform duration-200", collapsed && "rotate-180")}
+          />
+        </button>
       </div>
     </aside>
+  );
+}
+
+function NavRow({
+  item,
+  pathname,
+  collapsed,
+}: {
+  item: NavItem;
+  pathname: string;
+  collapsed: boolean;
+}) {
+  const Icon = item.icon;
+  const active =
+    pathname === item.href ||
+    (item.href !== "/dashboard" && pathname.startsWith(item.href));
+
+  return (
+    <Link
+      href={item.href}
+      className={cn(
+        "group relative flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-[13px] transition-colors",
+        collapsed && "justify-center px-0",
+        active
+          ? "bg-bone-100 text-ink-300 font-medium"
+          : "text-ink-300/65 hover:text-ink-300 hover:bg-bone-50"
+      )}
+      title={collapsed ? item.label : undefined}
+    >
+      {active && (
+        <span
+          aria-hidden
+          className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-r-full bg-signal-500"
+        />
+      )}
+      <Icon
+        className={cn(
+          "h-4 w-4 shrink-0 transition-colors",
+          active ? "text-ink-300" : "text-ink-300/55 group-hover:text-ink-300/85"
+        )}
+        strokeWidth={1.75}
+      />
+      {!collapsed && (
+        <>
+          <span className="flex-1 truncate">{item.label}</span>
+          {item.badge && (
+            <span className="text-[10px] font-mono text-ink-300/55 px-1.5 py-0.5 rounded bg-bone-100 group-hover:bg-bone-200/80">
+              {item.badge}
+            </span>
+          )}
+          {!item.badge && item.hint && (
+            <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] font-mono text-ink-300/40">
+              {item.hint}
+            </span>
+          )}
+        </>
+      )}
+    </Link>
   );
 }

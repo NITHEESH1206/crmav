@@ -28,7 +28,7 @@ export function ServiceTickets({ tickets, atRisk = 0 }: { tickets: Ticket[]; atR
       <CardHeader className="flex-row items-start justify-between gap-3">
         <div>
           <CardTitle>Service tickets</CardTitle>
-          <p className="text-xs text-white/45 mt-1">
+          <p className="text-xs text-ink-300/55 mt-1">
             {tickets.length} open {atRisk > 0 ? `· ${atRisk} SLA at risk` : ""}
           </p>
         </div>
@@ -36,7 +36,7 @@ export function ServiceTickets({ tickets, atRisk = 0 }: { tickets: Ticket[]; atR
       </CardHeader>
       <CardContent className="space-y-2">
         {tickets.length === 0 && (
-          <div className="text-xs text-white/40 text-center py-8">All clear.</div>
+          <div className="text-xs text-ink-300/50 text-center py-8">All clear.</div>
         )}
         {tickets.map((t, i) => {
           const Icon = statusIcon(t.status);
@@ -46,18 +46,18 @@ export function ServiceTickets({ tickets, atRisk = 0 }: { tickets: Ticket[]; atR
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: i * 0.05 }}
-              className="flex items-center gap-3 p-2.5 -mx-2.5 rounded-xl hover:bg-white/[0.02] transition-colors cursor-pointer"
+              className="flex items-center gap-3 p-2.5 -mx-2.5 rounded-xl hover:bg-bone-50/60 transition-colors cursor-pointer"
             >
               <Icon className={`h-4 w-4 ${statusColor(t.status)} shrink-0`} />
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[10px] text-white/35 font-mono">{t.number}</span>
+                  <span className="text-[10px] text-ink-300/45 font-mono">{t.number}</span>
                   <Badge variant={priorityVariant(t.priority)} className="h-4 px-1.5 text-[9px]">
                     {t.priority}
                   </Badge>
                 </div>
                 <div className="text-xs font-medium truncate mt-0.5">{t.title}</div>
-                <div className="text-[10px] text-white/40 truncate">{t.account?.name ?? ""}</div>
+                <div className="text-[10px] text-ink-300/50 truncate">{t.account?.name ?? ""}</div>
               </div>
             </motion.div>
           );

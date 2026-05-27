@@ -85,7 +85,7 @@ export function QuickCreateDialog({
 }
 
 function FieldLabel({ children }: { children: React.ReactNode }) {
-  return <label className="text-xs text-white/65 mb-1.5 block">{children}</label>;
+  return <label className="text-xs text-ink-300/75 mb-1.5 block">{children}</label>;
 }
 
 function FormError({ msg }: { msg: string | null }) {
@@ -113,7 +113,7 @@ function Select({
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="h-10 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 text-sm text-white focus:outline-none focus:border-signal-500/50 focus:ring-2 focus:ring-signal-500/20"
+      className="h-10 w-full rounded-xl border border-bone-300/65 bg-bone-50 px-3 text-sm text-ink-300 focus:outline-none focus:border-signal-500/50 focus:ring-2 focus:ring-signal-500/20"
     >
       {placeholder && <option value="">{placeholder}</option>}
       {children}
@@ -317,7 +317,7 @@ function TicketForm({ onDone, lookups }: { onDone: () => void; lookups: Lookups 
           onChange={(e) => setDescription(e.target.value)}
           rows={3}
           placeholder="Symptoms, room, what's been tried…"
-          className="w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-signal-500/50 focus:ring-2 focus:ring-signal-500/20 resize-none"
+          className="w-full rounded-xl border border-bone-300/65 bg-bone-50 px-3 py-2 text-sm text-ink-300 placeholder:text-ink-300/45 focus:outline-none focus:border-signal-500/50 focus:ring-2 focus:ring-signal-500/20 resize-none"
         />
       </div>
       <div className="grid grid-cols-2 gap-3">

@@ -52,8 +52,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport = {
-  themeColor: "#0a0a0a",
-  colorScheme: "dark" as const,
+  themeColor: "#f4f2ec",
+  colorScheme: "light" as const,
 };
 
 const hasClerk =
@@ -65,11 +65,8 @@ export default async function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   const body = (
     <body
-      className={`${mono.variable} font-sans bg-ink-300 text-bone-100 antialiased min-h-screen`}
+      className={`${mono.variable} font-sans bg-bone-100 text-ink-300 antialiased min-h-screen`}
     >
-      <div className="fixed inset-0 -z-50 bg-ink-300" aria-hidden />
-      <div className="fixed inset-0 -z-40 bg-signal-mesh opacity-60" aria-hidden />
-      <div className="fixed inset-0 -z-30 noise" aria-hidden />
       {children}
       <Toaster />
     </body>
@@ -82,13 +79,13 @@ export default async function RootLayout({
         appearance={{
           variables: {
             colorPrimary: "#ff5a1f",
-            colorBackground: "#0a0a0a",
-            colorText: "#f4f2ec",
+            colorBackground: "#ffffff",
+            colorText: "#0a0a0a",
             borderRadius: "0.85rem",
           },
         }}
       >
-        <html lang="en" className="dark">
+        <html lang="en">
           {body}
         </html>
       </ClerkProvider>
@@ -96,7 +93,7 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       {body}
     </html>
   );

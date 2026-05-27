@@ -63,23 +63,23 @@ export default async function OpportunitiesPage() {
                 <span className="text-sm font-semibold">{STAGE_LABEL[col.stage] ?? col.stage}</span>
                 <Badge variant="secondary" className="h-5">{col.deals.length}</Badge>
               </div>
-              <span className="text-xs text-white/45 font-mono">${formatCompact(col.totalCents / 100)}</span>
+              <span className="text-xs text-ink-300/55 font-mono">${formatCompact(col.totalCents / 100)}</span>
             </div>
 
-            <div className="flex flex-col gap-2.5 flex-1 rounded-2xl bg-white/[0.015] border border-white/[0.04] p-2.5">
+            <div className="flex flex-col gap-2.5 flex-1 rounded-2xl bg-bone-50/50 border border-bone-300/45 p-2.5">
               {col.deals.map((d) => (
                 <OpenableRow key={d.id} kind="opportunity" id={d.id}>
                 <Card className="hover-lift">
                   <CardContent className="p-3.5">
-                    <div className="flex items-center gap-2 text-[10px] text-white/35 font-mono">
+                    <div className="flex items-center gap-2 text-[10px] text-ink-300/45 font-mono">
                       {d.id.slice(0, 8)}
                     </div>
                     <div className="text-sm font-medium mt-1 leading-tight">{d.name}</div>
-                    <div className="flex items-center gap-1.5 mt-1.5 text-[11px] text-white/45">
+                    <div className="flex items-center gap-1.5 mt-1.5 text-[11px] text-ink-300/55">
                       <Building2 className="h-3 w-3" />
                       {d.account?.name ?? "—"}
                     </div>
-                    <div className="mt-3 pt-3 border-t border-white/[0.06] flex items-center justify-between">
+                    <div className="mt-3 pt-3 border-t border-bone-300/55 flex items-center justify-between">
                       <div className="font-display text-base font-semibold text-gradient">
                         ${formatCompact(d.valueCents / 100)}
                       </div>
@@ -101,7 +101,7 @@ export default async function OpportunitiesPage() {
                 </Card>
                 </OpenableRow>
               ))}
-              <button className="rounded-xl border border-dashed border-white/[0.08] text-xs text-white/40 py-3 hover:text-white/70 hover:border-signal-500/40 transition-colors">
+              <button className="rounded-xl border border-dashed border-bone-300/65 text-xs text-ink-300/50 py-3 hover:text-ink-300/80 hover:border-signal-500/40 transition-colors">
                 + Add deal
               </button>
             </div>
@@ -116,7 +116,7 @@ export default async function OpportunitiesPage() {
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-sm font-semibold">AI insight</div>
-            <div className="text-xs text-white/55 mt-0.5">
+            <div className="text-xs text-ink-300/65 mt-0.5">
               ${formatCompact(totalPipeline / 100)} active pipeline. Deals stuck in Proposal &gt; 14 days drop 41% in win rate.
             </div>
           </div>

@@ -1,55 +1,89 @@
-import { KpiCards } from "@/components/dashboard/kpi-cards";
-import { RevenueChart } from "@/components/dashboard/revenue-chart";
-import { PipelineFunnel } from "@/components/dashboard/pipeline-funnel";
-import { ProjectStatus } from "@/components/dashboard/project-status";
-import { ServiceTickets } from "@/components/dashboard/service-tickets";
-import { TechnicianTracking } from "@/components/dashboard/technician-tracking";
-import { UpcomingMeetings } from "@/components/dashboard/upcoming-meetings";
-import { ActivityTimeline } from "@/components/dashboard/activity-timeline";
-import { DashboardHeader } from "@/components/dashboard/header";
+import { ModuleShell } from "@/components/app/module-shell";
 import {
-  getDashboardStats,
-  getActivityFeed,
-  getPipelineByStage,
-  getActiveProjects,
-  getOpenTickets,
-  getTechnicians,
-  getUpcomingEvents,
-} from "@/lib/data/dashboard";
+  getAttentionBar,
+  getAtRiskProjects,
+  getDelayedProcurement,
+  getOverdueInvoices,
+  getLowStock,
+  getExpiringAMCs,
+  getTodaysOps,
+  getTeamUtilization,
+  getPipelineSnapshot,
+} from "@/lib/data/mission-control";
+import { AttentionBar } from "@/components/mission-control/attention-bar";
+import { AIBriefWidget } from "@/components/mission-control/ai-brief";
+import { DashboardFrame } from "@/components/mission-control/dashboard-frame";
+import {
+  AtRiskProjectsWidget,
+  DelayedProcurementWidget,
+  OverdueInvoicesWidget,
+  LowStockWidget,
+  AMCRenewalsWidget,
+  TodaysOpsWidget,
+  PipelineRevenueWidget,
+  TeamUtilizationWidget,
+} from "@/components/mission-control/widgets";
 
 export default async function DashboardPage() {
-  const [stats, activity, pipeline, projects, tickets, techs, events] = await Promise.all([
-    getDashboardStats(),
-    getActivityFeed(),
-    getPipelineByStage(),
-    getActiveProjects(4),
-    getOpenTickets(4),
-    getTechnicians(),
-    getUpcomingEvents(),
+  const [
+    attention,
+    atRisk,
+    delayedPOs,
+    overdueInv,
+    lowStock,
+    amcs,
+    todays,
+    pipeline,
+    team,
+  ] = await Promise.all([
+    getAttentionBar(7),
+    getAtRiskProjects(5),
+    getDelayedProcurement(5),
+    getOverdueInvoices(5),
+    getLowStock(5),
+    getExpiringAMCs(5),
+    getTodaysOps(),
+    getPipelineSnapshot(),
+    getTeamUtilization(),
   ]);
 
   return (
-    <div className="space-y-6">
-      <DashboardHeader />
-      <KpiCards
-        revenueCents={stats.revenueMtdCents}
-        activeProjects={stats.activeProjects}
-        openTickets={stats.openTickets}
-        pipelineCents={stats.pipelineCents}
-      />
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <RevenueChart />
-        <PipelineFunnel stages={pipeline} />
-      </div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <ProjectStatus projects={projects} totalActive={stats.activeProjects} />
-        <ServiceTickets tickets={tickets} />
-        <TechnicianTracking techs={techs} />
-      </div>
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
-        <UpcomingMeetings events={events} />
-        <ActivityTimeline items={activity} />
-      </div>
-    </div>
+    <ModuleShell
+      eyebrow="Mission Control"
+      title="Today's operations"
+      description="What needs attention, ranked by dollar at risk and time sensitivity. Every metric drills into its module."
+    >
+      <DashboardFrame>
+        {/* ── Attention Bar ── */}
+        <div className="mb-5">
+          <AttentionBar items={attention} />
+        </div>
+
+        {/* ── Row 1: Today's Ops · Pipeline · Team · AI Brief ── */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 mb-3">
+          <TodaysOpsWidget {...todays} />
+          <PipelineRevenueWidget {...pipeline} />
+          <TeamUtilizationWidget {...team} />
+          <AIBriefWidget items={attention} />
+        </div>
+
+        {/* ── Row 2: Operational risk ── */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 mb-3">
+          <AtRiskProjectsWidget projects={atRisk} />
+          <DelayedProcurementWidget pos={delayedPOs} />
+          <OverdueInvoicesWidget
+            items={overdueInv.items}
+            totalCents={overdueInv.totalCents}
+            totalCount={overdueInv.totalCount}
+          />
+        </div>
+
+        {/* ── Row 3: Inventory · AMC ── */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <LowStockWidget items={lowStock.items} totalLow={lowStock.totalLow} />
+          <AMCRenewalsWidget items={amcs.items} totalMrrCents={amcs.totalMrrCents} />
+        </div>
+      </DashboardFrame>
+    </ModuleShell>
   );
 }

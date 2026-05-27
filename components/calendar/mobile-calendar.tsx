@@ -67,7 +67,7 @@ export function MobileCalendar({ events }: { events: CalendarEventDTO[] }) {
       <div className="flex items-center justify-between px-4 pt-4 pb-3">
         <button
           onClick={() => setAnchor((d) => addDays(d, -7))}
-          className="h-8 w-8 rounded-lg border border-white/[0.08] bg-white/[0.02] flex items-center justify-center text-white/65"
+          className="h-8 w-8 rounded-lg border border-bone-300/65 bg-bone-50/60 flex items-center justify-center text-ink-300/75"
           aria-label="Previous week"
         >
           <ChevronLeft className="h-4 w-4" />
@@ -77,7 +77,7 @@ export function MobileCalendar({ events }: { events: CalendarEventDTO[] }) {
         </div>
         <button
           onClick={() => setAnchor((d) => addDays(d, 7))}
-          className="h-8 w-8 rounded-lg border border-white/[0.08] bg-white/[0.02] flex items-center justify-center text-white/65"
+          className="h-8 w-8 rounded-lg border border-bone-300/65 bg-bone-50/60 flex items-center justify-center text-ink-300/75"
           aria-label="Next week"
         >
           <ChevronRight className="h-4 w-4" />
@@ -98,13 +98,13 @@ export function MobileCalendar({ events }: { events: CalendarEventDTO[] }) {
                 "relative flex flex-col items-center justify-center gap-0.5 py-2.5 rounded-xl border transition-all",
                 isSelected
                   ? "bg-signal-500/[0.18] border-signal-500/40 shadow-glow-sm"
-                  : "border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04]"
+                  : "border-bone-300/55 bg-bone-50/60 hover:bg-bone-100/70"
               )}
             >
               <span
                 className={cn(
                   "text-[10px] uppercase tracking-wider",
-                  isSelected ? "text-signal-300" : "text-white/45"
+                  isSelected ? "text-signal-300" : "text-ink-300/55"
                 )}
               >
                 {DAY_NAMES[day.getDay()]}
@@ -112,7 +112,7 @@ export function MobileCalendar({ events }: { events: CalendarEventDTO[] }) {
               <span
                 className={cn(
                   "font-display text-lg font-semibold tracking-tight",
-                  isToday && !isSelected ? "text-signal-400" : isSelected ? "text-bone-100" : "text-bone-100"
+                  isToday && !isSelected ? "text-signal-400" : isSelected ? "text-ink-300" : "text-ink-300"
                 )}
               >
                 {day.getDate()}
@@ -131,26 +131,26 @@ export function MobileCalendar({ events }: { events: CalendarEventDTO[] }) {
       </div>
 
       {/* Selected day header */}
-      <div className="px-4 py-3 border-t border-white/[0.06] bg-ink-200/30">
-        <div className="text-[10px] uppercase tracking-wider text-white/45">
+      <div className="px-4 py-3 border-t border-bone-300/55 bg-bone-50/70">
+        <div className="text-[10px] uppercase tracking-wider text-ink-300/55">
           {anchor.toLocaleDateString("en-US", { weekday: "long" })}
         </div>
         <div className="flex items-baseline justify-between">
           <div className="font-display text-xl font-semibold tracking-tight">
             {anchor.toLocaleDateString("en-US", { month: "long", day: "numeric" })}
           </div>
-          <div className="text-xs text-white/45">
+          <div className="text-xs text-ink-300/55">
             {selectedEvents.length} event{selectedEvents.length === 1 ? "" : "s"}
           </div>
         </div>
       </div>
 
       {/* Events list */}
-      <div className="divide-y divide-white/[0.04]">
+      <div className="divide-y divide-bone-300/45">
         {selectedEvents.length === 0 ? (
           <div className="px-4 py-10 text-center">
-            <div className="text-sm text-white/45">Nothing scheduled.</div>
-            <div className="text-[11px] text-white/30 mt-1">Open on a larger screen to add events.</div>
+            <div className="text-sm text-ink-300/55">Nothing scheduled.</div>
+            <div className="text-[11px] text-ink-300/45 mt-1">Open on a larger screen to add events.</div>
           </div>
         ) : (
           selectedEvents.map((e, i) => {
@@ -174,7 +174,7 @@ export function MobileCalendar({ events }: { events: CalendarEventDTO[] }) {
                       {fmtTime(e.startsAt)}
                     </Badge>
                   </div>
-                  <div className="text-[11px] text-white/45 mt-1 flex flex-wrap items-center gap-x-2">
+                  <div className="text-[11px] text-ink-300/55 mt-1 flex flex-wrap items-center gap-x-2">
                     <span>
                       {fmtTime(e.startsAt)} – {fmtTime(e.endsAt)}
                     </span>

@@ -11,7 +11,7 @@ export function MarginChart({ data }: { data: { name: string; margin: number }[]
       <CardHeader className="flex-row items-start justify-between">
         <div>
           <CardTitle>Project profitability</CardTitle>
-          <p className="text-xs text-white/45 mt-1">Gross margin % by project</p>
+          <p className="text-xs text-ink-300/55 mt-1">Gross margin % by project</p>
         </div>
         <Badge variant="success" className="gap-1">
           <ArrowUpRight className="h-3 w-3" />
@@ -52,7 +52,7 @@ export function ServiceMixChart({ data }: { data: { type: string; count: number 
       <CardHeader className="flex-row items-start justify-between">
         <div>
           <CardTitle>Service mix</CardTitle>
-          <p className="text-xs text-white/45 mt-1">Rooms by type</p>
+          <p className="text-xs text-ink-300/55 mt-1">Rooms by type</p>
         </div>
         <Badge className="gap-1">
           <TrendingUp className="h-3 w-3" />

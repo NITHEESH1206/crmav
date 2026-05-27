@@ -34,7 +34,7 @@ export function DetailHeader({
     >
       <Link
         href={backHref}
-        className="inline-flex items-center gap-1 text-xs text-white/45 hover:text-white/80 transition-colors"
+        className="inline-flex items-center gap-1 text-xs text-ink-300/55 hover:text-ink-300/85 transition-colors"
       >
         <ChevronLeft className="h-3.5 w-3.5" />
         {backLabel}
@@ -54,7 +54,7 @@ export function DetailHeader({
             <h1 className="font-display text-3xl sm:text-4xl font-semibold tracking-tight leading-tight mt-1">
               {title}
             </h1>
-            {subtitle && <div className="text-sm text-white/55 mt-1.5">{subtitle}</div>}
+            {subtitle && <div className="text-sm text-ink-300/65 mt-1.5">{subtitle}</div>}
             {badges && <div className="flex flex-wrap items-center gap-2 mt-3">{badges}</div>}
           </div>
         </div>

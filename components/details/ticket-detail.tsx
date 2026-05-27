@@ -113,24 +113,24 @@ export function TicketDetail({ ticket, users }: { ticket: Ticket; users: { id: s
                 onSave={(v) => updateTicket({ id: ticket.id, assigneeId: v || null })}
               />
               <div>
-                <div className="text-[10px] uppercase tracking-wider text-white/40">Created</div>
-                <div className="mt-1 text-sm text-white/85">{ticket.createdAt.toLocaleString()}</div>
+                <div className="text-[10px] uppercase tracking-wider text-ink-300/50">Created</div>
+                <div className="mt-1 text-sm text-ink-300/90">{ticket.createdAt.toLocaleString()}</div>
               </div>
               <div>
-                <div className="text-[10px] uppercase tracking-wider text-white/40">SLA due</div>
-                <div className="mt-1 text-sm text-white/85">
+                <div className="text-[10px] uppercase tracking-wider text-ink-300/50">SLA due</div>
+                <div className="mt-1 text-sm text-ink-300/90">
                   {ticket.slaDueAt?.toLocaleString() ?? "—"}
                 </div>
               </div>
               <div>
-                <div className="text-[10px] uppercase tracking-wider text-white/40">Account</div>
-                <div className="mt-1 text-sm text-white/85">{ticket.account?.name ?? "—"}</div>
+                <div className="text-[10px] uppercase tracking-wider text-ink-300/50">Account</div>
+                <div className="mt-1 text-sm text-ink-300/90">{ticket.account?.name ?? "—"}</div>
               </div>
             </div>
             <div>
-              <div className="text-[10px] uppercase tracking-wider text-white/40 mb-2">Description</div>
-              <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 text-sm text-white/75 leading-relaxed min-h-[80px]">
-                {ticket.description ?? <span className="text-white/30 italic">No description.</span>}
+              <div className="text-[10px] uppercase tracking-wider text-ink-300/50 mb-2">Description</div>
+              <div className="rounded-xl border border-bone-300/55 bg-bone-50/60 p-4 text-sm text-ink-300/85 leading-relaxed min-h-[80px]">
+                {ticket.description ?? <span className="text-ink-300/45 italic">No description.</span>}
               </div>
             </div>
           </CardContent>

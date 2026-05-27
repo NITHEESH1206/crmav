@@ -37,16 +37,16 @@ export function RelatedList({
       </CardHeader>
       <CardContent className="p-0">
         {items.length === 0 ? (
-          <div className="px-6 pb-6 text-xs text-white/40 italic">{empty}</div>
+          <div className="px-6 pb-6 text-xs text-ink-300/50 italic">{empty}</div>
         ) : (
-          <div className="border-t border-white/[0.04]">
+          <div className="border-t border-bone-300/45">
             {items.map((it) => {
               const Inner = (
-                <div className="flex items-center gap-3 px-6 py-3 hover:bg-white/[0.02] transition-colors group">
+                <div className="flex items-center gap-3 px-6 py-3 hover:bg-bone-50/60 transition-colors group">
                   <div className="min-w-0 flex-1">
-                    <div className="text-sm text-white/85 truncate">{it.label}</div>
+                    <div className="text-sm text-ink-300/90 truncate">{it.label}</div>
                     {it.meta && (
-                      <div className="text-[11px] text-white/45 mt-0.5 truncate">{it.meta}</div>
+                      <div className="text-[11px] text-ink-300/55 mt-0.5 truncate">{it.meta}</div>
                     )}
                   </div>
                   {it.badge && (
@@ -56,16 +56,16 @@ export function RelatedList({
                   )}
                   {it.right && <div className="shrink-0">{it.right}</div>}
                   {it.href && (
-                    <ChevronRight className="h-3.5 w-3.5 text-white/30 group-hover:text-white/70 shrink-0" />
+                    <ChevronRight className="h-3.5 w-3.5 text-ink-300/45 group-hover:text-ink-300/80 shrink-0" />
                   )}
                 </div>
               );
               return it.href ? (
-                <Link key={it.id} href={it.href} className="block border-b border-white/[0.04] last:border-b-0">
+                <Link key={it.id} href={it.href} className="block border-b border-bone-300/45 last:border-b-0">
                   {Inner}
                 </Link>
               ) : (
-                <div key={it.id} className="border-b border-white/[0.04] last:border-b-0">
+                <div key={it.id} className="border-b border-bone-300/45 last:border-b-0">
                   {Inner}
                 </div>
               );

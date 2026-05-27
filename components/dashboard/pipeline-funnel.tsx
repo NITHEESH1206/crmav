@@ -28,7 +28,7 @@ export function PipelineFunnel({ stages }: { stages: Stage[] }) {
       <CardHeader className="flex-row items-start justify-between gap-3">
         <div>
           <CardTitle>Sales pipeline</CardTitle>
-          <p className="text-xs text-white/45 mt-1">By stage · last 30 days</p>
+          <p className="text-xs text-ink-300/55 mt-1">By stage · last 30 days</p>
         </div>
         <Badge>${formatCompact(total / 100)}</Badge>
       </CardHeader>
@@ -45,12 +45,12 @@ export function PipelineFunnel({ stages }: { stages: Stage[] }) {
             >
               <div className="flex items-center justify-between text-xs mb-1.5">
                 <div className="flex items-center gap-2">
-                  <span className="text-white/75 font-medium">{meta.label}</span>
-                  <span className="text-white/35">{s.count}</span>
+                  <span className="text-ink-300/85 font-medium">{meta.label}</span>
+                  <span className="text-ink-300/45">{s.count}</span>
                 </div>
-                <span className="text-white/55 font-mono">${formatCompact(s.valueCents / 100)}</span>
+                <span className="text-ink-300/65 font-mono">${formatCompact(s.valueCents / 100)}</span>
               </div>
-              <div className="relative h-7 rounded-md bg-white/[0.02] border border-white/[0.04] overflow-hidden">
+              <div className="relative h-7 rounded-md bg-bone-50/60 border border-bone-300/45 overflow-hidden">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${meta.width}%` }}

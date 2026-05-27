@@ -54,11 +54,11 @@ export function CompanyTab({ workspace }: { workspace: Workspace }) {
       </CardHeader>
       <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div>
-          <label className="text-xs text-white/65 mb-2 block">Company name</label>
+          <label className="text-xs text-ink-300/75 mb-2 block">Company name</label>
           <Input value={name} onChange={(e) => setName(e.target.value)} />
         </div>
         <div>
-          <label className="text-xs text-white/65 mb-2 block">Logo URL (optional)</label>
+          <label className="text-xs text-ink-300/75 mb-2 block">Logo URL (optional)</label>
           <Input
             value={logoUrl}
             onChange={(e) => setLogoUrl(e.target.value)}
@@ -66,11 +66,11 @@ export function CompanyTab({ workspace }: { workspace: Workspace }) {
           />
         </div>
         <div>
-          <label className="text-xs text-white/65 mb-2 block">Trading currency</label>
+          <label className="text-xs text-ink-300/75 mb-2 block">Trading currency</label>
           <select
             value={currency}
             onChange={(e) => setCurrency(e.target.value)}
-            className="h-10 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 text-sm text-bone-100 focus:outline-none focus:border-signal-500/40"
+            className="h-10 w-full rounded-xl border border-bone-300/65 bg-bone-50 px-3 text-sm text-ink-300 focus:outline-none focus:border-signal-500/40"
           >
             {CURRENCIES.map((c) => (
               <option key={c} value={c}>{c}</option>
@@ -78,11 +78,11 @@ export function CompanyTab({ workspace }: { workspace: Workspace }) {
           </select>
         </div>
         <div>
-          <label className="text-xs text-white/65 mb-2 block">Time zone</label>
+          <label className="text-xs text-ink-300/75 mb-2 block">Time zone</label>
           <select
             value={timezone}
             onChange={(e) => setTimezone(e.target.value)}
-            className="h-10 w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 text-sm text-bone-100 focus:outline-none focus:border-signal-500/40"
+            className="h-10 w-full rounded-xl border border-bone-300/65 bg-bone-50 px-3 text-sm text-ink-300 focus:outline-none focus:border-signal-500/40"
           >
             {TIMEZONES.map((tz) => (
               <option key={tz} value={tz}>{tz}</option>

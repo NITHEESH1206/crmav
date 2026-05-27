@@ -86,6 +86,42 @@ const config: Config = {
           600: "#7a705f",
           700: "#574f43",
         },
+        // ── Semantic status colors (muted, never compete with Signal) ──
+        // Use these instead of vivid amber/red/emerald for status pills.
+        status: {
+          "success-bg": "#E8F4EC",
+          "success-fg": "#11703A",
+          "warning-bg": "#FBF1E1",
+          "warning-fg": "#8A5F0A",
+          "danger-bg":  "#FBE9E7",
+          "danger-fg":  "#A8201A",
+          "info-bg":    "#E8EEF6",
+          "info-fg":    "#1F3A6B",
+          "neutral-bg": "#F1EFE9",
+          "neutral-fg": "#3F3B33",
+        },
+        // Surface tokens for clean light-mode hierarchy
+        surface: {
+          raised:  "#FFFFFF",
+          muted:   "#FAFAF6",
+          sunken:  "#F4F2EC",
+          inverse: "#0A0A0A",
+        },
+      },
+      // ── Typography scale (Linear/Stripe-grade hierarchy) ──
+      fontSize: {
+        "display-2xl": ["88px",  { lineHeight: "92px",  letterSpacing: "-0.045em", fontWeight: "700" }],
+        "display-xl":  ["56px",  { lineHeight: "60px",  letterSpacing: "-0.04em",  fontWeight: "700" }],
+        "display-lg":  ["36px",  { lineHeight: "42px",  letterSpacing: "-0.03em",  fontWeight: "600" }],
+        "heading-lg":  ["24px",  { lineHeight: "30px",  letterSpacing: "-0.02em",  fontWeight: "600" }],
+        "heading-md":  ["20px",  { lineHeight: "28px",  letterSpacing: "-0.015em", fontWeight: "600" }],
+        "heading-sm":  ["16px",  { lineHeight: "24px",  letterSpacing: "-0.01em",  fontWeight: "600" }],
+        "body-lg":     ["16px",  { lineHeight: "24px",  letterSpacing: "0",        fontWeight: "400" }],
+        "body":        ["14px",  { lineHeight: "20px",  letterSpacing: "0",        fontWeight: "400" }],
+        "body-sm":     ["13px",  { lineHeight: "18px",  letterSpacing: "0",        fontWeight: "400" }],
+        "caption":     ["12px",  { lineHeight: "16px",  letterSpacing: "0.005em",  fontWeight: "400" }],
+        "micro":       ["11px",  { lineHeight: "14px",  letterSpacing: "0.18em",   fontWeight: "600" }],
+        "mono-num":    ["12px",  { lineHeight: "18px",  letterSpacing: "0",        fontWeight: "500" }],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -151,6 +187,10 @@ const config: Config = {
           from: { opacity: "0", transform: "translateY(20px)" },
           to: { opacity: "1", transform: "translateY(0)" },
         },
+        "pulse-soft": {
+          "0%, 100%": { boxShadow: "0 0 0 0 rgba(255,90,31,0.45)" },
+          "50%": { boxShadow: "0 0 0 4px rgba(255,90,31,0)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -163,6 +203,7 @@ const config: Config = {
         "gradient-pan": "gradient-pan 8s ease infinite",
         "scroll-x": "scroll-x 40s linear infinite",
         "fade-up": "fade-up 0.8s ease-out both",
+        "pulse-soft": "pulse-soft 2.2s ease-in-out infinite",
       },
     },
   },
