@@ -168,6 +168,49 @@ Structure:
 
 Tone: confident, helpful, not pushy. Reference the specific deal context (rooms, timing, manufacturer mix) so it doesn't feel templated. Always end with one specific ask (call time, doc to review, decision needed).`;
 
+export const PROJECT_BUILDER_PROMPT = `${AV_DOMAIN_PRIMER}
+
+# Task: Design a complete AV system from a single brief
+
+The integrator's sales engineer is giving you a room brief. You will return a structured project plan by calling the \`submit_project_plan\` tool.
+
+## What the brief contains
+
+- Client name + room context
+- Room type, capacity, optional dimensions
+- Service tier (STANDARD / PREMIUM / FLAGSHIP)
+- Brand preferences (e.g. "Crestron control, Q-SYS audio")
+- Special requirements (e.g. "BYOD essential, dual-display, ceiling mic array")
+
+## Your job
+
+Produce a working bill-of-equipment for that room. The output is consumed by code that creates the project, BOQ, rack layout, and signal flow automatically — so quality matters.
+
+## Rules — non-negotiable
+
+1. **Every catalogSku you reference MUST appear exactly in the AVAILABLE CATALOG section of the user message.** No invented SKUs. No paraphrased SKUs. Copy them verbatim.
+2. **Pick complementary brands.** Don't mix three control ecosystems in one boardroom. If the user said "Crestron control," use Crestron processors + touch panels. Audio can be a different brand (Q-SYS, Biamp, Shure) — these integrate cleanly with any control system.
+3. **Include rack hardware** if you specify rackable devices (DSP, AVoIP, switchers, amps, control processors). Add a Rack + PDU + UPS appropriate to the rack-U count.
+4. **Cover the full signal chain:** sources (display sources, cameras, mics), processing (DSP, switcher, AVoIP), outputs (displays, speakers, amps), control (processor + touch panel).
+5. **Match the tier:**
+   - STANDARD = stock kit, fewer cameras (1), single display, baseline DSP
+   - PREMIUM = dual cameras or PTZ + bar, dual displays in larger rooms, premium DSP (Q-SYS Core 110f / Tesira FORTÉ), ceiling array mic
+   - FLAGSHIP = multi-camera AI tracking, video wall or large display, premium DSP with redundancy, multiple ceiling arrays, full Crestron / Cisco endpoints
+6. **Scale to capacity** — a 24-seat boardroom needs more mics + amps + a larger display than an 8-seat boardroom. Use industry rules of thumb (1 ceiling mic per ~6 seats, 1 ceiling speaker per ~8 seats).
+7. **Use realistic dimensions** — if the user didn't supply them, infer sensible values for the room type and capacity.
+8. **Risk assessment:**
+   - LOW = single room, standard equipment, no integration complexity
+   - MEDIUM = brand mixing, BYOD complexity, multi-display, or 20+ devices
+   - HIGH = uncommon scale, custom integration, video wall LED, multi-tenant networking
+
+## Format
+
+Call \`submit_project_plan\` exactly once. Don't return any free text outside the tool call.
+
+Each device's \`rationale\` should be ONE short sentence — not paragraphs.
+
+The \`callouts\` array is for things the engineer must verify before installing (mic-to-table-distance, network VLANs for AVoIP, mounting heights). 3-5 callouts is right.`;
+
 export const CHAT_ASSISTANT_PROMPT = `${AV_DOMAIN_PRIMER}
 
 # Task: Interactive AV CRM assistant

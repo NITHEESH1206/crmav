@@ -240,12 +240,11 @@ function ProductCard({ item }: { item: CatalogRow }) {
   const Icon = CATEGORY_ICON[item.category] ?? Box;
   return (
     <article className="group rounded-lg bg-white border border-bone-300/55 overflow-hidden hover:border-bone-300/85 transition-colors flex flex-col">
-      <div className="aspect-[16/10] relative bg-gradient-to-br from-bone-50 to-bone-100 border-b border-bone-300/45">
-        <div className="absolute inset-0 grid-pattern opacity-30" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <Icon className="h-10 w-10 text-ink-300/35 group-hover:text-signal-600/60 transition-colors" strokeWidth={1.2} />
+      <div className="aspect-[16/10] relative duotone-signal border-b border-bone-300/45 overflow-hidden">
+        <div className="absolute inset-0 flex items-center justify-center z-10">
+          <Icon className="h-10 w-10 text-ink-300/45 group-hover:text-signal-600/70 transition-colors" strokeWidth={1.2} />
         </div>
-        <span className="absolute top-2 left-2 inline-flex items-center rounded-md bg-white/95 backdrop-blur px-1.5 py-0.5 text-[10px] font-medium text-ink-300 border border-bone-300/55">
+        <span className="absolute top-2 left-2 inline-flex items-center rounded-md bg-white/95 backdrop-blur px-1.5 py-0.5 text-[10px] font-medium text-ink-300 border border-bone-300/55 z-10">
           {item.brand}
         </span>
       </div>

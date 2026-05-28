@@ -32,7 +32,8 @@
       "Bash(npx tsx *)",
       "Bash(npm install *)",
       "Bash(npx prisma *)",
-      "Bash(taskkill /F /IM node.exe)"
+      "Bash(taskkill /F /IM node.exe)",
+      "WebFetch(domain:need-spiny-01266573.figma.site)"
     ]
   }
 }

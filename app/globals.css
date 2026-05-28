@@ -303,6 +303,32 @@
            border border-bone-300/70 bg-white text-[10.5px] font-mono text-ink-300/75
            shadow-[0_1px_0_0_rgba(0,0,0,0.04)];
   }
+
+  /* ── Signal-orange duotone tile — Aetherfield-style imagery treatment ──
+     Use on card hero areas (catalog products, room cards) for a warmer,
+     branded feel without needing actual photography. */
+  .duotone-signal {
+    background:
+      radial-gradient(circle at 25% 20%, rgba(255, 90, 31, 0.18), transparent 55%),
+      radial-gradient(circle at 80% 75%, rgba(255, 125, 63, 0.12), transparent 55%),
+      linear-gradient(135deg, #FAFAF6 0%, #F4F2EC 100%);
+    position: relative;
+  }
+  .duotone-signal::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/></svg>");
+    mix-blend-mode: multiply;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .duotone-ink {
+    background:
+      radial-gradient(circle at 25% 20%, rgba(10, 10, 10, 0.12), transparent 55%),
+      radial-gradient(circle at 80% 75%, rgba(10, 10, 10, 0.06), transparent 55%),
+      linear-gradient(135deg, #FAFAF6 0%, #EBE7DD 100%);
+  }
 }
 
 @layer utilities {

@@ -3,16 +3,15 @@
 import Link from "next/link";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { useState } from "react";
-import { ArrowRight, Menu, X } from "lucide-react";
+import { ArrowUpRight, Menu, X } from "lucide-react";
 import { BrandMark } from "@/components/app/brand-mark";
 import { cn } from "@/lib/utils";
 
 const LINKS = [
-  { label: "Home", href: "#home" },
-  { label: "Solutions", href: "#features" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "Testimonials", href: "#testimonials" },
-  { label: "News", href: "#news" },
+  { label: "Product",   href: "#product" },
+  { label: "Workflow",  href: "#workflow" },
+  { label: "Customers", href: "#customers" },
+  { label: "Journal",   href: "#journal" },
 ];
 
 export function LandingNavbar() {
@@ -23,43 +22,56 @@ export function LandingNavbar() {
 
   return (
     <motion.header
-      initial={{ y: -16, opacity: 0 }}
+      initial={{ y: -8, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
-      className="fixed top-0 inset-x-0 z-50 flex justify-center px-4 pt-4"
+      transition={{ duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] }}
+      className="fixed top-0 inset-x-0 z-50"
     >
       <div
         className={cn(
-          "flex w-full max-w-6xl items-center justify-between rounded-full pl-5 pr-2 py-2 transition-all duration-500",
+          "transition-all duration-300",
           scrolled
-            ? "bg-white/85 backdrop-blur-xl shadow-[0_10px_40px_-12px_rgba(10,10,10,0.18)] border border-bone-300/60"
-            : "bg-white/70 backdrop-blur-md border border-bone-300/40"
+            ? "bg-bone-50/85 backdrop-blur-md border-b border-bone-300/40"
+            : "bg-transparent border-b border-transparent"
         )}
       >
-        <Link href="/" className="flex items-center shrink-0 -ml-1">
-          <BrandMark variant="full" height={26} invertForDark={false} />
-        </Link>
-
-        <nav className="hidden md:flex items-center gap-1">
-          {LINKS.map((l) => (
-            <Link
-              key={l.label}
-              href={l.href}
-              className="px-4 py-2 text-[15px] font-medium text-ink-300/70 hover:text-ink-300 transition-colors rounded-full"
-            >
-              {l.label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="flex items-center gap-2">
-          <Link href="/dashboard" className="hidden sm:inline-flex">
-            <PillCta>Sign In</PillCta>
+        <div className="mx-auto max-w-[1280px] px-6 lg:px-10 h-16 flex items-center justify-between gap-6">
+          <Link href="/" className="flex items-center shrink-0">
+            <BrandMark variant="full" height={22} invertForDark={false} />
           </Link>
+
+          <nav className="hidden md:flex items-center gap-7">
+            {LINKS.map((l) => (
+              <Link
+                key={l.label}
+                href={l.href}
+                className="text-[14px] text-ink-300/70 hover:text-ink-300 transition-colors"
+              >
+                {l.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="hidden md:flex items-center gap-3">
+            <Link
+              href="/dashboard"
+              className="text-[14px] text-ink-300/70 hover:text-ink-300 transition-colors"
+            >
+              Sign in
+            </Link>
+            <Link href="/dashboard" className="group">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-ink-300 text-bone-100 pl-4 pr-3.5 py-2 text-[13.5px] font-medium hover:bg-ink-200 transition-colors">
+                Get started
+                <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={2} />
+              </span>
+            </Link>
+          </div>
+
+          {/* Mobile */}
           <button
             type="button"
             onClick={() => setOpen((o) => !o)}
-            className="md:hidden h-10 w-10 rounded-full bg-ink-300 text-bone-100 flex items-center justify-center"
+            className="md:hidden h-9 w-9 rounded-full bg-ink-300 text-bone-100 flex items-center justify-center"
             aria-label="Toggle menu"
           >
             {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
@@ -67,21 +79,19 @@ export function LandingNavbar() {
         </div>
       </div>
 
-      {/* Mobile sheet */}
       {open && (
         <motion.div
-          initial={{ opacity: 0, y: -10 }}
+          initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.25 }}
-          className="md:hidden absolute top-[78px] inset-x-4 rounded-3xl bg-white border border-bone-300/60 shadow-[0_20px_60px_-20px_rgba(10,10,10,0.25)] p-4"
+          className="md:hidden bg-bone-50 border-b border-bone-300/40"
         >
-          <nav className="flex flex-col gap-1">
+          <nav className="px-6 py-4 flex flex-col gap-1">
             {LINKS.map((l) => (
               <Link
                 key={l.label}
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className="px-4 py-3 text-base font-medium text-ink-300/80 hover:bg-bone-100 rounded-2xl"
+                className="px-3 py-3 text-[15px] text-ink-300/80 hover:bg-bone-100 rounded-lg"
               >
                 {l.label}
               </Link>
@@ -89,35 +99,14 @@ export function LandingNavbar() {
             <Link
               href="/dashboard"
               onClick={() => setOpen(false)}
-              className="mt-2"
+              className="mt-2 inline-flex items-center justify-center gap-1.5 rounded-full bg-ink-300 text-bone-100 px-4 py-3 text-[14px] font-medium"
             >
-              <PillCta className="w-full justify-center">Sign In</PillCta>
+              Get started
+              <ArrowUpRight className="h-3.5 w-3.5" />
             </Link>
           </nav>
         </motion.div>
       )}
     </motion.header>
-  );
-}
-
-function PillCta({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <span
-      className={cn(
-        "inline-flex items-center gap-2 rounded-full bg-ink-300 pl-5 pr-1.5 py-1.5 text-[14px] font-medium text-bone-100 hover:bg-ink-200 transition-colors",
-        className
-      )}
-    >
-      {children}
-      <span className="h-7 w-7 rounded-full bg-bone-100/15 flex items-center justify-center">
-        <ArrowRight className="h-3.5 w-3.5 text-bone-100" strokeWidth={2.2} />
-      </span>
-    </span>
   );
 }

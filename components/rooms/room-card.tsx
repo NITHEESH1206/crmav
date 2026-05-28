@@ -68,16 +68,15 @@ export function RoomCard({ room, index }: { room: Room; index: number }) {
     >
       <Card className="overflow-hidden hover-lift group">
         <Link href={`/rooms/${room.id}`} className="block">
-          <div className={`aspect-[16/9] relative bg-gradient-to-br ${tint} border-b border-bone-300/55 cursor-pointer`}>
-            <div className="absolute inset-0 grid-pattern opacity-30" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <Layers3 className="h-14 w-14 text-ink-300/35 group-hover:text-signal-400/60 transition-colors" strokeWidth={1.2} />
+          <div className="aspect-[16/9] relative duotone-signal border-b border-bone-300/55 cursor-pointer overflow-hidden">
+            <div className="absolute inset-0 flex items-center justify-center z-10">
+              <Layers3 className="h-14 w-14 text-ink-300/40 group-hover:text-signal-600/70 transition-colors" strokeWidth={1.2} />
             </div>
-            <Badge variant="secondary" className="absolute top-3 left-3 capitalize text-[10px]">
+            <Badge variant="secondary" className="absolute top-3 left-3 capitalize text-[10px] z-10">
               {room.roomType.toLowerCase().replace("_", " ")}
             </Badge>
             {room.capacity && (
-              <Badge variant="outline" className="absolute top-3 right-3 text-[10px]">
+              <Badge variant="outline" className="absolute top-3 right-3 text-[10px] z-10 bg-white/85">
                 {room.capacity} seats
               </Badge>
             )}

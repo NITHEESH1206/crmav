@@ -151,18 +151,23 @@ export function ModuleShell({
         </div>
       </motion.div>
 
-      {/* ── Hero header ── */}
-      <header className="flex flex-col gap-4 mb-6">
-        <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+      {/* ── Hero header — Aetherfield-style airier rhythm ── */}
+      <header className="flex flex-col gap-5 mb-9 pt-2">
+        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div className="min-w-0">
             {eyebrow && (
-              <div className="text-[10.5px] uppercase tracking-[0.16em] text-ink-300/55 font-semibold">
+              <div className="inline-flex items-center gap-2 text-[11.5px] text-ink-300/55 font-medium">
+                <span className="h-1 w-1 rounded-full bg-signal-500" />
                 {eyebrow}
               </div>
             )}
-            <h1 className="mt-1 text-display-lg text-ink-300">{title}</h1>
+            <h1 className="mt-3 font-display text-[32px] md:text-[42px] leading-[1.05] tracking-[-0.025em] text-ink-300 font-medium">
+              {title}
+            </h1>
             {description && (
-              <p className="mt-2 text-body text-ink-300/65 max-w-2xl">{description}</p>
+              <p className="mt-3 text-[15px] leading-[1.55] text-ink-300/65 max-w-2xl">
+                {description}
+              </p>
             )}
           </div>
           <div className="flex flex-wrap items-center gap-1.5 shrink-0">
