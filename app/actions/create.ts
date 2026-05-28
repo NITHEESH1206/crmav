@@ -101,7 +101,7 @@ const projectSchema = z.object({
 export async function createProject(input: z.infer<typeof projectSchema>) {
   const data = projectSchema.parse(input);
   const workspaceId = await getCurrentWorkspaceId();
-  await prisma.project.create({
+  const project = await prisma.project.create({
     data: {
       workspaceId,
       name: data.name,
@@ -115,5 +115,54 @@ export async function createProject(input: z.infer<typeof projectSchema>) {
   });
   revalidatePath("/projects");
   revalidatePath("/dashboard");
-  return { ok: true };
+  return { ok: true, id: project.id };
+}
+
+// ─── Room ────────────────────────────────────────────────────────────────
+const roomSchema = z.object({
+  name: z.string().min(2, "Name is required"),
+  roomType: z.enum([
+    "BOARDROOM",
+    "HUDDLE",
+    "TRAINING",
+    "STUDIO",
+    "AUDITORIUM",
+    "LOBBY",
+    "COMMAND_CENTER",
+    "OTHER",
+  ]),
+  capacity: z.coerce.number().int().min(1).max(2000).optional().nullable(),
+  projectId: z.string().optional().nullable(),
+  accountId: z.string().optional().nullable(),
+  notes: z.string().optional(),
+});
+
+export async function createRoom(input: z.infer<typeof roomSchema>) {
+  const data = roomSchema.parse(input);
+  const workspaceId = await getCurrentWorkspaceId();
+
+  // If a project is supplied but no account, inherit from project.
+  let accountId = data.accountId ?? null;
+  if (!accountId && data.projectId) {
+    const proj = await prisma.project.findUnique({
+      where: { id: data.projectId },
+      select: { accountId: true },
+    });
+    accountId = proj?.accountId ?? null;
+  }
+
+  const room = await prisma.room.create({
+    data: {
+      workspaceId,
+      name: data.name,
+      roomType: data.roomType,
+      capacity: data.capacity ?? null,
+      projectId: data.projectId || null,
+      accountId,
+      notes: data.notes || null,
+    },
+  });
+  revalidatePath("/rooms");
+  if (data.projectId) revalidatePath(`/projects/${data.projectId}`);
+  return { ok: true, id: room.id };
 }

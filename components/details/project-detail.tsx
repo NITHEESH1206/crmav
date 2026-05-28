@@ -27,6 +27,7 @@ import { ProjectDocuments } from "@/components/projects/project-documents";
 import { StageBar, type Stage, type StageState } from "@/components/app/stage-bar";
 import { GenerateButton } from "@/components/ai/generate-button";
 import { Permit } from "@/lib/permissions/permit";
+import { NewRoomTrigger } from "@/components/rooms/new-room-trigger";
 
 type Project = {
   id: string;
@@ -316,17 +317,44 @@ export function ProjectDetail({ project }: { project: Project }) {
       </Card>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <RelatedList
-          title="Rooms"
-          icon={Layers3}
-          items={project.rooms.map((r) => ({
-            id: r.id,
-            label: r.name,
-            meta: `${r.roomType.toLowerCase()} · ${r._count.devices} devices · ${r._count.racks} racks`,
-            href: "/rooms",
-          }))}
-          empty="No rooms yet."
-        />
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Layers3 className="h-3.5 w-3.5 text-signal-400" />
+              Rooms
+              <Badge variant="secondary" className="ml-auto">{project.rooms.length}</Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {project.rooms.length === 0 ? (
+              <div className="text-xs text-ink-300/55 italic mb-3">
+                No rooms yet. Add the first AV space to start equipment design.
+              </div>
+            ) : (
+              project.rooms.map((r) => (
+                <a
+                  key={r.id}
+                  href={`/rooms/${r.id}`}
+                  className="block rounded-md border border-bone-300/55 bg-bone-50 hover:bg-bone-100 transition-colors px-3 py-2"
+                >
+                  <div className="text-[13px] font-medium text-ink-300 truncate">{r.name}</div>
+                  <div className="text-[11px] text-ink-300/55 mt-0.5 truncate">
+                    {r.roomType.toLowerCase().replace("_", " ")} · {r._count.devices} devices · {r._count.racks} racks
+                  </div>
+                </a>
+              ))
+            )}
+            <div className="pt-2 border-t border-bone-300/45">
+              <NewRoomTrigger
+                projects={[{ id: project.id, name: project.name }]}
+                accounts={project.account ? [{ id: project.account.id, name: project.account.name }] : []}
+                defaultProjectId={project.id}
+                label="Add room"
+                variant="secondary"
+              />
+            </div>
+          </CardContent>
+        </Card>
         <RelatedList
           title="Crew"
           icon={Boxes}

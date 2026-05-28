@@ -1,11 +1,27 @@
+import { Building2, Boxes, Server, Network, Layers3 } from "lucide-react";
 import { ModuleShell } from "@/components/app/module-shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { RoomCard } from "@/components/rooms/room-card";
+import { NewRoomTrigger } from "@/components/rooms/new-room-trigger";
 import { listRooms } from "@/lib/data/rooms";
-import { Building2, Boxes, Server, Network } from "lucide-react";
+import { prisma } from "@/lib/prisma";
+import { getCurrentWorkspaceId } from "@/lib/data/workspace";
 
 export default async function RoomsPage() {
-  const rooms = await listRooms();
+  const workspaceId = await getCurrentWorkspaceId();
+  const [rooms, projects, accounts] = await Promise.all([
+    listRooms(),
+    prisma.project.findMany({
+      where: { workspaceId, status: { in: ["ACTIVE"] } },
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
+    }),
+    prisma.account.findMany({
+      where: { workspaceId },
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
+    }),
+  ]);
 
   const stats = [
     { l: "Total rooms", v: rooms.length.toString(), icon: Building2 },
@@ -30,7 +46,8 @@ export default async function RoomsPage() {
     <ModuleShell
       eyebrow="AV Tools"
       title="Rooms"
-      description="Configure each AV space room-by-room. Devices, racks, signal flows, and one-click BOQ generation."
+      description="Configure each AV space room-by-room. Devices, racks, signal flows, and a 3D view of every room."
+      actions={<NewRoomTrigger projects={projects} accounts={accounts} />}
     >
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         {stats.map((s) => {
@@ -49,17 +66,33 @@ export default async function RoomsPage() {
         })}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {rooms.map((r, i) => (
-          <RoomCard key={r.id} room={r} index={i} />
-        ))}
-      </div>
-      {rooms.length === 0 && (
+      {rooms.length === 0 ? (
         <Card>
-          <CardContent className="p-10 text-center text-sm text-ink-300/55">
-            No rooms yet. Add one from a project to start configuring AV equipment.
+          <CardContent className="p-10 text-center">
+            <div className="mx-auto w-10 h-10 rounded-md bg-bone-100 border border-bone-300/55 flex items-center justify-center mb-3">
+              <Layers3 className="h-4 w-4 text-ink-300/55" />
+            </div>
+            <p className="text-[13px] text-ink-300/75 mb-1">No rooms yet.</p>
+            <p className="text-[12px] text-ink-300/55 mb-4 max-w-md mx-auto">
+              Create a room to start populating it with devices from the catalog and visualising
+              the AV setup in 3D.
+            </p>
+            <div className="inline-flex">
+              <NewRoomTrigger
+                projects={projects}
+                accounts={accounts}
+                label="Create your first room"
+                size="default"
+              />
+            </div>
           </CardContent>
         </Card>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {rooms.map((r, i) => (
+            <RoomCard key={r.id} room={r} index={i} />
+          ))}
+        </div>
       )}
     </ModuleShell>
   );
