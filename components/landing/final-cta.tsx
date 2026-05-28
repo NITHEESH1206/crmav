@@ -20,20 +20,20 @@ export function FinalCTA() {
             className="absolute inset-0 bg-[radial-gradient(circle_at_85%_15%,rgba(255,90,31,0.18),transparent_55%)]"
           />
           <div className="relative max-w-[680px]">
-            <span className="inline-flex items-center gap-2 text-[12.5px] text-bone-100/55 font-medium mb-5">
+            <span className="inline-flex items-center gap-2 mb-6 font-mono text-[13px] text-bone-100/60 uppercase tracking-[0.06em]">
               <span className="h-1 w-1 rounded-full bg-signal-500" />
               Get started
             </span>
-            <h2 className="font-display text-[36px] md:text-[52px] leading-[1.05] tracking-[-0.03em] font-medium">
+            <h2 className="text-[40px] md:text-[64px] leading-[1.05] tracking-[-0.028em] font-medium">
               Run your AV business from one operating system.
             </h2>
-            <p className="mt-5 text-[16px] md:text-[18px] leading-[1.55] text-bone-100/70 max-w-[560px]">
+            <p className="mt-6 text-[18px] md:text-[20px] leading-[1.55] text-bone-100/70 max-w-[560px]">
               14-day trial. No credit card. Onboard with one room and see your full project rendered in 3D in under five minutes.
             </p>
 
             <div className="mt-9 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <Link href="/dashboard" className="group">
-                <span className="inline-flex items-center justify-center gap-2 rounded-full bg-bone-100 text-ink-300 px-6 py-3.5 text-[14.5px] font-medium hover:bg-bone-200 transition-colors w-full sm:w-auto">
+                <span className="inline-flex items-center justify-center gap-2 rounded-full bg-bone-100 text-ink-300 px-6 py-3.5 text-[16px] font-medium hover:bg-bone-200 transition-colors w-full sm:w-auto">
                   Start your trial
                   <ArrowUpRight
                     className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
@@ -42,7 +42,7 @@ export function FinalCTA() {
                 </span>
               </Link>
               <Link href="#" className="group">
-                <span className="inline-flex items-center justify-center gap-2 rounded-full bg-transparent text-bone-100 border border-bone-100/30 hover:border-bone-100/60 px-6 py-3.5 text-[14.5px] font-medium transition-colors w-full sm:w-auto">
+                <span className="inline-flex items-center justify-center gap-2 rounded-full bg-transparent text-bone-100 border border-bone-100/30 hover:border-bone-100/60 px-6 py-3.5 text-[16px] font-medium transition-colors w-full sm:w-auto">
                   Book a 20-min walkthrough
                 </span>
               </Link>

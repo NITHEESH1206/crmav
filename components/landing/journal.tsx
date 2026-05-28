@@ -40,11 +40,11 @@ export function Journal() {
           className="flex items-end justify-between mb-12 md:mb-16"
         >
           <div>
-            <span className="inline-flex items-center gap-2 text-[12.5px] text-ink-300/55 font-medium mb-5">
+            <span className="inline-flex items-center gap-2 mb-6 font-mono text-[13px] text-ink-300/60 uppercase tracking-[0.06em]">
               <span className="h-1 w-1 rounded-full bg-signal-500" />
               Journal
             </span>
-            <h2 className="font-display text-[32px] md:text-[42px] leading-[1.05] tracking-[-0.03em] text-ink-300 font-medium">
+            <h2 className="text-[32px] md:text-[40px] leading-[1.08] tracking-[-0.024em] text-ink-300 font-medium">
               Notes from the AV operations floor.
             </h2>
           </div>
@@ -84,10 +84,10 @@ export function Journal() {
                   </div>
                 </div>
                 <div className="mt-5">
-                  <div className="text-[11px] text-ink-300/55 font-medium">
+                  <div className="font-mono text-[12px] text-ink-300/55 uppercase tracking-[0.05em]">
                     {a.cat} <span className="text-ink-300/30 mx-1">·</span> {a.minutes} min read
                   </div>
-                  <h3 className="mt-2 font-display text-[20px] leading-[1.25] tracking-[-0.015em] text-ink-300 font-medium group-hover:text-signal-700 transition-colors">
+                  <h3 className="mt-3 text-[20px] leading-[1.3] tracking-[-0.012em] text-ink-300 font-medium group-hover:text-signal-700 transition-colors">
                     {a.title}
                   </h3>
                 </div>

@@ -16,14 +16,14 @@ export function CaseStudy() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.7 }}
           >
-            <span className="inline-flex items-center gap-2 text-[12.5px] text-ink-300/55 font-medium mb-5">
+            <span className="inline-flex items-center gap-2 mb-6 font-mono text-[13px] text-ink-300/60 uppercase tracking-[0.06em]">
               <span className="h-1 w-1 rounded-full bg-signal-500" />
               Case study
             </span>
-            <h2 className="font-display text-[32px] md:text-[42px] leading-[1.05] tracking-[-0.03em] text-ink-300 font-medium">
+            <h2 className="text-[32px] md:text-[40px] leading-[1.08] tracking-[-0.024em] text-ink-300 font-medium">
               Why Soundstage AV chose ZynexAV.
             </h2>
-            <p className="mt-5 text-[16px] leading-[1.6] text-ink-300/65 max-w-[520px]">
+            <p className="mt-6 text-[18px] leading-[1.55] text-ink-300/65 max-w-[520px]">
               With fragmented data across Excel, AutoCAD and three SaaS subscriptions, Soundstage's project margin was being eroded by re-keying alone. They moved their full opportunity-to-AMC pipeline to ZynexAV in 11 days.
             </p>
 
@@ -108,10 +108,10 @@ export function CaseStudy() {
 function Metric({ value, label }: { value: string; label: string }) {
   return (
     <div>
-      <div className="font-display text-[24px] md:text-[28px] font-medium tracking-[-0.02em] text-ink-300">
+      <div className="text-[32px] font-medium tracking-[-0.018em] text-ink-300 leading-none">
         {value}
       </div>
-      <div className="mt-1.5 text-[11.5px] text-ink-300/55 leading-[1.4]">{label}</div>
+      <div className="mt-2 text-[13px] text-ink-300/55 leading-[1.45]">{label}</div>
     </div>
   );
 }

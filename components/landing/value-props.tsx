@@ -42,10 +42,10 @@ export function ValueProps() {
                 <div className="h-10 w-10 rounded-md bg-signal-500/10 border border-signal-500/20 flex items-center justify-center mb-5">
                   <Icon className="h-4 w-4 text-signal-600" strokeWidth={1.75} />
                 </div>
-                <h3 className="font-display text-[22px] md:text-[24px] font-medium tracking-[-0.02em] text-ink-300 leading-tight">
+                <h3 className="text-[24px] font-medium tracking-[-0.014em] text-ink-300 leading-[1.2]">
                   {v.title}
                 </h3>
-                <p className="mt-3 text-[15px] leading-[1.55] text-ink-300/65">
+                <p className="mt-4 text-[16px] leading-[1.55] text-ink-300/65">
                   {v.body}
                 </p>
               </motion.div>

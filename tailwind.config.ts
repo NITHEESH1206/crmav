@@ -15,9 +15,11 @@ const config: Config = {
     },
     extend: {
       fontFamily: {
-        sans: ['"PP Neue Montreal"', '"Neue Montreal"', "var(--font-sans)", "system-ui", "sans-serif"],
-        display: ['"PP Neue Montreal"', '"Neue Montreal"', "var(--font-display)", "system-ui", "sans-serif"],
-        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
+        // Aetherfield's exact stack: Radio Canada Big sans + Geist Mono + Source Serif
+        sans:    ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
+        display: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
+        mono:    ["var(--font-mono)", "ui-monospace", "monospace"],
+        serif:   ["var(--font-serif)", "ui-serif", "Georgia", "serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -108,20 +110,24 @@ const config: Config = {
           inverse: "#0A0A0A",
         },
       },
-      // ── Typography scale (Linear/Stripe-grade hierarchy) ──
+      // ── Typography scale — Aetherfield's exact ladder ──
+      //  Display 80 / 64 / 40 · Heading 36 / 32 / 24 · Body 20 / 18 / 16 / 14
+      //  Letter-spacing tightens as size grows. Radio Canada Big runs Medium
+      //  (500) for headings — heavier than 600 looks chunky in this typeface.
       fontSize: {
-        "display-2xl": ["88px",  { lineHeight: "92px",  letterSpacing: "-0.045em", fontWeight: "700" }],
-        "display-xl":  ["56px",  { lineHeight: "60px",  letterSpacing: "-0.04em",  fontWeight: "700" }],
-        "display-lg":  ["36px",  { lineHeight: "42px",  letterSpacing: "-0.03em",  fontWeight: "600" }],
-        "heading-lg":  ["24px",  { lineHeight: "30px",  letterSpacing: "-0.02em",  fontWeight: "600" }],
-        "heading-md":  ["20px",  { lineHeight: "28px",  letterSpacing: "-0.015em", fontWeight: "600" }],
-        "heading-sm":  ["16px",  { lineHeight: "24px",  letterSpacing: "-0.01em",  fontWeight: "600" }],
-        "body-lg":     ["16px",  { lineHeight: "24px",  letterSpacing: "0",        fontWeight: "400" }],
-        "body":        ["14px",  { lineHeight: "20px",  letterSpacing: "0",        fontWeight: "400" }],
-        "body-sm":     ["13px",  { lineHeight: "18px",  letterSpacing: "0",        fontWeight: "400" }],
-        "caption":     ["12px",  { lineHeight: "16px",  letterSpacing: "0.005em",  fontWeight: "400" }],
-        "micro":       ["11px",  { lineHeight: "14px",  letterSpacing: "0.18em",   fontWeight: "600" }],
-        "mono-num":    ["12px",  { lineHeight: "18px",  letterSpacing: "0",        fontWeight: "500" }],
+        "display-2xl": ["80px", { lineHeight: "1.04", letterSpacing: "-0.03em", fontWeight: "500" }],
+        "display-xl":  ["64px", { lineHeight: "1.05", letterSpacing: "-0.028em", fontWeight: "500" }],
+        "display-lg":  ["40px", { lineHeight: "1.08", letterSpacing: "-0.024em", fontWeight: "500" }],
+        "heading-lg":  ["36px", { lineHeight: "1.1",  letterSpacing: "-0.02em",  fontWeight: "500" }],
+        "heading-md":  ["32px", { lineHeight: "1.12", letterSpacing: "-0.018em", fontWeight: "500" }],
+        "heading-sm":  ["24px", { lineHeight: "1.2",  letterSpacing: "-0.014em", fontWeight: "500" }],
+        "body-lg":     ["20px", { lineHeight: "1.5",  letterSpacing: "-0.005em", fontWeight: "400" }],
+        "body":        ["18px", { lineHeight: "1.55", letterSpacing: "0",        fontWeight: "400" }],
+        "body-md":     ["16px", { lineHeight: "1.55", letterSpacing: "0",        fontWeight: "400" }],
+        "body-sm":     ["14px", { lineHeight: "1.5",  letterSpacing: "0",        fontWeight: "400" }],
+        "caption":     ["13px", { lineHeight: "1.45", letterSpacing: "0",        fontWeight: "400" }],
+        "micro":       ["11px", { lineHeight: "1.3",  letterSpacing: "0.16em",   fontWeight: "500" }],
+        "mono-num":    ["13px", { lineHeight: "1.4",  letterSpacing: "0",        fontWeight: "400" }],
       },
       borderRadius: {
         lg: "var(--radius)",

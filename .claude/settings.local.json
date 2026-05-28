@@ -33,7 +33,8 @@
       "Bash(npm install *)",
       "Bash(npx prisma *)",
       "Bash(taskkill /F /IM node.exe)",
-      "WebFetch(domain:need-spiny-01266573.figma.site)"
+      "WebFetch(domain:need-spiny-01266573.figma.site)",
+      "Bash(curl -s -L -A \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36\" \"https://need-spiny-01266573.figma.site/\")"
     ]
   }
 }

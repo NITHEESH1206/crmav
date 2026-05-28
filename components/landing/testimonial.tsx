@@ -13,13 +13,13 @@ export function Testimonial() {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
           >
-            <span className="text-[44px] md:text-[56px] leading-none text-signal-500 font-display font-medium block mb-3">
+            <span className="text-[64px] md:text-[80px] leading-none text-signal-500 font-serif italic block mb-2">
               &ldquo;
             </span>
-            <p className="font-display text-[24px] md:text-[32px] leading-[1.3] tracking-[-0.02em] text-ink-300 font-medium">
+            <p className="font-serif italic text-[24px] md:text-[32px] leading-[1.3] tracking-[-0.01em] text-ink-300">
               We finally moved past spreadsheets and disconnected tools. One quote becomes a project, the project becomes a 3D room, the 3D room becomes a service contract — without us re-typing a single SKU.
             </p>
-            <div className="mt-7 text-[13.5px] text-ink-300/70">
+            <div className="mt-8 text-[14px] text-ink-300/70">
               <span className="font-semibold text-ink-300">Elliot Williams</span>
               <span className="mx-2 text-ink-300/30">·</span>
               <span>VP Operations</span>
@@ -48,7 +48,7 @@ export function Testimonial() {
                   "url(\"data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/></svg>\")",
               }}
             />
-            <div className="absolute inset-0 flex items-center justify-center font-display text-[44px] text-ink-300/60">
+            <div className="absolute inset-0 flex items-center justify-center text-[40px] font-medium text-ink-300/60">
               EW
             </div>
           </motion.div>

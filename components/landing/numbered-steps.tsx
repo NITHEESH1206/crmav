@@ -40,11 +40,11 @@ export function NumberedSteps() {
           transition={{ duration: 0.7 }}
           className="max-w-[760px] mb-16 md:mb-20"
         >
-          <span className="inline-flex items-center gap-2 text-[12.5px] text-ink-300/55 font-medium mb-5">
+          <span className="inline-flex items-center gap-2 mb-6 font-mono text-[13px] text-ink-300/60 uppercase tracking-[0.06em]">
             <span className="h-1 w-1 rounded-full bg-signal-500" />
             The workflow
           </span>
-          <h2 className="font-display text-[36px] md:text-[48px] leading-[1.05] tracking-[-0.03em] text-ink-300 font-medium">
+          <h2 className="text-[32px] md:text-[40px] leading-[1.08] tracking-[-0.024em] text-ink-300 font-medium">
             From first opportunity to AMC renewal — one timeline.
           </h2>
         </motion.div>
@@ -60,14 +60,14 @@ export function NumberedSteps() {
               className="grid grid-cols-1 md:grid-cols-[160px_1fr] gap-4 md:gap-12 py-10 md:py-14 group"
             >
               <div className="flex items-baseline gap-3">
-                <span className="font-display text-[28px] md:text-[32px] font-medium text-ink-300/30 tracking-tight">
+                <span className="font-mono text-[16px] md:text-[18px] text-ink-300/35 tracking-tight">
                   {step.n}
                 </span>
-                <span className="font-display text-[22px] md:text-[26px] font-medium text-ink-300 tracking-[-0.02em]">
+                <span className="text-[24px] md:text-[24px] font-medium text-ink-300 tracking-[-0.014em]">
                   {step.title}
                 </span>
               </div>
-              <p className="text-[15px] md:text-[17px] leading-[1.55] text-ink-300/70 max-w-[640px]">
+              <p className="text-[16px] md:text-[18px] leading-[1.55] text-ink-300/70 max-w-[640px]">
                 {step.body}
               </p>
             </motion.li>

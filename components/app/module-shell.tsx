@@ -156,16 +156,16 @@ export function ModuleShell({
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div className="min-w-0">
             {eyebrow && (
-              <div className="inline-flex items-center gap-2 text-[11.5px] text-ink-300/55 font-medium">
+              <div className="inline-flex items-center gap-2 font-mono text-[12px] text-ink-300/55 uppercase tracking-[0.06em]">
                 <span className="h-1 w-1 rounded-full bg-signal-500" />
                 {eyebrow}
               </div>
             )}
-            <h1 className="mt-3 font-display text-[32px] md:text-[42px] leading-[1.05] tracking-[-0.025em] text-ink-300 font-medium">
+            <h1 className="mt-3 text-[32px] md:text-[40px] leading-[1.08] tracking-[-0.024em] text-ink-300 font-medium">
               {title}
             </h1>
             {description && (
-              <p className="mt-3 text-[15px] leading-[1.55] text-ink-300/65 max-w-2xl">
+              <p className="mt-3 text-[16px] leading-[1.55] text-ink-300/65 max-w-2xl">
                 {description}
               </p>
             )}

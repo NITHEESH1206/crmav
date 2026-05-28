@@ -1,13 +1,34 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono } from "next/font/google";
+import { Radio_Canada_Big, Geist_Mono, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
-// PP Neue Montreal loads via @import in globals.css (cdnfonts CDN).
-// Keep JetBrains Mono for code/data styling.
-const mono = JetBrains_Mono({
+/**
+ * Aetherfield's exact font stack:
+ *  - Radio Canada Big: primary sans, body + display
+ *  - Geist Mono: monospace (eyebrows, numeric callouts, kbd hints)
+ *  - Source Serif 4: accent serif (testimonial quote)
+ *
+ * All three self-hosted via next/font/google — no FOUT, no extra network.
+ */
+const sans = Radio_Canada_Big({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-sans",
+  display: "swap",
+});
+
+const mono = Geist_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
   variable: "--font-mono",
+  display: "swap",
+});
+
+const serif = Source_Serif_4({
+  subsets: ["latin"],
+  weight: ["400", "600"],
+  variable: "--font-serif",
   display: "swap",
 });
 
@@ -63,9 +84,10 @@ const hasClerk =
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const fontVars = `${sans.variable} ${mono.variable} ${serif.variable}`;
   const body = (
     <body
-      className={`${mono.variable} font-sans bg-bone-100 text-ink-300 antialiased min-h-screen`}
+      className={`${fontVars} font-sans bg-bone-100 text-ink-300 antialiased min-h-screen`}
     >
       {children}
       <Toaster />

@@ -45,7 +45,7 @@ export function LandingNavbar() {
               <Link
                 key={l.label}
                 href={l.href}
-                className="text-[14px] text-ink-300/70 hover:text-ink-300 transition-colors"
+                className="text-[15px] text-ink-300/70 hover:text-ink-300 transition-colors"
               >
                 {l.label}
               </Link>
@@ -60,7 +60,7 @@ export function LandingNavbar() {
               Sign in
             </Link>
             <Link href="/dashboard" className="group">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-ink-300 text-bone-100 pl-4 pr-3.5 py-2 text-[13.5px] font-medium hover:bg-ink-200 transition-colors">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-ink-300 text-bone-100 pl-4 pr-3.5 py-2 text-[14px] font-medium hover:bg-ink-200 transition-colors">
                 Get started
                 <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={2} />
               </span>
