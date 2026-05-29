@@ -34,7 +34,7 @@ export function Hero() {
 
           <div className="mt-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             <Link href="/dashboard" className="group">
-              <span className="inline-flex items-center justify-center gap-2 rounded-full bg-ink-300 text-bone-100 px-6 py-3.5 text-[16px] font-medium hover:bg-ink-200 transition-colors w-full sm:w-auto">
+              <span className="btn-glass-signal inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-[16px] font-medium w-full sm:w-auto">
                 Request a demo
                 <ArrowUpRight
                   className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
@@ -43,7 +43,7 @@ export function Hero() {
               </span>
             </Link>
             <Link href="#product" className="group">
-              <span className="inline-flex items-center justify-center gap-2 rounded-full bg-transparent text-ink-300 border border-ink-300/20 hover:border-ink-300/50 px-6 py-3.5 text-[16px] font-medium transition-colors w-full sm:w-auto">
+              <span className="btn-glass-secondary inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-[16px] font-medium w-full sm:w-auto">
                 Explore the platform
               </span>
             </Link>

@@ -13,11 +13,11 @@ export function FinalCTA() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.7 }}
-          className="relative rounded-[24px] bg-ink-300 text-bone-100 px-8 md:px-14 py-14 md:py-20 overflow-hidden"
+          className="glass-ink relative rounded-[28px] text-bone-100 px-8 md:px-14 py-14 md:py-20 overflow-hidden"
         >
           <div
             aria-hidden
-            className="absolute inset-0 bg-[radial-gradient(circle_at_85%_15%,rgba(255,90,31,0.18),transparent_55%)]"
+            className="absolute inset-0 bg-[radial-gradient(circle_at_85%_15%,rgba(255,90,31,0.35),transparent_55%),radial-gradient(circle_at_10%_85%,rgba(255,125,63,0.18),transparent_60%)]"
           />
           <div className="relative max-w-[680px]">
             <span className="inline-flex items-center gap-2 mb-6 font-mono text-[13px] text-bone-100/60 uppercase tracking-[0.06em]">
@@ -33,7 +33,7 @@ export function FinalCTA() {
 
             <div className="mt-9 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <Link href="/dashboard" className="group">
-                <span className="inline-flex items-center justify-center gap-2 rounded-full bg-bone-100 text-ink-300 px-6 py-3.5 text-[16px] font-medium hover:bg-bone-200 transition-colors w-full sm:w-auto">
+                <span className="btn-glass-signal inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-[16px] font-medium w-full sm:w-auto">
                   Start your trial
                   <ArrowUpRight
                     className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
@@ -42,7 +42,7 @@ export function FinalCTA() {
                 </span>
               </Link>
               <Link href="#" className="group">
-                <span className="inline-flex items-center justify-center gap-2 rounded-full bg-transparent text-bone-100 border border-bone-100/30 hover:border-bone-100/60 px-6 py-3.5 text-[16px] font-medium transition-colors w-full sm:w-auto">
+                <span className="inline-flex items-center justify-center gap-2 rounded-full bg-bone-100/10 backdrop-blur-md text-bone-100 border border-bone-100/20 hover:bg-bone-100/15 hover:border-bone-100/40 px-7 py-3.5 text-[16px] font-medium transition-all w-full sm:w-auto">
                   Book a 20-min walkthrough
                 </span>
               </Link>

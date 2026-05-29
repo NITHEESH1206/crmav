@@ -55,7 +55,7 @@ export function Sidebar() {
         collapsed ? "w-[68px]" : "w-[244px]"
       )}
     >
-      <div className="relative m-2 mr-0 flex h-[calc(100vh-16px)] flex-col rounded-lg bg-white border border-bone-300/60 overflow-hidden">
+      <div className="glass-strong relative m-2 mr-0 flex h-[calc(100vh-16px)] flex-col rounded-2xl overflow-hidden">
         {/* ── Workspace switcher row ── */}
         <button
           type="button"

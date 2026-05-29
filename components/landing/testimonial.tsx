@@ -34,7 +34,7 @@ export function Testimonial() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="relative aspect-square rounded-full overflow-hidden bg-gradient-to-br from-signal-500/20 via-bone-200 to-ink-300/20 border border-bone-300/55"
+            className="glass-card relative aspect-square !rounded-full overflow-hidden bg-gradient-to-br from-signal-500/25 via-transparent to-ink-300/15"
           >
             <div
               aria-hidden

@@ -15,10 +15,10 @@ import { cn } from "@/lib/utils";
  *  - generate  → Signal-filled — RESERVED for AI generation actions only
  *
  * Sizes: sm 28 · default 36 · lg 44 · icon (square) · xl (kept for marketing)
- * Radius: 8px (Linear/Stripe feel) — pill only via className override.
+ * Radius: 12px default for friendlier glass feel — pill via className override.
  */
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-[13px] font-medium ring-offset-background transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-3.5 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-xl text-[13px] font-medium ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-3.5 [&_svg]:shrink-0",
   {
     variants: {
       variant: {

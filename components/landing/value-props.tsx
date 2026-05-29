@@ -26,9 +26,9 @@ const VALUES = [
 
 export function ValueProps() {
   return (
-    <section className="relative py-24 md:py-32 bg-bone-100/50">
+    <section className="relative py-24 md:py-32">
       <div className="mx-auto max-w-[1100px] px-6 lg:px-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
           {VALUES.map((v, i) => {
             const Icon = v.icon;
             return (
@@ -38,9 +38,10 @@ export function ValueProps() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.6, delay: i * 0.08 }}
+                className="glass-card p-8 md:p-9 hover:-translate-y-1 transition-transform duration-300"
               >
-                <div className="h-10 w-10 rounded-md bg-signal-500/10 border border-signal-500/20 flex items-center justify-center mb-5">
-                  <Icon className="h-4 w-4 text-signal-600" strokeWidth={1.75} />
+                <div className="glass-signal h-12 w-12 rounded-2xl flex items-center justify-center mb-6">
+                  <Icon className="h-5 w-5 text-signal-700" strokeWidth={1.75} />
                 </div>
                 <h3 className="text-[24px] font-medium tracking-[-0.014em] text-ink-300 leading-[1.2]">
                   {v.title}

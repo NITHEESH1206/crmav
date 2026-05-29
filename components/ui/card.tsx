@@ -2,22 +2,27 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * Card — Linear/Stripe restraint.
- *  - 8px radius, 1px border, **no shadow at rest**
- *  - Pass `interactive` to opt in to hover lift + subtle shadow
+ * Card — Apple-style glass.
+ *  - 20px radius, frosted bg via .glass-strong, soft outer shadow + inner highlight
+ *  - Pass `interactive` to opt in to hover lift
+ *  - Pass `flat` to fall back to the older opaque-white treatment when glass
+ *    would compete with dense data (tables, list rows).
  *
  * Compose: Card → CardHeader → CardTitle / CardDescription, then CardContent.
  */
 const Card = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & { interactive?: boolean }
->(({ className, interactive, ...props }, ref) => (
+  React.HTMLAttributes<HTMLDivElement> & { interactive?: boolean; flat?: boolean }
+>(({ className, interactive, flat, ...props }, ref) => (
   <div
     ref={ref}
     className={cn(
-      "relative rounded-lg bg-white text-ink-300 border border-bone-300/55",
+      "relative text-ink-300 rounded-[20px]",
+      flat
+        ? "bg-white border border-bone-300/55"
+        : "glass-strong",
       interactive &&
-        "transition-all duration-150 hover:border-bone-300/85 hover:shadow-[0_4px_12px_-6px_rgba(10,10,10,0.12)] hover:-translate-y-px cursor-pointer",
+        "transition-all duration-200 hover:-translate-y-px cursor-pointer",
       className
     )}
     {...props}

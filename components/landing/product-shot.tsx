@@ -26,7 +26,7 @@ export function ProductShot() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
-          className="relative rounded-[24px] bg-white border border-bone-300/55 shadow-[0_50px_120px_-30px_rgba(10,10,10,0.25)] overflow-hidden"
+          className="glass-card relative overflow-hidden"
         >
           {/* Mock topbar */}
           <div className="flex items-center justify-between px-5 py-3 border-b border-bone-300/45">
@@ -154,9 +154,7 @@ function MiniWidget({
 }) {
   return (
     <div
-      className={`rounded-lg bg-white border border-bone-300/55 p-4 ${
-        tint ? "bg-signal-500/[0.04]" : ""
-      }`}
+      className={`rounded-2xl ${tint ? "glass-signal" : "glass-strong"} p-4`}
     >
       <div className="flex items-center gap-1.5 text-[9.5px] uppercase tracking-[0.14em] text-ink-300/55 font-semibold">
         {Icon && <Icon className="h-3 w-3 text-signal-500" />}
@@ -197,7 +195,7 @@ function ListWidget({
   items: { p: string; s: string; r: string }[];
 }) {
   return (
-    <div className="rounded-lg bg-white border border-bone-300/55">
+    <div className="rounded-2xl glass-strong overflow-hidden">
       <div className="flex items-center justify-between px-3.5 py-2.5 border-b border-bone-300/45">
         <div className="flex items-center gap-1.5">
           <Icon className="h-3 w-3 text-ink-300/55" />

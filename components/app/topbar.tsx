@@ -46,7 +46,7 @@ export function Topbar() {
 
   return (
     <header className="sticky top-0 z-30 px-3 sm:px-6 lg:px-8 pt-3">
-      <div className="rounded-lg bg-white border border-bone-300/55 flex items-center gap-2 px-2 sm:px-3 py-1.5">
+      <div className="glass-strong rounded-2xl flex items-center gap-2 px-2 sm:px-3 py-1.5">
         {/* Mobile hamburger */}
         <button
           onClick={toggleMobileNav}

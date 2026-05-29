@@ -70,7 +70,7 @@ export function Journal() {
                 className="group cursor-pointer"
               >
                 <div
-                  className={`aspect-[4/3] rounded-2xl overflow-hidden bg-gradient-to-br ${a.accent} border border-bone-300/55 relative`}
+                  className={`glass-card aspect-[4/3] overflow-hidden bg-gradient-to-br ${a.accent} relative group-hover:-translate-y-1 transition-transform duration-300`}
                 >
                   <div
                     aria-hidden

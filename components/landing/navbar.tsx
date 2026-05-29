@@ -27,15 +27,13 @@ export function LandingNavbar() {
       transition={{ duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] }}
       className="fixed top-0 inset-x-0 z-50"
     >
-      <div
-        className={cn(
-          "transition-all duration-300",
-          scrolled
-            ? "bg-bone-50/85 backdrop-blur-md border-b border-bone-300/40"
-            : "bg-transparent border-b border-transparent"
-        )}
-      >
-        <div className="mx-auto max-w-[1280px] px-6 lg:px-10 h-16 flex items-center justify-between gap-6">
+      <div className="mx-auto max-w-[1100px] px-4 lg:px-6 pt-4">
+        <div
+          className={cn(
+            "transition-all duration-300 rounded-full px-5 lg:px-6 h-14 flex items-center justify-between gap-6",
+            scrolled ? "glass-strong" : "glass"
+          )}
+        >
           <Link href="/" className="flex items-center shrink-0">
             <BrandMark variant="full" height={22} invertForDark={false} />
           </Link>
@@ -60,7 +58,7 @@ export function LandingNavbar() {
               Sign in
             </Link>
             <Link href="/dashboard" className="group">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-ink-300 text-bone-100 pl-4 pr-3.5 py-2 text-[14px] font-medium hover:bg-ink-200 transition-colors">
+              <span className="btn-glass-primary inline-flex items-center gap-1.5 rounded-full pl-4 pr-3.5 py-2 text-[14px] font-medium">
                 Get started
                 <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={2} />
               </span>

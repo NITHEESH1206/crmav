@@ -23,6 +23,24 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   return (
     <SessionProvider role="ADMIN">
     <div className="relative min-h-screen">
+      {/* Ambient brand wash for the app — softer than the landing's so
+          dense content stays readable, but enough that the glass chrome
+          picks up the warmth. */}
+      <div
+        aria-hidden
+        className="fixed inset-0 -z-20 bg-bone-50 pointer-events-none"
+      />
+      <div
+        aria-hidden
+        className="fixed inset-0 -z-10 pointer-events-none"
+        style={{
+          backgroundImage: [
+            "radial-gradient(50% 40% at 5% 0%, rgba(255, 125, 63, 0.12), transparent 65%)",
+            "radial-gradient(45% 35% at 95% 8%, rgba(255, 156, 102, 0.08), transparent 70%)",
+            "radial-gradient(55% 45% at 50% 100%, rgba(255, 90, 31, 0.06), transparent 70%)",
+          ].join(","),
+        }}
+      />
       <DensityMount />
       <Sidebar />
       <MobileSidebar />

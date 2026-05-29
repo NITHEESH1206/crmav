@@ -49,7 +49,7 @@ export function CaseStudy() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="relative aspect-[4/5] rounded-[20px] overflow-hidden bg-gradient-to-br from-signal-500/[0.08] via-bone-100 to-bone-200/60 border border-bone-300/55"
+            className="glass-card relative aspect-[4/5] overflow-hidden bg-gradient-to-br from-signal-500/[0.18] via-transparent to-signal-500/[0.06]"
           >
             {/* Signal-orange duotone texture — built from CSS so no image dependency */}
             <div
