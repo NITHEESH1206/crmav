@@ -231,6 +231,44 @@
       inset 0 1px 0 0 rgba(255, 255, 255, 0.18),
       0 2px 8px -2px rgba(0, 0, 0, 0.3);
   }
+  /* Glass input — frosted text fields */
+  .input-glass {
+    display: block;
+    width: 100%;
+    height: 2.5rem;
+    border-radius: 0.875rem;
+    padding-left: 0.875rem;
+    padding-right: 0.875rem;
+    font-size: 14px;
+    color: #0a0a0a;
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(12px) saturate(1.4);
+    -webkit-backdrop-filter: blur(12px) saturate(1.4);
+    border: 1px solid rgba(10, 10, 10, 0.08);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.8),
+      0 1px 2px 0 rgba(10, 10, 10, 0.03);
+    transition: all 0.2s ease;
+    outline: none;
+  }
+  .input-glass::placeholder {
+    color: rgba(10, 10, 10, 0.35);
+  }
+  .input-glass:focus {
+    border-color: rgba(255, 90, 31, 0.45);
+    background: rgba(255, 255, 255, 0.75);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.95),
+      0 0 0 3px rgba(255, 90, 31, 0.12);
+  }
+  textarea.input-glass {
+    height: auto;
+    min-height: 5rem;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+    line-height: 1.5;
+  }
+
   /* The "active selected" pill variant — used for sidebar active nav, toggle
      buttons, etc. Renders the glass even without hover. */
   .glass-pill-active {

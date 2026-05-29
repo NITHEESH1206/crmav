@@ -13,6 +13,7 @@ import {
 import { AttentionBar } from "@/components/mission-control/attention-bar";
 import { AIBriefWidget } from "@/components/mission-control/ai-brief";
 import { DashboardFrame } from "@/components/mission-control/dashboard-frame";
+import { BuilderCTA } from "@/components/mission-control/builder-cta";
 import {
   AtRiskProjectsWidget,
   DelayedProcurementWidget,
@@ -54,6 +55,11 @@ export default async function DashboardPage() {
       description="What needs attention, ranked by dollar at risk and time sensitivity. Every metric drills into its module."
     >
       <DashboardFrame>
+        {/* ── AI Builder hero CTA ── */}
+        <div className="mb-4">
+          <BuilderCTA />
+        </div>
+
         {/* ── Attention Bar ── */}
         <div className="mb-5">
           <AttentionBar items={attention} />

@@ -162,6 +162,17 @@ export function CommandPalette() {
   const commands: Command[] = useMemo(
     () => [
       {
+        id: "ai.builder",
+        label: "AI Builder · design a new room",
+        hint: "G N",
+        icon: Sparkles,
+        run: () => {
+          setOpen(false);
+          router.push("/builder");
+        },
+        keywords: ["build", "wizard", "project", "ai", "new", "create"],
+      },
+      {
         id: "ai.ask",
         label: "Ask AI in current context",
         hint: "⌘/",

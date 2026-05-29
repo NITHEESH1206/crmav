@@ -20,6 +20,7 @@ import {
   FileText,
   Activity,
   Workflow,
+  Sparkles,
   type LucideIcon,
 } from "lucide-react";
 
@@ -57,6 +58,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "Accounts",      href: "/accounts",      icon: Building2,               group: "Sell", hint: "G A" },
 
   // ── BUILD ── deliver the project
+  { label: "AI Builder",   href: "/builder",      icon: Sparkles,     group: "Build", hint: "G N" },
   { label: "Projects",     href: "/projects",     icon: FolderKanban, group: "Build", hint: "G P" },
   { label: "Rooms",        href: "/rooms",        icon: Layers3,      group: "Build" },
   { label: "Rack Builder", href: "/rack-builder", icon: Server,       group: "Build" },
