@@ -14,6 +14,8 @@ import { AttentionBar } from "@/components/mission-control/attention-bar";
 import { AIBriefWidget } from "@/components/mission-control/ai-brief";
 import { DashboardFrame } from "@/components/mission-control/dashboard-frame";
 import { BuilderCTA } from "@/components/mission-control/builder-cta";
+import { SetupProgressWidget } from "@/components/onboarding/setup-progress-widget";
+import { getOnboardingStatus } from "@/app/actions/onboarding";
 import {
   AtRiskProjectsWidget,
   DelayedProcurementWidget,
@@ -36,6 +38,7 @@ export default async function DashboardPage() {
     todays,
     pipeline,
     team,
+    onboarding,
   ] = await Promise.all([
     getAttentionBar(7),
     getAtRiskProjects(5),
@@ -46,6 +49,7 @@ export default async function DashboardPage() {
     getTodaysOps(),
     getPipelineSnapshot(),
     getTeamUtilization(),
+    getOnboardingStatus(),
   ]);
 
   return (
@@ -55,6 +59,13 @@ export default async function DashboardPage() {
       description="What needs attention, ranked by dollar at risk and time sensitivity. Every metric drills into its module."
     >
       <DashboardFrame>
+        {/* ── Setup progress (shown until onboarding is complete) ── */}
+        {!onboarding.isComplete && (
+          <div className="mb-4">
+            <SetupProgressWidget status={onboarding} />
+          </div>
+        )}
+
         {/* ── AI Builder hero CTA ── */}
         <div className="mb-4">
           <BuilderCTA />
