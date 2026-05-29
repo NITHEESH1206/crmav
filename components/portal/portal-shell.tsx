@@ -152,7 +152,7 @@ export function PortalShell({ data }: { data: PortalData }) {
         {tab === "projects"  && <ProjectsTab projects={data.projects} />}
         {tab === "documents" && <DocumentsTab documents={data.documents} />}
         {tab === "tickets"   && <TicketsTab tickets={data.tickets} />}
-        {tab === "invoices"  && <InvoicesTab invoices={data.invoices} />}
+        {tab === "invoices"  && <InvoicesTab invoices={data.invoices} accountId={data.account.id} />}
         {tab === "amc"       && <AMCsTab amcs={data.amcs} />}
       </main>
 

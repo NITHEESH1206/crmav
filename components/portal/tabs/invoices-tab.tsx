@@ -1,7 +1,12 @@
 "use client";
 
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import { CheckCircle2, ArrowUpRight, Loader2 } from "lucide-react";
 import { formatCompact } from "@/lib/utils";
+import { createInvoicePaymentLink } from "@/app/actions/payments";
 import type { PortalData } from "../portal-shell";
 
 const STATUS_TONE: Record<string, string> = {
@@ -12,93 +17,149 @@ const STATUS_TONE: Record<string, string> = {
   VOID:    "pill-neutral",
 };
 
-export function InvoicesTab({ invoices }: { invoices: PortalData["invoices"] }) {
+export function InvoicesTab({
+  invoices,
+  accountId,
+}: {
+  invoices: PortalData["invoices"];
+  accountId: string;
+}) {
+  const [payingId, setPayingId] = useState<string | null>(null);
+  const [, startTransition] = useTransition();
+  const searchParams = useSearchParams();
+
+  // Razorpay redirects back with ?paid=<invoiceId> on success
+  useEffect(() => {
+    const paid = searchParams.get("paid");
+    if (paid) {
+      toast.success("Payment received", {
+        description: "Thanks — we've updated your invoice. Refresh in a moment to see PAID.",
+      });
+    }
+  }, [searchParams]);
+
+  function startPay(invoiceId: string) {
+    setPayingId(invoiceId);
+    startTransition(async () => {
+      try {
+        const r = await createInvoicePaymentLink({
+          invoiceId,
+          fromAccountId: accountId,
+        });
+        if (r.ok) {
+          // Redirect to the Razorpay hosted page in the same tab
+          window.location.href = r.url;
+          return;
+        }
+        toast.error("Couldn't start payment", { description: r.error });
+      } catch (err) {
+        toast.error("Payment error", {
+          description: err instanceof Error ? err.message : "Unknown error",
+        });
+      } finally {
+        setPayingId(null);
+      }
+    });
+  }
+
   if (invoices.length === 0) {
     return (
-      <div className="rounded-lg bg-white border border-bone-300/55 px-6 py-16 text-center text-[12.5px] text-ink-300/55">
+      <div className="glass-card px-6 py-16 text-center text-[12.5px] text-ink-300/55">
         No invoices issued yet.
       </div>
     );
   }
   return (
-    <div className="rounded-lg bg-white border border-bone-300/55 overflow-hidden">
+    <div className="glass-card overflow-hidden">
       <table className="w-full text-[12.5px]">
         <thead>
-          <tr className="border-b border-bone-300/55 bg-bone-50/60">
-            <th className="text-left px-4 py-2 text-[10.5px] uppercase tracking-[0.14em] text-ink-300/55 font-semibold w-[110px]">
+          <tr className="border-b border-bone-300/30 bg-white/30">
+            <th className="text-left px-4 py-2.5 font-mono text-[10.5px] uppercase tracking-[0.08em] text-ink-300/55 font-medium w-[110px]">
               Invoice
             </th>
-            <th className="text-right px-4 py-2 text-[10.5px] uppercase tracking-[0.14em] text-ink-300/55 font-semibold w-[120px]">
+            <th className="text-right px-4 py-2.5 font-mono text-[10.5px] uppercase tracking-[0.08em] text-ink-300/55 font-medium w-[120px]">
               Amount
             </th>
-            <th className="text-left px-4 py-2 text-[10.5px] uppercase tracking-[0.14em] text-ink-300/55 font-semibold w-[120px]">
+            <th className="text-left px-4 py-2.5 font-mono text-[10.5px] uppercase tracking-[0.08em] text-ink-300/55 font-medium w-[120px]">
               Issued
             </th>
-            <th className="text-left px-4 py-2 text-[10.5px] uppercase tracking-[0.14em] text-ink-300/55 font-semibold w-[120px]">
+            <th className="text-left px-4 py-2.5 font-mono text-[10.5px] uppercase tracking-[0.08em] text-ink-300/55 font-medium w-[120px]">
               Due
             </th>
-            <th className="text-left px-4 py-2 text-[10.5px] uppercase tracking-[0.14em] text-ink-300/55 font-semibold w-[100px]">
+            <th className="text-left px-4 py-2.5 font-mono text-[10.5px] uppercase tracking-[0.08em] text-ink-300/55 font-medium w-[100px]">
               Status
             </th>
-            <th className="text-right px-4 py-2 text-[10.5px] uppercase tracking-[0.14em] text-ink-300/55 font-semibold w-[120px]">
+            <th className="text-right px-4 py-2.5 font-mono text-[10.5px] uppercase tracking-[0.08em] text-ink-300/55 font-medium w-[140px]">
               Action
             </th>
           </tr>
         </thead>
         <tbody>
-          {invoices.map((inv) => (
-            <tr key={inv.id} className="border-b border-bone-300/35 hover:bg-bone-50">
-              <td className="px-4 py-2 font-mono text-ink-300">{inv.number}</td>
-              <td className="px-4 py-2 text-right font-mono text-ink-300 font-medium">
-                ${formatCompact(inv.totalCents / 100)}
-              </td>
-              <td className="px-4 py-2 text-ink-300/55">
-                {inv.issuedAt
-                  ? inv.issuedAt.toLocaleDateString("en-US", { month: "short", day: "numeric" })
-                  : "—"}
-              </td>
-              <td className="px-4 py-2 text-ink-300/55">
-                {inv.dueAt
-                  ? inv.dueAt.toLocaleDateString("en-US", { month: "short", day: "numeric" })
-                  : "—"}
-              </td>
-              <td className="px-4 py-2">
-                <span
-                  className={`inline-flex items-center rounded-md px-2 py-0.5 text-[11px] ${
-                    STATUS_TONE[inv.status] ?? "pill-neutral"
-                  }`}
-                >
-                  {inv.status.toLowerCase()}
-                </span>
-              </td>
-              <td className="px-4 py-2 text-right">
-                {inv.status === "SENT" || inv.status === "OVERDUE" ? (
-                  <button
-                    type="button"
-                    onClick={() =>
-                      toast.info("Pay flow", {
-                        description: "Stripe-hosted payment lands when keys are wired.",
-                      })
-                    }
-                    className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md bg-ink-300 text-bone-100 text-[12px] font-medium hover:bg-ink-200"
+          {invoices.map((inv) => {
+            const isPayable = inv.status === "SENT" || inv.status === "OVERDUE";
+            const isPaying = payingId === inv.id;
+            return (
+              <tr key={inv.id} className="border-b border-bone-300/25 hover:bg-white/40 transition-colors">
+                <td className="px-4 py-2.5 font-mono text-ink-300">{inv.number}</td>
+                <td className="px-4 py-2.5 text-right font-mono text-ink-300 font-medium">
+                  ${formatCompact(inv.totalCents / 100)}
+                </td>
+                <td className="px-4 py-2.5 text-ink-300/55">
+                  {inv.issuedAt
+                    ? inv.issuedAt.toLocaleDateString("en-US", { month: "short", day: "numeric" })
+                    : "—"}
+                </td>
+                <td className="px-4 py-2.5 text-ink-300/55">
+                  {inv.dueAt
+                    ? inv.dueAt.toLocaleDateString("en-US", { month: "short", day: "numeric" })
+                    : "—"}
+                </td>
+                <td className="px-4 py-2.5">
+                  <span
+                    className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[10.5px] font-medium ${
+                      STATUS_TONE[inv.status] ?? "pill-neutral"
+                    }`}
                   >
-                    Pay
-                  </button>
-                ) : (
-                  <a
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      toast.info("Download", { description: "Invoice PDF generation pending." });
-                    }}
-                    className="inline-flex items-center gap-1 text-[12px] text-ink-300/65 hover:text-ink-300"
-                  >
-                    PDF
-                  </a>
-                )}
-              </td>
-            </tr>
-          ))}
+                    {inv.status === "PAID" && <CheckCircle2 className="h-2.5 w-2.5 mr-0.5" strokeWidth={2.5} />}
+                    {inv.status.toLowerCase()}
+                  </span>
+                </td>
+                <td className="px-4 py-2.5 text-right">
+                  {isPayable ? (
+                    <button
+                      type="button"
+                      onClick={() => startPay(inv.id)}
+                      disabled={isPaying}
+                      className="btn-glass-signal inline-flex items-center gap-1.5 h-8 px-3.5 rounded-full text-[12px] font-medium disabled:opacity-60"
+                    >
+                      {isPaying ? (
+                        <>
+                          <Loader2 className="h-3 w-3 animate-spin" />
+                          Redirecting…
+                        </>
+                      ) : (
+                        <>
+                          Pay
+                          <ArrowUpRight className="h-3 w-3" strokeWidth={2} />
+                        </>
+                      )}
+                    </button>
+                  ) : (
+                    <a
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        toast.info("Download", { description: "Invoice PDF generation pending." });
+                      }}
+                      className="hover-glass inline-flex items-center gap-1 h-8 px-3 rounded-full text-[12px] text-ink-300/65 hover:text-ink-300 border border-transparent"
+                    >
+                      PDF
+                    </a>
+                  )}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

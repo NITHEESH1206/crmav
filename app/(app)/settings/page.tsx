@@ -16,6 +16,7 @@ import { TeamTab } from "@/components/settings/team-tab";
 import { ApiKeysTab } from "@/components/settings/api-keys-tab";
 import { AuditTab } from "@/components/settings/audit-tab";
 import { PermissionsMatrix } from "@/components/settings/permissions-matrix";
+import { IntegrationsTab } from "@/components/settings/integrations-tab";
 import {
   getWorkspace,
   listWorkspaceMembers,
@@ -107,32 +108,7 @@ export default async function SettingsPage() {
         </TabsContent>
 
         <TabsContent value="integrations">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[
-              { name: "Crestron Fusion", status: "Connected" },
-              { name: "Q-SYS Reflect", status: "Connected" },
-              { name: "Extron GVE", status: "Connected" },
-              { name: "Microsoft Teams Rooms", status: "Connected" },
-              { name: "Zoom Rooms", status: "Available" },
-              { name: "QuickBooks", status: "Available" },
-              { name: "Stripe", status: "Connected" },
-              { name: "Slack", status: "Available" },
-            ].map((i) => (
-              <Card key={i.name} className="hover-lift">
-                <CardContent className="p-5 flex items-center justify-between">
-                  <div>
-                    <div className="text-sm font-medium">{i.name}</div>
-                    <div className="text-[11px] text-ink-300/55 mt-0.5">
-                      {i.status === "Connected" ? "Active" : "Not configured"}
-                    </div>
-                  </div>
-                  <Badge variant={i.status === "Connected" ? "success" : "secondary"}>
-                    {i.status}
-                  </Badge>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <IntegrationsTab />
         </TabsContent>
 
         <TabsContent value="api">

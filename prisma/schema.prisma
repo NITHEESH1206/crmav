@@ -638,6 +638,14 @@ model Invoice {
   paidAt      DateTime?
   pdfUrl      String?
   stripeId    String?
+
+  /** Razorpay payment-link integration (Phase 17). NULL until a link has been
+   *  generated for the invoice. paidVia records which provider actually
+   *  captured the payment ("razorpay" / "stripe" / "manual"). */
+  razorpayPaymentLinkId  String?
+  razorpayPaymentLinkUrl String?
+  paidVia                String?
+
   createdAt   DateTime @default(now())
 
   lines InvoiceLine[]
