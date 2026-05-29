@@ -14,9 +14,8 @@ import {
 export const runtime = "nodejs";
 export const maxDuration = 120;
 
-const briefSchema = z.object({
-  accountName: z.string().min(2).max(120),
-  roomName: z.string().min(2).max(120),
+const roomBriefSchema = z.object({
+  name: z.string().min(2).max(120),
   roomType: z.enum([
     "BOARDROOM",
     "HUDDLE",
@@ -31,12 +30,20 @@ const briefSchema = z.object({
   lengthM: z.number().min(2).max(50).optional().nullable(),
   widthM: z.number().min(2).max(40).optional().nullable(),
   heightM: z.number().min(2.4).max(15).optional().nullable(),
+  notes: z.string().max(400).optional(),
+});
+
+const briefSchema = z.object({
+  accountName: z.string().min(2).max(120),
+  projectName: z.string().min(2).max(120).optional(),
+  rooms: z.array(roomBriefSchema).min(1).max(20),
   tier: z.enum(["STANDARD", "PREMIUM", "FLAGSHIP"]),
   brandPreferences: z.string().max(400).optional(),
   requirements: z.string().max(1200).optional(),
 });
 
 export type BuilderBrief = z.infer<typeof briefSchema>;
+export type RoomBrief = z.infer<typeof roomBriefSchema>;
 
 export type PlanResponse =
   | { ok: true; plan: ValidatedPlan }
@@ -82,21 +89,33 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   // Build the per-request user message — the system prompt stays cached.
-  const dimsLine =
-    brief.lengthM && brief.widthM && brief.heightM
-      ? `Dimensions: ${brief.lengthM} × ${brief.widthM} × ${brief.heightM} m`
-      : "Dimensions: not supplied — infer sensible defaults for this room type and capacity.";
+  const roomsBlock = brief.rooms.map((room, idx) => {
+    const dimsLine =
+      room.lengthM && room.widthM && room.heightM
+        ? `Dimensions: ${room.lengthM} × ${room.widthM} × ${room.heightM} m`
+        : "Dimensions: not supplied — infer sensible defaults for this room type and capacity.";
+    return [
+      `## Room ${idx + 1}: ${room.name}`,
+      `Type: ${room.roomType}`,
+      `Capacity: ${room.capacity} seats`,
+      dimsLine,
+      room.notes ? `Notes: ${room.notes}` : "",
+    ]
+      .filter(Boolean)
+      .join("\n");
+  }).join("\n\n");
 
   const userMessage = [
     "# Brief",
     `Client: ${brief.accountName}`,
-    `Room: ${brief.roomName}`,
-    `Room type: ${brief.roomType}`,
-    `Capacity: ${brief.capacity} seats`,
-    dimsLine,
+    brief.projectName ? `Project name (suggested): ${brief.projectName}` : "",
     `Tier: ${brief.tier}`,
+    `Rooms: ${brief.rooms.length}`,
     brief.brandPreferences ? `Brand preferences: ${brief.brandPreferences}` : "Brand preferences: integrator's default mix",
     brief.requirements ? `Special requirements: ${brief.requirements}` : "Special requirements: none",
+    "",
+    "# Rooms in this project",
+    roomsBlock,
     "",
     "# AVAILABLE CATALOG",
     "Only use SKUs from this list. Copy them exactly as shown.",

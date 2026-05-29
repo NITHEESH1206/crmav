@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { CheckCircle2, Loader2, Sparkles, ArrowUpRight, Box, FolderKanban, Server, Network, Receipt } from "lucide-react";
+import { CheckCircle2, Loader2, Sparkles, ArrowUpRight, Box, FolderKanban, Server, Network, Receipt, Layers3 } from "lucide-react";
 import { formatCompact } from "@/lib/utils";
 
 type StepState = "pending" | "active" | "done";
@@ -11,32 +11,43 @@ const STEPS = [
   { id: "validating",  label: "Validating plan",   icon: CheckCircle2 },
   { id: "account",     label: "Creating account",  icon: FolderKanban },
   { id: "project",     label: "Creating project",  icon: FolderKanban },
+  { id: "rooms",       label: "Building rooms",    icon: Layers3 },
   { id: "boq",         label: "Writing BOQ",       icon: Receipt },
-  { id: "rack",        label: "Stacking rack",     icon: Server },
-  { id: "flow",        label: "Drawing signal flow", icon: Network },
+  { id: "rack",        label: "Stacking racks",    icon: Server },
+  { id: "flow",        label: "Drawing signal flows", icon: Network },
   { id: "finalize",    label: "Finalising",        icon: Sparkles },
 ] as const;
+
+export type RoomResult = {
+  id: string;
+  name: string;
+  boqLines: number;
+  rackUnits: number;
+  flowNodes: number;
+  totalCents: number;
+};
 
 export function LaunchProgress({
   status,
   projectId,
-  roomId,
   accountId,
   errors,
+  rooms,
   totals,
+  roomCount,
 }: {
   status: "running" | "done" | "error";
   projectId?: string;
-  roomId?: string;
   accountId?: string;
   errors?: string;
-  totals?: { boqLines: number; rackUnits: number; flowNodes: number; boqTotalCents: number };
+  rooms?: RoomResult[];
+  totals?: { boqLines: number; rackUnits: number; flowNodes: number; totalCents: number };
+  roomCount?: number;
 }) {
-  // Mock progress through steps over ~1.2s so users feel the work happening
   const [stepIdx, setStepIdx] = useState(0);
   useEffect(() => {
     if (status !== "running") {
-      setStepIdx(STEPS.length); // jump to done
+      setStepIdx(STEPS.length);
       return;
     }
     const t = setInterval(() => {
@@ -57,14 +68,14 @@ export function LaunchProgress({
         </div>
         <h2 className="text-[28px] md:text-[36px] font-medium tracking-[-0.02em] text-ink-300 leading-tight">
           {isDone
-            ? "Your project is live."
+            ? `Your ${rooms && rooms.length > 1 ? `${rooms.length}-room ` : ""}project is live.`
             : isError
               ? "We hit an issue."
-              : "Spinning everything up…"}
+              : `Spinning up ${roomCount ?? ""} room${(roomCount ?? 0) === 1 ? "" : "s"}…`}
         </h2>
         {!isDone && !isError && (
           <p className="mt-2 text-[14.5px] text-ink-300/65">
-            Hold on — creating the account, project, BOQ, rack and signal flow.
+            Hold on — creating the account, project, BOQs, racks and signal flows.
           </p>
         )}
       </div>
@@ -72,14 +83,13 @@ export function LaunchProgress({
       {/* Step list */}
       <ol className="mt-8 max-w-md mx-auto space-y-2">
         {STEPS.map((step, i) => {
-          const state: StepState =
-            isDone
+          const state: StepState = isDone
+            ? "done"
+            : i < stepIdx
               ? "done"
-              : i < stepIdx
-                ? "done"
-                : i === stepIdx
-                  ? "active"
-                  : "pending";
+              : i === stepIdx
+                ? "active"
+                : "pending";
           return (
             <li
               key={step.id}
@@ -125,28 +135,77 @@ export function LaunchProgress({
       </ol>
 
       {/* Done state */}
-      {isDone && totals && (
-        <div className="mt-9 max-w-md mx-auto">
-          <div className="grid grid-cols-2 gap-3">
-            <DoneStat label="BOQ value" value={`$${formatCompact(totals.boqTotalCents / 100)}`} signal />
+      {isDone && totals && rooms && (
+        <div className="mt-9 max-w-xl mx-auto">
+          {/* Totals strip */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <DoneStat label="Project value" value={`$${formatCompact(totals.totalCents / 100)}`} signal />
+            <DoneStat label="Rooms" value={rooms.length.toString()} />
             <DoneStat label="BOQ lines" value={totals.boqLines.toString()} />
-            <DoneStat label="Rack units" value={totals.rackUnits.toString()} />
             <DoneStat label="Flow nodes" value={totals.flowNodes.toString()} />
           </div>
 
+          {/* Per-room list — pick which 3D room to open */}
+          {rooms.length > 1 && (
+            <div className="mt-7">
+              <div className="font-mono text-[10.5px] uppercase tracking-[0.08em] text-ink-300/60 font-medium mb-3 text-center">
+                Pick a room to open in 3D
+              </div>
+              <div className="space-y-2">
+                {rooms.map((r, i) => (
+                  <Link
+                    key={r.id}
+                    href={`/rooms/${r.id}`}
+                    className="hover-glass flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-white/40 border border-bone-300/55"
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span className="h-8 w-8 rounded-lg bg-signal-500/15 border border-signal-500/25 flex items-center justify-center font-mono text-[11px] text-signal-700 font-medium shrink-0">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <div className="min-w-0">
+                        <div className="text-[14px] font-medium text-ink-300 truncate">
+                          {r.name}
+                        </div>
+                        <div className="text-[11.5px] text-ink-300/55 mt-0.5">
+                          {r.boqLines} lines · {r.rackUnits}U rack · {r.flowNodes} flow nodes
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3 shrink-0">
+                      <span className="font-mono text-[12.5px] text-signal-700 font-medium">
+                        ${formatCompact(r.totalCents / 100)}
+                      </span>
+                      <ArrowUpRight className="h-3.5 w-3.5 text-ink-300/55" strokeWidth={2} />
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Primary actions */}
           <div className="mt-7 flex flex-col gap-2">
-            {roomId && (
+            {rooms.length === 1 ? (
               <Link
-                href={`/rooms/${roomId}`}
+                href={`/rooms/${rooms[0].id}`}
                 className="btn-glass-signal inline-flex items-center justify-center gap-2 h-11 px-6 rounded-full text-[14.5px] font-medium"
               >
                 <Box className="h-4 w-4" strokeWidth={2} />
                 Open the 3D room
                 <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} />
               </Link>
+            ) : (
+              <Link
+                href={`/projects/${projectId}`}
+                className="btn-glass-signal inline-flex items-center justify-center gap-2 h-11 px-6 rounded-full text-[14.5px] font-medium"
+              >
+                <FolderKanban className="h-4 w-4" strokeWidth={2} />
+                Open project overview
+                <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} />
+              </Link>
             )}
             <div className="grid grid-cols-2 gap-2">
-              {projectId && (
+              {projectId && rooms.length === 1 && (
                 <Link
                   href={`/projects/${projectId}`}
                   className="hover-glass inline-flex items-center justify-center gap-1.5 h-10 px-4 rounded-full border border-bone-300/55 text-[13px] text-ink-300/75 hover:text-ink-300"

@@ -52,20 +52,20 @@ export const planRoomSchema = z.object({
 
 export type PlanRoom = z.infer<typeof planRoomSchema>;
 
-/** The full plan returned by the AI for a single project / single room build. */
+/** The full plan returned by the AI — supports multiple rooms in one project. */
 export const projectPlanSchema = z.object({
   /** 1-2 sentence executive summary surfaced in the wizard's review step. */
-  narrative: z.string().min(20).max(800),
+  narrative: z.string().min(20).max(1200),
   /** Suggested project name. */
   projectName: z.string().min(2).max(120),
   /** Total estimated contract value in USD cents (advisory — final number is sum of BOQ). */
   estimatedValueCents: z.number().int().min(0),
   /** Risk level the AI thinks this project carries. */
   riskLevel: z.enum(["LOW", "MEDIUM", "HIGH"]),
-  /** Always exactly one room per generation — multi-room scope is iterative. */
-  room: planRoomSchema,
+  /** Per-room equipment plan. One project, many rooms. */
+  rooms: z.array(planRoomSchema).min(1).max(20),
   /** Free-form "things to verify" callouts shown above the Launch button. */
-  callouts: z.array(z.string().min(5).max(220)).max(8).default([]),
+  callouts: z.array(z.string().min(5).max(220)).max(12).default([]),
 });
 
 export type ProjectPlan = z.infer<typeof projectPlanSchema>;
@@ -105,42 +105,49 @@ export const PROJECT_PLAN_TOOL = {
         type: "array",
         items: { type: "string" },
         description:
-          "Things the engineer should verify (e.g. ceiling height for mic array reach, network VLANs for AVoIP).",
+          "Things the engineer should verify (e.g. ceiling height for mic array reach, network VLANs for AVoIP, rack location for cable runs between rooms).",
       },
-      room: {
-        type: "object",
-        properties: {
-          name: { type: "string" },
-          roomType: {
-            type: "string",
-            enum: ROOM_TYPES as unknown as string[],
-          },
-          capacity: { type: "integer" },
-          lengthM: { type: "number", description: "Room length in meters." },
-          widthM: { type: "number" },
-          heightM: { type: "number", description: "Ceiling height in meters." },
-          devices: {
-            type: "array",
-            description:
-              "Equipment list. Every catalogSku MUST be from the AVAILABLE CATALOG. Pick complementary brands per the user's preferences. Include rack hardware (rack, PDU, UPS) when the device list warrants it.",
-            items: {
-              type: "object",
-              properties: {
-                catalogSku: { type: "string" },
-                quantity: { type: "integer", minimum: 1, maximum: 50 },
-                rationale: {
-                  type: "string",
-                  description: "1 short sentence on why this device for this room.",
+      rooms: {
+        type: "array",
+        description:
+          "One entry per room in the project. For multi-room briefs, share infrastructure where it makes sense (e.g. one central rack feeding multiple displays) but each room still needs its own device list.",
+        minItems: 1,
+        maxItems: 20,
+        items: {
+          type: "object",
+          properties: {
+            name: { type: "string", description: "Room name (e.g. 'Boardroom 04 — 14F')." },
+            roomType: {
+              type: "string",
+              enum: ROOM_TYPES as unknown as string[],
+            },
+            capacity: { type: "integer" },
+            lengthM: { type: "number", description: "Room length in meters." },
+            widthM: { type: "number" },
+            heightM: { type: "number", description: "Ceiling height in meters." },
+            devices: {
+              type: "array",
+              description:
+                "Equipment list for THIS room. Every catalogSku MUST be from the AVAILABLE CATALOG. Pick complementary brands per the user's preferences. Include rack hardware (rack, PDU, UPS) on the room that gets the central rack — typically the largest space.",
+              items: {
+                type: "object",
+                properties: {
+                  catalogSku: { type: "string" },
+                  quantity: { type: "integer", minimum: 1, maximum: 50 },
+                  rationale: {
+                    type: "string",
+                    description: "1 short sentence on why this device for this room.",
+                  },
                 },
+                required: ["catalogSku", "quantity"],
               },
-              required: ["catalogSku", "quantity"],
             },
           },
+          required: ["name", "roomType", "capacity", "lengthM", "widthM", "heightM", "devices"],
         },
-        required: ["name", "roomType", "capacity", "lengthM", "widthM", "heightM", "devices"],
       },
     },
-    required: ["narrative", "projectName", "estimatedValueCents", "riskLevel", "room"],
+    required: ["narrative", "projectName", "estimatedValueCents", "riskLevel", "rooms"],
   },
 };
 
@@ -151,17 +158,24 @@ export type CatalogIndex = Map<
   { id: string; sku: string; name: string; brand: string; category: string; listPriceCents: number }
 >;
 
+export type ValidatedDevice = {
+  catalogId: string;
+  sku: string;
+  name: string;
+  brand: string;
+  category: string;
+  listPriceCents: number;
+  quantity: number;
+  rationale?: string;
+};
+
+export type ValidatedRoom = PlanRoom & {
+  validatedDevices: ValidatedDevice[];
+  totalCents: number;
+};
+
 export type ValidatedPlan = ProjectPlan & {
-  validatedDevices: Array<{
-    catalogId: string;
-    sku: string;
-    name: string;
-    brand: string;
-    category: string;
-    listPriceCents: number;
-    quantity: number;
-    rationale?: string;
-  }>;
+  validatedRooms: ValidatedRoom[];
   warnings: string[];
   totalCents: number;
 };
@@ -174,56 +188,67 @@ export type ValidatedPlan = ProjectPlan & {
  */
 export function validatePlan(plan: ProjectPlan, catalog: CatalogIndex): ValidatedPlan {
   const warnings: string[] = [];
-  const validatedDevices: ValidatedPlan["validatedDevices"] = [];
+  const validatedRooms: ValidatedRoom[] = [];
 
-  for (const dev of plan.room.devices) {
-    const exact = catalog.get(dev.catalogSku);
-    if (exact) {
-      validatedDevices.push({
-        catalogId: exact.id,
-        sku: exact.sku,
-        name: exact.name,
-        brand: exact.brand,
-        category: exact.category,
-        listPriceCents: exact.listPriceCents,
-        quantity: dev.quantity,
-        rationale: dev.rationale,
-      });
-      continue;
-    }
-    // Fuzzy fallback — substring or shared prefix
-    const needle = dev.catalogSku.toUpperCase();
-    let fuzzy: ReturnType<typeof catalog.get> | undefined;
-    for (const entry of catalog.values()) {
-      const haystack = entry.sku.toUpperCase();
-      if (haystack.includes(needle) || needle.includes(haystack)) {
-        fuzzy = entry;
-        break;
+  for (const room of plan.rooms) {
+    const validatedDevices: ValidatedDevice[] = [];
+    for (const dev of room.devices) {
+      const exact = catalog.get(dev.catalogSku);
+      if (exact) {
+        validatedDevices.push({
+          catalogId: exact.id,
+          sku: exact.sku,
+          name: exact.name,
+          brand: exact.brand,
+          category: exact.category,
+          listPriceCents: exact.listPriceCents,
+          quantity: dev.quantity,
+          rationale: dev.rationale,
+        });
+        continue;
       }
+      // Fuzzy fallback — substring or shared prefix
+      const needle = dev.catalogSku.toUpperCase();
+      let fuzzy: ReturnType<typeof catalog.get> | undefined;
+      for (const entry of catalog.values()) {
+        const haystack = entry.sku.toUpperCase();
+        if (haystack.includes(needle) || needle.includes(haystack)) {
+          fuzzy = entry;
+          break;
+        }
+      }
+      if (fuzzy) {
+        warnings.push(`[${room.name}] Mapped unknown SKU "${dev.catalogSku}" → "${fuzzy.sku}"`);
+        validatedDevices.push({
+          catalogId: fuzzy.id,
+          sku: fuzzy.sku,
+          name: fuzzy.name,
+          brand: fuzzy.brand,
+          category: fuzzy.category,
+          listPriceCents: fuzzy.listPriceCents,
+          quantity: dev.quantity,
+          rationale: dev.rationale,
+        });
+        continue;
+      }
+      throw new Error(
+        `[${room.name}] AI suggested unknown SKU "${dev.catalogSku}" — not in your catalog. Re-run generation or extend the catalog.`
+      );
     }
-    if (fuzzy) {
-      warnings.push(`Mapped unknown SKU "${dev.catalogSku}" → "${fuzzy.sku}"`);
-      validatedDevices.push({
-        catalogId: fuzzy.id,
-        sku: fuzzy.sku,
-        name: fuzzy.name,
-        brand: fuzzy.brand,
-        category: fuzzy.category,
-        listPriceCents: fuzzy.listPriceCents,
-        quantity: dev.quantity,
-        rationale: dev.rationale,
-      });
-      continue;
-    }
-    throw new Error(
-      `AI suggested unknown SKU "${dev.catalogSku}" — not in your catalog. Re-run generation or extend the catalog.`
+
+    const roomTotal = validatedDevices.reduce(
+      (sum, d) => sum + d.quantity * d.listPriceCents,
+      0
     );
+
+    validatedRooms.push({
+      ...room,
+      validatedDevices,
+      totalCents: roomTotal,
+    });
   }
 
-  const totalCents = validatedDevices.reduce(
-    (sum, d) => sum + d.quantity * d.listPriceCents,
-    0
-  );
+  const totalCents = validatedRooms.reduce((sum, r) => sum + r.totalCents, 0);
 
-  return { ...plan, validatedDevices, warnings, totalCents };
+  return { ...plan, validatedRooms, warnings, totalCents };
 }

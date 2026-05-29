@@ -4,7 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { BriefForm, type Brief } from "./brief-form";
 import { PlanReview } from "./plan-review";
-import { LaunchProgress } from "./launch-progress";
+import { LaunchProgress, type RoomResult } from "./launch-progress";
 import { launchProjectFromPlan } from "@/app/actions/launch-project";
 import type { ValidatedPlan } from "@/lib/ai/plan-schema";
 
@@ -20,14 +20,31 @@ export function BuilderShell() {
   const [launchError, setLaunchError] = useState<string | undefined>();
   const [launchResult, setLaunchResult] = useState<{
     projectId: string;
-    roomId: string;
     accountId: string;
-    totals: { boqLines: number; rackUnits: number; flowNodes: number; boqTotalCents: number };
+    rooms: RoomResult[];
+    totals: { boqLines: number; rackUnits: number; flowNodes: number; totalCents: number };
   } | null>(null);
 
   async function generatePlan(newBrief: Brief, refinement?: string) {
-    const body: Record<string, unknown> = { ...newBrief };
-    if (refinement) body.requirements = `${newBrief.requirements ? newBrief.requirements + " " : ""}REFINEMENT: ${refinement}`;
+    const body: Record<string, unknown> = {
+      accountName: newBrief.accountName,
+      projectName: newBrief.projectName || undefined,
+      rooms: newBrief.rooms.map((r) => ({
+        name: r.name,
+        roomType: r.roomType,
+        capacity: r.capacity,
+        lengthM: r.lengthM,
+        widthM: r.widthM,
+        heightM: r.heightM,
+        notes: r.notes || undefined,
+      })),
+      tier: newBrief.tier,
+      brandPreferences: newBrief.brandPreferences || undefined,
+      requirements: refinement
+        ? `${newBrief.requirements ? newBrief.requirements + " " : ""}REFINEMENT: ${refinement}`
+        : (newBrief.requirements || undefined),
+    };
+
     const res = await fetch("/api/ai/generate/project-plan", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -85,23 +102,23 @@ export function BuilderShell() {
         estimatedValueCents: plan.estimatedValueCents,
         riskLevel: plan.riskLevel,
         callouts: plan.callouts,
-        room: {
-          name: plan.room.name,
-          roomType: plan.room.roomType,
-          capacity: plan.room.capacity,
-          lengthM: plan.room.lengthM,
-          widthM: plan.room.widthM,
-          heightM: plan.room.heightM,
-        },
-        devices: plan.validatedDevices.map((d) => ({
-          catalogId: d.catalogId,
-          sku: d.sku,
-          name: d.name,
-          brand: d.brand,
-          category: d.category,
-          listPriceCents: d.listPriceCents,
-          quantity: d.quantity,
-          rationale: d.rationale,
+        rooms: plan.validatedRooms.map((room) => ({
+          name: room.name,
+          roomType: room.roomType,
+          capacity: room.capacity,
+          lengthM: room.lengthM,
+          widthM: room.widthM,
+          heightM: room.heightM,
+          devices: room.validatedDevices.map((d) => ({
+            catalogId: d.catalogId,
+            sku: d.sku,
+            name: d.name,
+            brand: d.brand,
+            category: d.category,
+            listPriceCents: d.listPriceCents,
+            quantity: d.quantity,
+            rationale: d.rationale,
+          })),
         })),
       });
       if (!r.ok) {
@@ -111,18 +128,18 @@ export function BuilderShell() {
       }
       setLaunchResult({
         projectId: r.projectId,
-        roomId: r.roomId,
         accountId: r.accountId,
+        rooms: r.rooms,
         totals: {
           boqLines: r.total.boqLines,
           rackUnits: r.total.rackUnits,
           flowNodes: r.total.flowNodes,
-          boqTotalCents: plan.totalCents,
+          totalCents: r.total.totalCents,
         },
       });
       setStage("done");
-      toast.success("Project launched", {
-        description: `${plan.projectName} is live with ${r.total.boqLines} BOQ items.`,
+      toast.success(`Project launched`, {
+        description: `${plan.projectName} · ${r.rooms.length} room${r.rooms.length === 1 ? "" : "s"} · ${r.total.boqLines} BOQ lines.`,
       });
     } catch (err) {
       setStage("error");
@@ -207,10 +224,11 @@ export function BuilderShell() {
             stage === "launching" ? "running" : stage === "done" ? "done" : "error"
           }
           projectId={launchResult?.projectId}
-          roomId={launchResult?.roomId}
           accountId={launchResult?.accountId}
           errors={launchError}
+          rooms={launchResult?.rooms}
           totals={launchResult?.totals}
+          roomCount={plan?.validatedRooms.length}
         />
       )}
     </div>

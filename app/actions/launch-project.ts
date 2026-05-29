@@ -9,18 +9,20 @@ import { buildSignalFlow } from "@/lib/av/signal-flow-builder";
 import type { Prisma } from "@prisma/client";
 
 /**
- * Launch a project from a validated AI plan.
+ * Launch a project from a validated multi-room AI plan.
  *
  * Creates (in a single transaction so partial failures roll back):
  *   1. Account (find-or-create by name)
- *   2. Opportunity (in CLOSED_WON to mark "ready to deliver")
- *   3. Project (engineering phase)
- *   4. Room (with persisted dimensions)
- *   5. BOQItem rows for every device
- *   6. AVRack with auto-stacked layout (only rackable devices)
- *   7. SignalFlow with deterministic node + edge diagram
+ *   2. Opportunity (CLOSED_WON since user committed to launch)
+ *   3. Project (engineering phase, contract value = sum of all room totals)
+ *   4. For each room:
+ *      a. Room with persisted dimensions
+ *      b. BOQItem rows
+ *      c. AVRack with auto-stacked layout (only if rackable devices exist)
+ *      d. SignalFlow with deterministic diagram
  *
- * Returns the IDs needed to navigate to the new room's 3D view.
+ * Returns the IDs of all created rooms plus the project — the wizard's
+ * done screen lists them so the user can pick which 3D room to open first.
  */
 
 const validatedDeviceSchema = z.object({
@@ -34,6 +36,25 @@ const validatedDeviceSchema = z.object({
   rationale: z.string().optional(),
 });
 
+const roomLaunchSchema = z.object({
+  name: z.string().min(2),
+  roomType: z.enum([
+    "BOARDROOM",
+    "HUDDLE",
+    "TRAINING",
+    "STUDIO",
+    "AUDITORIUM",
+    "LOBBY",
+    "COMMAND_CENTER",
+    "OTHER",
+  ]),
+  capacity: z.number().int().min(1).max(2000),
+  lengthM: z.number(),
+  widthM: z.number(),
+  heightM: z.number(),
+  devices: z.array(validatedDeviceSchema).min(1),
+});
+
 const launchInputSchema = z.object({
   accountName: z.string().min(2),
   projectName: z.string().min(2),
@@ -41,30 +62,33 @@ const launchInputSchema = z.object({
   estimatedValueCents: z.number().int().min(0),
   riskLevel: z.enum(["LOW", "MEDIUM", "HIGH"]),
   callouts: z.array(z.string()).default([]),
-  room: z.object({
-    name: z.string().min(2),
-    roomType: z.enum([
-      "BOARDROOM",
-      "HUDDLE",
-      "TRAINING",
-      "STUDIO",
-      "AUDITORIUM",
-      "LOBBY",
-      "COMMAND_CENTER",
-      "OTHER",
-    ]),
-    capacity: z.number().int().min(1).max(2000),
-    lengthM: z.number(),
-    widthM: z.number(),
-    heightM: z.number(),
-  }),
-  devices: z.array(validatedDeviceSchema).min(1),
+  rooms: z.array(roomLaunchSchema).min(1).max(20),
 });
 
 export type LaunchInput = z.infer<typeof launchInputSchema>;
 
+export type RoomLaunchResult = {
+  id: string;
+  name: string;
+  boqLines: number;
+  rackUnits: number;
+  flowNodes: number;
+  totalCents: number;
+};
+
 export type LaunchResult =
-  | { ok: true; projectId: string; roomId: string; accountId: string; total: { boqLines: number; rackUnits: number; flowNodes: number } }
+  | {
+      ok: true;
+      projectId: string;
+      accountId: string;
+      rooms: RoomLaunchResult[];
+      total: {
+        boqLines: number;
+        rackUnits: number;
+        flowNodes: number;
+        totalCents: number;
+      };
+    }
   | { ok: false; error: string };
 
 export async function launchProjectFromPlan(input: LaunchInput): Promise<LaunchResult> {
@@ -80,142 +104,175 @@ export async function launchProjectFromPlan(input: LaunchInput): Promise<LaunchR
   const data = parsed.data;
   const workspaceId = await getCurrentWorkspaceId();
 
-  // BOQ total derived from devices (not the AI's estimate — sum of real prices)
-  const boqTotalCents = data.devices.reduce(
-    (sum, d) => sum + d.quantity * d.listPriceCents,
+  // Contract value = sum of all rooms' device totals (not the AI's estimate)
+  const projectTotalCents = data.rooms.reduce(
+    (sum, room) =>
+      sum +
+      room.devices.reduce((s, d) => s + d.quantity * d.listPriceCents, 0),
     0
   );
 
   try {
-    const result = await prisma.$transaction(async (tx) => {
-      // 1. Find-or-create account
-      let account = await tx.account.findFirst({
-        where: { workspaceId, name: { equals: data.accountName, mode: "insensitive" } },
-      });
-      if (!account) {
-        account = await tx.account.create({
+    const result = await prisma.$transaction(
+      async (tx) => {
+        // 1. Find-or-create account
+        let account = await tx.account.findFirst({
+          where: { workspaceId, name: { equals: data.accountName, mode: "insensitive" } },
+        });
+        if (!account) {
+          account = await tx.account.create({
+            data: {
+              workspaceId,
+              name: data.accountName,
+              tier: "GROWTH",
+              healthScore: 80,
+            },
+          });
+        }
+
+        // 2. Opportunity
+        const opportunity = await tx.opportunity.create({
           data: {
             workspaceId,
-            name: data.accountName,
-            tier: "GROWTH",
-            healthScore: 80,
+            accountId: account.id,
+            name: data.projectName,
+            stage: "CLOSED_WON",
+            valueCents: projectTotalCents,
+            probability: 100,
+            aiScore: data.riskLevel === "LOW" ? 92 : data.riskLevel === "MEDIUM" ? 78 : 64,
           },
         });
-      }
 
-      // 2. Opportunity — created in CLOSED_WON because the user committed to launch
-      const opportunity = await tx.opportunity.create({
-        data: {
-          workspaceId,
-          accountId: account.id,
-          name: data.projectName,
-          stage: "CLOSED_WON",
-          valueCents: boqTotalCents,
-          probability: 100,
-          aiScore: data.riskLevel === "LOW" ? 92 : data.riskLevel === "MEDIUM" ? 78 : 64,
-        },
-      });
+        // 3. Project
+        const project = await tx.project.create({
+          data: {
+            workspaceId,
+            accountId: account.id,
+            opportunityId: opportunity.id,
+            name: data.projectName,
+            phase: "ENGINEERING",
+            status: "ACTIVE",
+            contractValueCents: projectTotalCents,
+            progress: 0,
+            riskLevel: data.riskLevel,
+          },
+        });
 
-      // 3. Project — engineering phase
-      const project = await tx.project.create({
-        data: {
-          workspaceId,
-          accountId: account.id,
-          opportunityId: opportunity.id,
-          name: data.projectName,
-          phase: "ENGINEERING",
-          status: "ACTIVE",
-          contractValueCents: boqTotalCents,
-          progress: 0,
-          riskLevel: data.riskLevel,
-        },
-      });
+        // 4. Per-room creation
+        const roomResults: RoomLaunchResult[] = [];
 
-      // 4. Room with persisted dimensions
-      const room = await tx.room.create({
-        data: {
-          workspaceId,
+        for (const roomData of data.rooms) {
+          const roomTotalCents = roomData.devices.reduce(
+            (s, d) => s + d.quantity * d.listPriceCents,
+            0
+          );
+
+          // Notes — pull room-level callouts from the project-level set into the
+          // largest room (heuristic: the room with the most devices).
+          const notes =
+            roomData === data.rooms[indexOfRichestRoom(data.rooms)] && data.callouts.length
+              ? data.callouts.map((c) => `• ${c}`).join("\n")
+              : null;
+
+          const room = await tx.room.create({
+            data: {
+              workspaceId,
+              projectId: project.id,
+              accountId: account.id,
+              name: roomData.name,
+              roomType: roomData.roomType,
+              capacity: roomData.capacity,
+              lengthM: roomData.lengthM,
+              widthM: roomData.widthM,
+              heightM: roomData.heightM,
+              notes,
+            },
+          });
+
+          // BOQ rows
+          const boqRows: Prisma.BOQItemCreateManyInput[] = roomData.devices.map((d) => ({
+            projectId: project.id,
+            roomId: room.id,
+            catalogId: d.catalogId,
+            description: d.name,
+            quantity: d.quantity,
+            unitPriceCents: d.listPriceCents,
+          }));
+          await tx.bOQItem.createMany({ data: boqRows });
+
+          // Rack (only if rackable devices exist)
+          const rackable = roomData.devices.filter((d) => isRackable(d.category));
+          let rackUnits = 0;
+          if (rackable.length > 0) {
+            const rackLayout = buildRackLayout(roomData.devices);
+            rackUnits = rackLayout.items.length;
+            await tx.aVRack.create({
+              data: {
+                workspaceId,
+                roomId: room.id,
+                name: `${roomData.name} — Rack`,
+                totalU: rackLayout.totalU,
+                layoutJson: rackLayout as unknown as Prisma.InputJsonValue,
+              },
+            });
+          }
+
+          // Signal flow
+          const flow = buildSignalFlow(roomData.devices);
+          await tx.signalFlow.create({
+            data: {
+              workspaceId,
+              roomId: room.id,
+              name: `${roomData.name} — Signal Flow`,
+              diagramJson: flow as unknown as Prisma.InputJsonValue,
+            },
+          });
+
+          roomResults.push({
+            id: room.id,
+            name: roomData.name,
+            boqLines: boqRows.length,
+            rackUnits,
+            flowNodes: flow.nodes.length,
+            totalCents: roomTotalCents,
+          });
+        }
+
+        return {
           projectId: project.id,
           accountId: account.id,
-          name: data.room.name,
-          roomType: data.room.roomType,
-          capacity: data.room.capacity,
-          lengthM: data.room.lengthM,
-          widthM: data.room.widthM,
-          heightM: data.room.heightM,
-          notes: data.callouts.length
-            ? data.callouts.map((c) => `• ${c}`).join("\n")
-            : null,
-        },
-      });
+          rooms: roomResults,
+        };
+      },
+      // Transactions for multi-room builds can be slow — extend the timeout.
+      { timeout: 30_000, maxWait: 10_000 }
+    );
 
-      // 5. BOQ items — one row per device line
-      const boqRows: Prisma.BOQItemCreateManyInput[] = data.devices.map((d) => ({
-        projectId: project.id,
-        roomId: room.id,
-        catalogId: d.catalogId,
-        description: d.name,
-        quantity: d.quantity,
-        unitPriceCents: d.listPriceCents,
-      }));
-      await tx.bOQItem.createMany({ data: boqRows });
-
-      // 6. Rack — only if there are rackable devices
-      const rackable = data.devices.filter((d) => isRackable(d.category));
-      let rackUnits = 0;
-      if (rackable.length > 0) {
-        const rackLayout = buildRackLayout(data.devices);
-        rackUnits = rackLayout.items.length;
-        await tx.aVRack.create({
-          data: {
-            workspaceId,
-            roomId: room.id,
-            name: `${data.room.name} — Primary Rack`,
-            totalU: rackLayout.totalU,
-            layoutJson: rackLayout as unknown as Prisma.InputJsonValue,
-          },
-        });
-      }
-
-      // 7. Signal flow — deterministic diagram
-      const flow = buildSignalFlow(data.devices);
-      await tx.signalFlow.create({
-        data: {
-          workspaceId,
-          roomId: room.id,
-          name: `${data.room.name} — Signal Flow`,
-          diagramJson: flow as unknown as Prisma.InputJsonValue,
-        },
-      });
-
-      return {
-        projectId: project.id,
-        roomId: room.id,
-        accountId: account.id,
-        boqLines: boqRows.length,
-        rackUnits,
-        flowNodes: flow.nodes.length,
-      };
-    });
-
-    // Revalidate all the surfaces that just got new data
+    // Revalidate everything that just got new data
     revalidatePath("/dashboard");
     revalidatePath("/projects");
     revalidatePath("/opportunities");
     revalidatePath("/accounts");
     revalidatePath("/rooms");
     revalidatePath(`/projects/${result.projectId}`);
-    revalidatePath(`/rooms/${result.roomId}`);
+    for (const r of result.rooms) {
+      revalidatePath(`/rooms/${r.id}`);
+    }
+
+    const totalBoqLines = result.rooms.reduce((s, r) => s + r.boqLines, 0);
+    const totalRackUnits = result.rooms.reduce((s, r) => s + r.rackUnits, 0);
+    const totalFlowNodes = result.rooms.reduce((s, r) => s + r.flowNodes, 0);
 
     return {
       ok: true,
       projectId: result.projectId,
-      roomId: result.roomId,
       accountId: result.accountId,
+      rooms: result.rooms,
       total: {
-        boqLines: result.boqLines,
-        rackUnits: result.rackUnits,
-        flowNodes: result.flowNodes,
+        boqLines: totalBoqLines,
+        rackUnits: totalRackUnits,
+        flowNodes: totalFlowNodes,
+        totalCents: projectTotalCents,
       },
     };
   } catch (err) {
@@ -224,4 +281,21 @@ export async function launchProjectFromPlan(input: LaunchInput): Promise<LaunchR
       error: err instanceof Error ? err.message : "Launch failed",
     };
   }
+}
+
+/** Picks the index of the room with the most devices — used to attach
+ *  project-level callouts to one logical room rather than every room. */
+function indexOfRichestRoom(
+  rooms: Array<{ devices: { quantity: number }[] }>
+): number {
+  let best = 0;
+  let bestCount = -1;
+  for (let i = 0; i < rooms.length; i++) {
+    const total = rooms[i].devices.reduce((s, d) => s + d.quantity, 0);
+    if (total > bestCount) {
+      bestCount = total;
+      best = i;
+    }
+  }
+  return best;
 }

@@ -172,19 +172,28 @@ export const PROJECT_BUILDER_PROMPT = `${AV_DOMAIN_PRIMER}
 
 # Task: Design a complete AV system from a single brief
 
-The integrator's sales engineer is giving you a room brief. You will return a structured project plan by calling the \`submit_project_plan\` tool.
+The integrator's sales engineer is giving you a project brief covering one or more rooms. You will return a structured project plan by calling the \`submit_project_plan\` tool.
 
 ## What the brief contains
 
-- Client name + room context
-- Room type, capacity, optional dimensions
-- Service tier (STANDARD / PREMIUM / FLAGSHIP)
+- Client name + project context
+- One or more rooms — each with type, capacity, optional dimensions, optional per-room notes
+- Service tier (STANDARD / PREMIUM / FLAGSHIP) — applies to the whole project unless a room overrides
 - Brand preferences (e.g. "Crestron control, Q-SYS audio")
 - Special requirements (e.g. "BYOD essential, dual-display, ceiling mic array")
 
 ## Your job
 
-Produce a working bill-of-equipment for that room. The output is consumed by code that creates the project, BOQ, rack layout, and signal flow automatically — so quality matters.
+Produce a working bill-of-equipment for EVERY room in the brief. Return them in the rooms array. The output is consumed by code that creates the project, per-room BOQs, per-room rack layouts, and per-room signal flows automatically — so quality matters.
+
+## Multi-room guidance
+
+When there are multiple rooms:
+- **Each room gets its own device list.** Don't share devices across rooms in the data — code can't deduplicate it.
+- **Pick the SAME control ecosystem across rooms** (one Crestron environment, not Crestron in one room and AMX in another). Consistency reduces commissioning cost.
+- **Audio brands can match or differ by room** if the use case differs (e.g. Q-SYS in boardroom + classroom, Shure standalone wireless in training).
+- **Place network + rack hardware on the room that will hold the central rack** — usually the largest space or a back-of-house "MDF" annex. Don't replicate rack hardware across every room.
+- **Scale device counts to capacity.** A 24-seat boardroom needs more mics + amps than an 8-seat huddle.
 
 ## Rules — non-negotiable
 
