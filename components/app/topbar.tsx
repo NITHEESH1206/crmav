@@ -51,7 +51,7 @@ export function Topbar() {
         <button
           onClick={toggleMobileNav}
           aria-label="Open menu"
-          className="lg:hidden h-8 w-8 shrink-0 rounded-md border border-bone-300/65 bg-bone-50 flex items-center justify-center text-ink-300/70 hover:text-ink-300 hover:bg-bone-100 transition-colors"
+          className="hover-glass lg:hidden h-9 w-9 shrink-0 rounded-full border border-bone-300/65 bg-bone-50 flex items-center justify-center text-ink-300/70 hover:text-ink-300"
         >
           <Menu className="h-3.5 w-3.5" />
         </button>
@@ -59,7 +59,7 @@ export function Topbar() {
         {/* Command palette trigger — desktop */}
         <button
           onClick={openPalette}
-          className="hidden md:flex flex-1 max-w-2xl items-center gap-2 h-8 rounded-md border border-bone-300/55 bg-bone-50 px-2.5 text-[12.5px] text-ink-300/55 hover:bg-bone-100 hover:border-bone-300/80 transition-colors"
+          className="hover-glass hidden md:flex flex-1 max-w-2xl items-center gap-2 h-9 rounded-full border border-bone-300/55 bg-bone-50/60 px-3.5 text-[12.5px] text-ink-300/55"
         >
           <Search className="h-3.5 w-3.5" />
           <span className="flex-1 text-left">Search projects, accounts, tickets, devices…</span>
@@ -70,7 +70,7 @@ export function Topbar() {
         <button
           onClick={() => setSearchOpen(true)}
           aria-label="Search"
-          className="md:hidden h-8 w-8 shrink-0 rounded-md border border-bone-300/65 bg-bone-50 flex items-center justify-center text-ink-300/65 hover:text-ink-300"
+          className="hover-glass md:hidden h-9 w-9 shrink-0 rounded-full border border-bone-300/65 bg-bone-50 flex items-center justify-center text-ink-300/65 hover:text-ink-300"
         >
           <Search className="h-3.5 w-3.5" />
         </button>
@@ -81,7 +81,7 @@ export function Topbar() {
         <button
           onClick={() => showAssistant()}
           aria-label="Ask AI"
-          className="h-8 px-2.5 rounded-md flex items-center gap-1.5 text-[12.5px] font-medium text-ink-300/75 hover:text-ink-300 hover:bg-bone-100 transition-colors"
+          className="hover-glass h-9 px-3 rounded-full flex items-center gap-1.5 text-[12.5px] font-medium text-ink-300/75 hover:text-ink-300 border border-transparent"
         >
           <Sparkles className="h-3.5 w-3.5 text-signal-500" strokeWidth={1.75} />
           <span className="hidden md:inline">Ask AI</span>
@@ -94,7 +94,7 @@ export function Topbar() {
             <button
               aria-label="Density"
               title="Display density"
-              className="h-8 w-8 shrink-0 rounded-md flex items-center justify-center text-ink-300/65 hover:text-ink-300 hover:bg-bone-100"
+              className="hover-glass h-9 w-9 shrink-0 rounded-full border border-transparent flex items-center justify-center text-ink-300/65 hover:text-ink-300"
             >
               {density === "comfortable" ? <Rows3 className="h-3.5 w-3.5" /> : <Rows4 className="h-3.5 w-3.5" />}
             </button>
@@ -121,7 +121,7 @@ export function Topbar() {
           <DropdownMenuTrigger asChild>
             <button
               aria-label="Notifications"
-              className="relative h-8 w-8 shrink-0 rounded-md flex items-center justify-center text-ink-300/65 hover:text-ink-300 hover:bg-bone-100"
+              className="hover-glass relative h-9 w-9 shrink-0 rounded-full border border-transparent flex items-center justify-center text-ink-300/65 hover:text-ink-300"
             >
               <Bell className="h-3.5 w-3.5" />
               <span className="absolute top-1 right-1 h-1.5 w-1.5 rounded-full bg-signal-500" />
@@ -154,7 +154,7 @@ export function Topbar() {
         {/* Profile */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="flex items-center gap-2 rounded-md hover:bg-bone-100 pl-1 pr-2 py-1 transition-colors">
+            <button className="hover-glass flex items-center gap-2 rounded-full border border-transparent pl-1.5 pr-3 py-1.5">
               <Avatar className="h-6 w-6">
                 <AvatarFallback className="text-[10px]">MR</AvatarFallback>
               </Avatar>

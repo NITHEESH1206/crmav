@@ -25,11 +25,11 @@ const buttonVariants = cva(
         default:
           "bg-ink-300 text-bone-100 hover:bg-ink-200 active:bg-ink-300 shadow-[0_1px_0_0_rgba(255,255,255,0.08)_inset,0_1px_2px_-1px_rgba(10,10,10,0.4)]",
         secondary:
-          "bg-white text-ink-300 border border-bone-300/70 hover:bg-bone-50 hover:border-bone-300",
+          "hover-glass border border-bone-300/70 bg-white text-ink-300 hover:text-ink-300",
         ghost:
-          "text-ink-300/75 hover:text-ink-300 hover:bg-bone-100",
+          "hover-glass border border-transparent text-ink-300/75 hover:text-ink-300",
         outline:
-          "border border-bone-300/80 bg-transparent text-ink-300 hover:bg-bone-50 hover:border-ink-300/30",
+          "hover-glass border border-bone-300/80 bg-transparent text-ink-300 hover:text-ink-300",
         destructive:
           "border border-status-danger-fg/30 bg-status-danger-bg text-status-danger-fg hover:bg-status-danger-fg/10 hover:border-status-danger-fg/50",
         "destructive-solid":

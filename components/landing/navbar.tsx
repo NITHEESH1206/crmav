@@ -43,7 +43,7 @@ export function LandingNavbar() {
               <Link
                 key={l.label}
                 href={l.href}
-                className="text-[15px] text-ink-300/70 hover:text-ink-300 transition-colors"
+                className="hover-glass text-[15px] text-ink-300/70 hover:text-ink-300 px-3.5 py-1.5 rounded-full border border-transparent"
               >
                 {l.label}
               </Link>

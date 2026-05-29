@@ -59,7 +59,7 @@ export function Sidebar() {
         {/* ── Workspace switcher row ── */}
         <button
           type="button"
-          className="flex items-center justify-between gap-2 px-3 py-3 border-b border-bone-300/55 hover:bg-bone-50/70 transition-colors"
+          className="hover-glass flex items-center justify-between gap-2 px-3 py-3 border-b border-bone-300/55"
           aria-label="Switch workspace"
         >
           <div className="flex items-center gap-2 min-w-0">
@@ -92,7 +92,7 @@ export function Sidebar() {
           <button
             type="button"
             className={cn(
-              "w-full flex items-center gap-2 rounded-md border border-bone-300/55 bg-bone-50 px-2.5 py-1.5 text-[12.5px] text-ink-300/55 hover:bg-bone-100 hover:border-bone-300/80 transition-colors",
+              "hover-glass w-full flex items-center gap-2 rounded-full border border-bone-300/55 bg-bone-50/60 px-3 py-1.5 text-[12.5px] text-ink-300/55",
               collapsed && "justify-center px-0"
             )}
           >
@@ -199,7 +199,7 @@ export function Sidebar() {
         <button
           type="button"
           onClick={() => setCollapsed((c) => !c)}
-          className="absolute -right-3 top-16 h-6 w-6 rounded-full bg-white border border-bone-300/65 flex items-center justify-center text-ink-300/55 hover:text-ink-300 hover:border-bone-300/85 transition-colors shadow-[0_2px_6px_-2px_rgba(10,10,10,0.12)]"
+          className="hover-glass absolute -right-3 top-16 h-6 w-6 rounded-full bg-white border border-bone-300/65 flex items-center justify-center text-ink-300/55 hover:text-ink-300 shadow-[0_2px_6px_-2px_rgba(10,10,10,0.12)]"
           aria-label="Toggle sidebar"
         >
           <ChevronsLeft
@@ -229,11 +229,11 @@ function NavRow({
     <Link
       href={item.href}
       className={cn(
-        "group relative flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-[13px] transition-colors",
+        "group relative flex items-center gap-2.5 rounded-full px-3 py-1.5 text-[13px] border border-transparent",
         collapsed && "justify-center px-0",
         active
-          ? "bg-bone-100 text-ink-300 font-medium"
-          : "text-ink-300/65 hover:text-ink-300 hover:bg-bone-50"
+          ? "glass-pill-active text-ink-300 font-medium"
+          : "hover-glass text-ink-300/65 hover:text-ink-300"
       )}
       title={collapsed ? item.label : undefined}
     >

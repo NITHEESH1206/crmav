@@ -196,6 +196,54 @@
       0 24px 60px -20px rgba(10, 10, 10, 0.45);
   }
 
+  /* ─── Hover-glass — the unified hover treatment for all interactive elements ───
+     On hover the element gains a frosted glass pill effect: translucent bg,
+     backdrop blur, faint inset light highlight at the top, soft outer shadow.
+     Works on any shape (square icon buttons, pill nav links, full buttons)
+     because the glass adapts to the element's own border-radius. */
+  .hover-glass {
+    transition: background-color 0.2s ease, backdrop-filter 0.2s ease,
+                border-color 0.2s ease, box-shadow 0.2s ease,
+                color 0.2s ease, transform 0.2s ease;
+  }
+  .hover-glass:hover {
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(16px) saturate(1.5);
+    -webkit-backdrop-filter: blur(16px) saturate(1.5);
+    border-color: rgba(255, 255, 255, 0.65);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.9),
+      0 2px 8px -2px rgba(10, 10, 10, 0.08),
+      0 1px 2px 0 rgba(10, 10, 10, 0.04);
+  }
+  /* For elements that need the same effect on dark/ink backgrounds */
+  .hover-glass-dark {
+    transition: background-color 0.2s ease, backdrop-filter 0.2s ease,
+                border-color 0.2s ease, box-shadow 0.2s ease,
+                color 0.2s ease, transform 0.2s ease;
+  }
+  .hover-glass-dark:hover {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px) saturate(1.5);
+    -webkit-backdrop-filter: blur(16px) saturate(1.5);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.18),
+      0 2px 8px -2px rgba(0, 0, 0, 0.3);
+  }
+  /* The "active selected" pill variant — used for sidebar active nav, toggle
+     buttons, etc. Renders the glass even without hover. */
+  .glass-pill-active {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(20px) saturate(1.5);
+    -webkit-backdrop-filter: blur(20px) saturate(1.5);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.95),
+      inset 0 -1px 0 0 rgba(10, 10, 10, 0.04),
+      0 2px 8px -2px rgba(10, 10, 10, 0.1);
+  }
+
   /* Glass button — for landing CTAs (pill shape inherited from utility) */
   .btn-glass-primary {
     background: linear-gradient(180deg, #1a1a1d 0%, #0a0a0a 100%);
