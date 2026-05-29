@@ -41,15 +41,15 @@ export function DashboardFrame({ children }: { children: React.ReactNode }) {
     >
       {/* Toolbar */}
       <div className={cn("flex items-center justify-between mb-4", noc && "mb-6")}>
-        <div className="inline-flex items-center rounded-md border border-bone-300/55 bg-white p-0.5">
+        <div className="glass inline-flex items-center rounded-full p-1">
           <button
             type="button"
             onClick={() => setMode("today")}
             className={cn(
-              "inline-flex items-center gap-1.5 h-7 px-2.5 rounded text-[12px] font-medium transition-colors",
+              "inline-flex items-center gap-1.5 h-8 px-3.5 rounded-full text-[12.5px] font-medium transition-all",
               mode === "today"
-                ? "bg-ink-300 text-bone-100"
-                : "text-ink-300/65 hover:text-ink-300"
+                ? "btn-glass-primary"
+                : "text-ink-300/65 hover:text-ink-300 hover:bg-white/40"
             )}
           >
             <Calendar className="h-3 w-3" />
@@ -59,10 +59,10 @@ export function DashboardFrame({ children }: { children: React.ReactNode }) {
             type="button"
             onClick={() => setMode("week")}
             className={cn(
-              "inline-flex items-center gap-1.5 h-7 px-2.5 rounded text-[12px] font-medium transition-colors",
+              "inline-flex items-center gap-1.5 h-8 px-3.5 rounded-full text-[12.5px] font-medium transition-all",
               mode === "week"
-                ? "bg-ink-300 text-bone-100"
-                : "text-ink-300/65 hover:text-ink-300"
+                ? "btn-glass-primary"
+                : "text-ink-300/65 hover:text-ink-300 hover:bg-white/40"
             )}
           >
             <CalendarDays className="h-3 w-3" />
@@ -73,7 +73,7 @@ export function DashboardFrame({ children }: { children: React.ReactNode }) {
         <button
           type="button"
           onClick={() => setNoc((v) => !v)}
-          className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md text-[12px] font-medium text-ink-300/65 hover:text-ink-300 hover:bg-bone-100 transition-colors"
+          className="glass inline-flex items-center gap-1.5 h-8 px-3.5 rounded-full text-[12.5px] font-medium text-ink-300/75 hover:text-ink-300 transition-all hover:-translate-y-px"
           title="Mission control mode (⌘⇧M)"
         >
           {noc ? <Minimize2 className="h-3 w-3" /> : <Maximize2 className="h-3 w-3" />}

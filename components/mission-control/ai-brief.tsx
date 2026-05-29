@@ -23,22 +23,31 @@ export function AIBriefWidget({ items }: { items: AttentionItem[] }) {
   }
 
   return (
-    <section className="rounded-lg bg-white border border-bone-300/55 overflow-hidden">
-      <header className="flex items-center justify-between gap-2 px-4 py-3 border-b border-bone-300/45">
+    <section className="glass-signal relative rounded-[20px] overflow-hidden">
+      {/* Top accent stripe — signal-orange for the AI surface */}
+      <span
+        aria-hidden
+        className="absolute top-0 left-3 right-3 h-px pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(90deg, transparent, rgba(255,90,31,0.65), transparent)",
+        }}
+      />
+      <header className="flex items-center justify-between gap-2 px-4 py-3 border-b border-signal-500/20">
         <div className="flex items-center gap-2 min-w-0">
-          <div className="h-5 w-5 rounded bg-signal-500/10 flex items-center justify-center shrink-0">
-            <Sparkles className="h-3 w-3 text-signal-500" strokeWidth={2} />
+          <div className="h-6 w-6 rounded-lg bg-signal-500/25 backdrop-blur-md border border-signal-500/30 flex items-center justify-center shrink-0 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.4)]">
+            <Sparkles className="h-3 w-3 text-signal-700" strokeWidth={2.5} />
           </div>
           <div className="min-w-0">
-            <div className="text-[10px] uppercase tracking-[0.14em] text-ink-300/45 font-semibold leading-tight">
+            <div className="font-mono text-[10px] uppercase tracking-[0.08em] text-signal-700/80 leading-tight">
               AI Brief · Today
             </div>
-            <h3 className="text-[13px] font-semibold text-ink-300 leading-tight">What to watch</h3>
+            <h3 className="text-[13px] font-semibold text-ink-300 leading-tight mt-0.5">What to watch</h3>
           </div>
         </div>
         <button
           onClick={openWithAI}
-          className="inline-flex items-center gap-1 text-[11px] text-signal-600 hover:text-signal-700 font-medium shrink-0"
+          className="inline-flex items-center gap-1 text-[11px] text-signal-700 hover:text-signal-800 font-medium shrink-0 rounded-full px-2 py-1 hover:bg-white/40 transition-colors"
         >
           Open with AI
           <ArrowUpRight className="h-3 w-3" />

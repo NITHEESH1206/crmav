@@ -1,7 +1,7 @@
 "use client";
 
 import { AlertTriangle, ShoppingCart, FileWarning, Boxes, Shield, Users, TrendingUp, Calendar } from "lucide-react";
-import { formatCompact, formatDate } from "@/lib/utils";
+import { cn, formatCompact, formatDate } from "@/lib/utils";
 import { WidgetCard, WidgetRow, WidgetEmpty } from "./widget-card";
 
 type Project = {
@@ -254,7 +254,7 @@ export function TodaysOpsWidget({
           <a
             key={s.label}
             href={s.href}
-            className="rounded-md bg-bone-50 hover:bg-bone-100 border border-bone-300/45 p-3 transition-colors"
+            className="rounded-2xl bg-white/55 hover:bg-white/80 backdrop-blur-md border border-white/60 p-3.5 transition-all hover:-translate-y-px shadow-[inset_0_1px_0_0_rgba(255,255,255,0.8),0_1px_2px_0_rgba(10,10,10,0.03)] hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.9),0_4px_12px_-4px_rgba(10,10,10,0.1)]"
           >
             <div className="text-display-lg font-display tracking-tight text-ink-300 leading-none">
               {s.value}
@@ -280,21 +280,21 @@ export function PipelineRevenueWidget({
   revenueThisMonthCents: number;
 }) {
   return (
-    <WidgetCard icon={TrendingUp} eyebrow="Sell · Finance" title="Pipeline & revenue" href="/opportunities">
+    <WidgetCard icon={TrendingUp} eyebrow="Sell · Finance" title="Pipeline & revenue" href="/opportunities" tone="signal">
       <div className="p-3 space-y-3">
         <div>
-          <div className="text-[10.5px] uppercase tracking-[0.14em] text-ink-300/50 font-semibold">
+          <div className="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-300/50">
             Open pipeline
           </div>
-          <div className="text-display-lg font-display tracking-tight text-ink-300 leading-tight mt-0.5">
+          <div className="text-display-lg font-display tracking-tight text-signal-700 leading-tight mt-0.5">
             ${formatCompact(openPipelineCents / 100)}
           </div>
           <div className="text-[11px] text-ink-300/55 mt-0.5">
             {openCount} active · {closingThisWeek} closing this week
           </div>
         </div>
-        <div className="pt-3 border-t border-bone-300/45">
-          <div className="text-[10.5px] uppercase tracking-[0.14em] text-ink-300/50 font-semibold">
+        <div className="pt-3 border-t border-signal-500/15">
+          <div className="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-300/50">
             Revenue MTD
           </div>
           <div className="text-heading-lg font-display tracking-tight text-ink-300 mt-0.5">
@@ -327,9 +327,14 @@ export function TeamUtilizationWidget({
             </span>
             <span className="text-[13px] font-mono text-ink-300/85">{util}%</span>
           </div>
-          <div className="mt-1.5 h-1.5 rounded-full bg-bone-100 overflow-hidden">
+          <div className="mt-2 h-2 rounded-full bg-white/50 backdrop-blur-md border border-white/60 overflow-hidden shadow-[inset_0_1px_0_0_rgba(255,255,255,0.8)]">
             <div
-              className="h-full rounded-full bg-ink-300 transition-all duration-500"
+              className={cn(
+                "h-full rounded-full transition-all duration-500",
+                util >= 85
+                  ? "bg-gradient-to-r from-signal-400 to-signal-600 shadow-[0_0_8px_rgba(255,90,31,0.4)]"
+                  : "bg-gradient-to-r from-ink-200 to-ink-300"
+              )}
               style={{ width: `${util}%` }}
             />
           </div>

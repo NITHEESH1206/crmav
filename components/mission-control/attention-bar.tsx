@@ -49,8 +49,8 @@ const KIND_META: Record<
 export function AttentionBar({ items }: { items: AttentionItem[] }) {
   if (items.length === 0) {
     return (
-      <div className="rounded-lg bg-white border border-bone-300/55 px-4 py-3 flex items-center gap-2">
-        <span className="h-2 w-2 rounded-full bg-status-success-fg/70" />
+      <div className="glass-strong rounded-2xl px-5 py-3.5 flex items-center gap-2.5">
+        <span className="h-2 w-2 rounded-full bg-status-success-fg/70 shadow-[0_0_8px_rgba(17,112,58,0.4)]" />
         <span className="text-[13px] text-ink-300/75">
           All clear. Nothing needs attention right now.
         </span>
@@ -59,8 +59,8 @@ export function AttentionBar({ items }: { items: AttentionItem[] }) {
   }
 
   return (
-    <div className="flex items-center gap-2 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-thin">
-      <span className="text-[10.5px] uppercase tracking-[0.16em] text-ink-300/55 font-semibold shrink-0 pr-2">
+    <div className="glass-strong rounded-2xl px-3 py-2.5 flex items-center gap-2 overflow-x-auto scrollbar-thin">
+      <span className="font-mono text-[10.5px] uppercase tracking-[0.08em] text-ink-300/55 font-semibold shrink-0 pl-2 pr-1">
         Attention
       </span>
       {items.map((item) => {
@@ -71,7 +71,7 @@ export function AttentionBar({ items }: { items: AttentionItem[] }) {
             key={item.id}
             href={item.href}
             className={cn(
-              "group inline-flex items-center gap-2 rounded-md border pl-2.5 pr-1.5 py-1.5 text-[12px] shrink-0 transition-all hover:-translate-y-px",
+              "group inline-flex items-center gap-2 rounded-full border backdrop-blur-md pl-3 pr-1.5 py-1.5 text-[12px] shrink-0 transition-all hover:-translate-y-px hover:shadow-[0_4px_12px_-4px_rgba(10,10,10,0.15)]",
               meta.tone
             )}
           >
@@ -80,7 +80,7 @@ export function AttentionBar({ items }: { items: AttentionItem[] }) {
             <span className="text-current/65 truncate hidden lg:inline max-w-[180px]">
               · {item.meta}
             </span>
-            <span className="h-5 w-5 rounded flex items-center justify-center bg-white/50 group-hover:bg-white">
+            <span className="h-5 w-5 rounded-full flex items-center justify-center bg-white/60 backdrop-blur-md group-hover:bg-white">
               <ChevronRight className="h-3 w-3" strokeWidth={2} />
             </span>
           </Link>

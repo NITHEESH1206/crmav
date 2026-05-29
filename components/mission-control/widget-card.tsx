@@ -6,9 +6,9 @@ import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
 
 /**
- * WidgetCard — the standard container for every Mission Control panel.
- * Slim header (eyebrow + count + drill-through link), no shadow at rest,
- * dense body, optional footer KPI row.
+ * WidgetCard — glass-strong panel with 20px radius, status-tinted top accent
+ * stripe (1px gradient line), and a soft inset highlight. The tone prop drives
+ * the accent so risk widgets read as warning, AMC as info, etc.
  */
 export function WidgetCard({
   icon: Icon,
@@ -28,52 +28,63 @@ export function WidgetCard({
   count?: number | string;
   href?: string;
   drillLabel?: string;
-  tone?: "neutral" | "warning" | "danger" | "info" | "success";
+  tone?: "neutral" | "warning" | "danger" | "info" | "success" | "signal";
   className?: string;
   children: React.ReactNode;
   footer?: React.ReactNode;
 }) {
-  const accent =
+  // 1px gradient stripe along the top — quietly status-coded
+  const accentColor =
     tone === "danger"
-      ? "border-status-danger-fg/25"
+      ? "rgba(168, 32, 26, 0.45)"
       : tone === "warning"
-        ? "border-status-warning-fg/25"
+        ? "rgba(138, 95, 10, 0.4)"
         : tone === "info"
-          ? "border-status-info-fg/25"
+          ? "rgba(31, 58, 107, 0.4)"
           : tone === "success"
-            ? "border-status-success-fg/25"
-            : "border-bone-300/55";
+            ? "rgba(17, 112, 58, 0.4)"
+            : tone === "signal"
+              ? "rgba(255, 90, 31, 0.55)"
+              : "rgba(10, 10, 10, 0.12)";
 
   return (
     <section
       className={cn(
-        "rounded-lg bg-white border flex flex-col min-w-0",
-        accent,
+        "glass-strong relative rounded-[20px] flex flex-col min-w-0 overflow-hidden",
         className
       )}
     >
-      <header className="flex items-center justify-between gap-2 px-4 py-3 border-b border-bone-300/45">
+      {/* Top accent stripe — quiet status signal */}
+      <span
+        aria-hidden
+        className="absolute top-0 left-3 right-3 h-px pointer-events-none"
+        style={{
+          background: `linear-gradient(90deg, transparent, ${accentColor}, transparent)`,
+        }}
+      />
+
+      <header className="flex items-center justify-between gap-2 px-4 py-3 border-b border-bone-300/30">
         <div className="flex items-center gap-2 min-w-0">
           {Icon && <Icon className="h-3.5 w-3.5 text-ink-300/55 shrink-0" strokeWidth={1.75} />}
           <div className="min-w-0">
             {eyebrow && (
-              <div className="text-[10px] uppercase tracking-[0.14em] text-ink-300/45 font-semibold leading-tight">
+              <div className="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-300/50 leading-tight">
                 {eyebrow}
               </div>
             )}
-            <h3 className="text-[13px] font-semibold text-ink-300 truncate leading-tight">{title}</h3>
+            <h3 className="text-[13px] font-semibold text-ink-300 truncate leading-tight mt-0.5">{title}</h3>
           </div>
         </div>
         <div className="flex items-center gap-2 shrink-0">
           {count !== undefined && (
-            <span className="text-[11px] font-mono text-ink-300/55 px-1.5 py-0.5 rounded bg-bone-100">
+            <span className="text-[11px] font-mono text-ink-300/65 px-1.5 py-0.5 rounded-md bg-white/60 backdrop-blur-md border border-bone-300/40">
               {count}
             </span>
           )}
           {href && (
             <Link
               href={href}
-              className="text-[11px] text-ink-300/55 hover:text-ink-300 flex items-center gap-0.5"
+              className="text-[11px] text-ink-300/60 hover:text-ink-300 flex items-center gap-0.5 transition-colors"
             >
               {drillLabel}
               <ChevronRight className="h-3 w-3" />
@@ -83,7 +94,7 @@ export function WidgetCard({
       </header>
       <div className="flex-1 p-2">{children}</div>
       {footer && (
-        <footer className="px-4 py-2.5 border-t border-bone-300/45 text-[11px] text-ink-300/65">
+        <footer className="px-4 py-2.5 border-t border-bone-300/30 text-[11px] text-ink-300/65 bg-white/30">
           {footer}
         </footer>
       )}
@@ -119,7 +130,7 @@ export function WidgetRow({
               : null;
 
   const content = (
-    <div className="flex items-center gap-2.5 px-2.5 py-2 rounded-md hover:bg-bone-50 transition-colors">
+    <div className="flex items-center gap-2.5 px-2.5 py-2 rounded-xl hover:bg-white/50 transition-colors">
       {dot && <span className={cn("h-1.5 w-1.5 rounded-full shrink-0", dot)} aria-hidden />}
       <div className="flex-1 min-w-0">
         <div className="text-[12.5px] text-ink-300 truncate">{primary}</div>
