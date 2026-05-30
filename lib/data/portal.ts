@@ -19,6 +19,26 @@ export async function getPortalAccount(accountId: string) {
   });
 }
 
+export async function getPortalProposals(accountId: string) {
+  // Quotes linked to this account's opportunities, that have been sent.
+  return prisma.quote.findMany({
+    where: {
+      opportunity: { accountId },
+      status: { in: ["SENT", "REVIEW", "SIGNED"] },
+    },
+    select: {
+      id: true,
+      number: true,
+      status: true,
+      totalCents: true,
+      signedByName: true,
+      signedAt: true,
+      opportunity: { select: { name: true } },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
 export async function getPortalProjects(accountId: string) {
   return prisma.project.findMany({
     where: { accountId },

@@ -8,6 +8,7 @@ import { KeyboardShortcuts } from "@/components/app/keyboard-shortcuts";
 import { DensityMount } from "@/components/app/density-mount";
 import { CommandPalette } from "@/components/palette/command-palette";
 import { GenerationDrawer } from "@/components/ai/generation-drawer";
+import { CopilotRail } from "@/components/ai/copilot-rail";
 import { SessionProvider } from "@/lib/permissions/session";
 import { getLookups } from "@/lib/data/lookups";
 
@@ -56,6 +57,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       <KeyboardShortcuts />
       <CommandPalette />
       <GenerationDrawer />
+      <CopilotRail />
     </div>
     </SessionProvider>
   );

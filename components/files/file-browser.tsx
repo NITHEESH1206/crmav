@@ -20,8 +20,9 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { addFile, deleteFile } from "@/app/actions/files";
+import { deleteFile } from "@/app/actions/files";
 import { ProvenanceBadge } from "@/components/ai/provenance-badge";
+import { UploadDropzone } from "@/components/files/upload-dropzone";
 import {
   FOLDERS,
   type AppFile,
@@ -55,10 +56,12 @@ export function FileBrowser({
   files,
   counts,
   projects,
+  storageConfigured,
 }: {
   files: AppFile[];
   counts: Record<Folder, number>;
   projects: { id: string; name: string }[];
+  storageConfigured: boolean;
 }) {
   const [folder, setFolder] = useState<Folder | "all">("all");
   const [q, setQ] = useState("");
@@ -174,7 +177,8 @@ export function FileBrowser({
       </div>
 
       {uploadOpen && (
-        <UploadDialog
+        <UploadDropzone
+          storageConfigured={storageConfigured}
           projects={projects}
           defaultFolder={folder === "all" ? "Drawings" : folder}
           onClose={() => setUploadOpen(false)}
@@ -402,125 +406,6 @@ function FilePreview({ file, files }: { file: AppFile; files: AppFile[] }) {
         </button>
       </footer>
     </>
-  );
-}
-
-/* ─── Upload dialog (URL paste; real file upload requires storage backend) ─── */
-function UploadDialog({
-  projects,
-  defaultFolder,
-  onClose,
-}: {
-  projects: { id: string; name: string }[];
-  defaultFolder: Folder;
-  onClose: () => void;
-}) {
-  const [name, setName] = useState("");
-  const [url, setUrl] = useState("");
-  const [projectId, setProjectId] = useState<string>("");
-  const [folder, setFolder] = useState<Folder>(defaultFolder);
-  const [pending, startTransition] = useTransition();
-
-  function submit() {
-    if (!name.trim() || !url.trim()) {
-      toast.error("Name and URL are required");
-      return;
-    }
-    startTransition(async () => {
-      try {
-        const res = await addFile({
-          name: name.trim(),
-          fileUrl: url.trim(),
-          projectId: projectId || undefined,
-          folder,
-        });
-        if (res.ok) {
-          toast.success(`Uploaded v${res.version}`);
-          onClose();
-        }
-      } catch (err) {
-        toast.error("Upload failed", {
-          description: err instanceof Error ? err.message : "Unknown error",
-        });
-      }
-    });
-  }
-
-  return (
-    <div className="fixed inset-0 z-[80] flex items-center justify-center p-4" onClick={onClose}>
-      <div className="absolute inset-0 bg-ink-300/30 backdrop-blur-sm" />
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-md rounded-lg bg-white border border-bone-300/65 overflow-hidden"
-      >
-        <header className="px-5 py-3.5 border-b border-bone-300/55">
-          <h3 className="text-[14px] font-semibold text-ink-300">Add file</h3>
-          <p className="text-[12px] text-ink-300/55 mt-0.5">
-            Paste a URL for now — direct upload lands when storage is wired.
-          </p>
-        </header>
-        <div className="px-5 py-4 space-y-3">
-          <Field label="Folder">
-            <select
-              value={folder}
-              onChange={(e) => setFolder(e.target.value as Folder)}
-              className="h-9 w-full rounded-md border border-bone-300/65 bg-bone-50 px-2.5 text-[13px] text-ink-300 outline-none focus:border-ink-300/30"
-            >
-              {FOLDERS.map((f) => (
-                <option key={f} value={f}>{f}</option>
-              ))}
-            </select>
-          </Field>
-          <Field label="Filename">
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Rack-A_v3.pdf"
-              className="h-9 w-full rounded-md border border-bone-300/65 bg-bone-50 px-2.5 text-[13px] text-ink-300 placeholder:text-ink-300/40 outline-none focus:border-ink-300/30"
-            />
-          </Field>
-          <Field label="File URL">
-            <input
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://…"
-              className="h-9 w-full rounded-md border border-bone-300/65 bg-bone-50 px-2.5 text-[13px] text-ink-300 placeholder:text-ink-300/40 outline-none focus:border-ink-300/30"
-            />
-          </Field>
-          <Field label="Project (optional)">
-            <select
-              value={projectId}
-              onChange={(e) => setProjectId(e.target.value)}
-              className="h-9 w-full rounded-md border border-bone-300/65 bg-bone-50 px-2.5 text-[13px] text-ink-300 outline-none focus:border-ink-300/30"
-            >
-              <option value="">— Workspace-level —</option>
-              {projects.map((p) => (
-                <option key={p.id} value={p.id}>{p.name}</option>
-              ))}
-            </select>
-          </Field>
-        </div>
-        <footer className="px-5 py-3 border-t border-bone-300/55 flex items-center justify-end gap-2">
-          <Button variant="ghost" size="sm" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button size="sm" onClick={submit} disabled={pending}>
-            {pending ? "Uploading…" : "Add file"}
-          </Button>
-        </footer>
-      </div>
-    </div>
-  );
-}
-
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <label className="block">
-      <span className="text-[10.5px] uppercase tracking-[0.14em] text-ink-300/55 font-semibold">
-        {label}
-      </span>
-      <div className="mt-1.5">{children}</div>
-    </label>
   );
 }
 

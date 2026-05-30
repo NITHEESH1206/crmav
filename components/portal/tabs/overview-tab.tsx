@@ -1,7 +1,8 @@
 "use client";
 
-import { ArrowRight, CheckCircle2, AlertCircle } from "lucide-react";
+import { ArrowRight, CheckCircle2, AlertCircle, FileSignature } from "lucide-react";
 import { formatCompact } from "@/lib/utils";
+import { SignProposalButton } from "../sign-proposal";
 import type { PortalData, PortalTab } from "../portal-shell";
 
 export function OverviewTab({
@@ -12,6 +13,7 @@ export function OverviewTab({
   onJump: (t: PortalTab) => void;
 }) {
   const primaryContact = data.contacts[0];
+  const pendingProposals = data.proposals.filter((p) => p.status !== "SIGNED");
 
   // "Awaiting action" — synthesised from overdue invoices and projects waiting for client review
   const actions: { label: string; detail: string; cta: string; jump: PortalTab }[] = [];

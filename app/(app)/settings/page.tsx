@@ -17,6 +17,8 @@ import { ApiKeysTab } from "@/components/settings/api-keys-tab";
 import { AuditTab } from "@/components/settings/audit-tab";
 import { PermissionsMatrix } from "@/components/settings/permissions-matrix";
 import { IntegrationsTab } from "@/components/settings/integrations-tab";
+import { NotificationsTab } from "@/components/settings/notifications-tab";
+import { getNotificationPrefs } from "@/app/actions/notifications";
 import {
   getWorkspace,
   listWorkspaceMembers,
@@ -26,11 +28,12 @@ import {
 import { notFound } from "next/navigation";
 
 export default async function SettingsPage() {
-  const [workspace, members, keys, audit] = await Promise.all([
+  const [workspace, members, keys, audit, notifPrefs] = await Promise.all([
     getWorkspace(),
     listWorkspaceMembers(),
     listApiKeys(),
     listAuditLog(50),
+    getNotificationPrefs(),
   ]);
 
   if (!workspace) notFound();
@@ -86,25 +89,7 @@ export default async function SettingsPage() {
         </TabsContent>
 
         <TabsContent value="notifications">
-          <Card>
-            <CardContent className="p-6 space-y-3">
-              {[
-                "SLA breach risk on service tickets",
-                "Project moved between phases",
-                "Inventory low-stock alerts",
-                "PO approvals required",
-                "Daily revenue digest",
-              ].map((n) => (
-                <div key={n} className="flex items-center justify-between py-2 border-b border-bone-300/45 last:border-0">
-                  <span className="text-sm">{n}</span>
-                  <div className="flex gap-2">
-                    <Badge variant="success">Email</Badge>
-                    <Badge>In-app</Badge>
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
+          <NotificationsTab initial={notifPrefs} />
         </TabsContent>
 
         <TabsContent value="integrations">

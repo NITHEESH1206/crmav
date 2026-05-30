@@ -10,7 +10,6 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { useQuickCreate } from "@/lib/stores/quick-create";
-import { useAssistant } from "@/lib/stores/assistant";
 import { useDetailDrawer } from "@/lib/stores/detail-drawer";
 import { NAV_BY_HINT_LETTER } from "@/lib/nav";
 import { Keyboard, Sparkles } from "lucide-react";
@@ -59,7 +58,6 @@ export function KeyboardShortcuts() {
   const router = useRouter();
   const [helpOpen, setHelpOpen] = useState(false);
   const showQuickCreate = useQuickCreate((s) => s.show);
-  const showAssistant = useAssistant((s) => s.show);
   const hideDetail = useDetailDrawer((s) => s.hide);
 
   useEffect(() => {
@@ -88,12 +86,7 @@ export function KeyboardShortcuts() {
         return;
       }
 
-      // ⌘/ — AI in current context
-      if (mod && e.key === "/") {
-        e.preventDefault();
-        showAssistant();
-        return;
-      }
+      // ⌘/ is handled by the Co-pilot rail (components/ai/copilot-rail.tsx)
 
       // Esc — close help dialog and detail drawer
       if (e.key === "Escape") {
@@ -155,7 +148,7 @@ export function KeyboardShortcuts() {
       window.removeEventListener("keydown", handler);
       if (gTimer) clearTimeout(gTimer);
     };
-  }, [router, showQuickCreate, showAssistant, hideDetail, helpOpen]);
+  }, [router, showQuickCreate, hideDetail, helpOpen]);
 
   // Group shortcuts for the help dialog
   const groups = Array.from(new Set(SHORTCUTS.map((s) => s.group)));

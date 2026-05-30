@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import {
   getPortalAccount,
   getPortalProjects,
+  getPortalProposals,
   getPortalDocuments,
   getPortalTickets,
   getPortalInvoices,
@@ -17,9 +18,10 @@ export default async function PortalPage({
 }) {
   const { accountId } = await params;
 
-  const [account, projects, documents, tickets, invoices, amcs, snapshot] = await Promise.all([
+  const [account, projects, proposals, documents, tickets, invoices, amcs, snapshot] = await Promise.all([
     getPortalAccount(accountId),
     getPortalProjects(accountId),
+    getPortalProposals(accountId),
     getPortalDocuments(accountId),
     getPortalTickets(accountId),
     getPortalInvoices(accountId),
@@ -93,6 +95,15 @@ export default async function PortalPage({
       visitsTotal: a.visitsTotal,
       visitsUsed: a.visitsUsed,
       monthlyValueCents: a.monthlyValueCents,
+    })),
+    proposals: proposals.map((p) => ({
+      quoteId: p.id,
+      number: p.number,
+      status: p.status,
+      totalCents: p.totalCents,
+      signedByName: p.signedByName,
+      signedAt: p.signedAt,
+      opportunityName: p.opportunity.name,
     })),
   };
 

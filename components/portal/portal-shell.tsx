@@ -80,6 +80,15 @@ export type PortalData = {
     visitsUsed: number;
     monthlyValueCents: number;
   }[];
+  proposals: {
+    quoteId: string;
+    number: string;
+    status: string;
+    totalCents: number;
+    signedByName: string | null;
+    signedAt: Date | null;
+    opportunityName: string;
+  }[];
 };
 
 const TABS: { id: PortalTab; label: string; icon: typeof LayoutDashboard }[] = [

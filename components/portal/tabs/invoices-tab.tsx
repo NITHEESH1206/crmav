@@ -146,11 +146,9 @@ export function InvoicesTab({
                     </button>
                   ) : (
                     <a
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        toast.info("Download", { description: "Invoice PDF generation pending." });
-                      }}
+                      href={`/api/invoices/${inv.id}/pdf?account=${accountId}`}
+                      target="_blank"
+                      rel="noreferrer"
                       className="hover-glass inline-flex items-center gap-1 h-8 px-3 rounded-full text-[12px] text-ink-300/65 hover:text-ink-300 border border-transparent"
                     >
                       PDF
