@@ -56,6 +56,7 @@ model Workspace {
   amcChecklists CommissioningChecklist[]
   automations   Automation[]
   automationRuns AutomationRun[]
+  deviceAgents  DeviceAgent[]
 }
 
 model User {
@@ -397,7 +398,25 @@ model Device {
   lastSeenAt  DateTime?
   dspConfigUrl String?
 
+  /** ── Remote control (Phase 30) ── */
+  /** Which on-site agent bridges this device to the cloud. */
+  agentId        String?
+  agent          DeviceAgent? @relation(fields: [agentId], references: [id])
+  /** Control protocol used to talk to the device on the LAN. */
+  controlProtocol DeviceProtocol @default(NONE)
+  /** TCP control port (PJLink 4352, Crestron 41794, etc.). */
+  controlPort     Int?
+  /** Reported power state from the agent. */
+  powerState      PowerState  @default(UNKNOWN)
+  /** Free-form latest telemetry (inputs, lamp hours, temp, errors). */
+  telemetryJson   Json?
+  /** Last time the agent successfully reached the device. */
+  lastPolledAt    DateTime?
+
+  commands     DeviceCommand[]
+
   @@index([workspaceId])
+  @@index([agentId])
 }
 
 enum DeviceStatus {
@@ -405,6 +424,87 @@ enum DeviceStatus {
   OFFLINE
   WARNING
   RETIRED
+}
+
+enum PowerState {
+  ON
+  OFF
+  WARMING
+  COOLING
+  UNKNOWN
+}
+
+enum DeviceProtocol {
+  NONE
+  PJLINK       // projectors — open standard, TCP 4352
+  TCP_RAW      // generic TCP command strings (displays, matrix)
+  CRESTRON     // Crestron console over TCP
+  TELNET       // telnet-style devices
+  HTTP         // REST/HTTP-controlled devices
+}
+
+/**
+ * DeviceAgent — an on-site bridge process (Raspberry Pi / mini-PC / NUC)
+ * running on the same LAN as the AV devices. It connects OUTBOUND to the
+ * cloud (poll-based), so devices behind NAT/firewall are controllable from
+ * anywhere without inbound ports or VPN.
+ */
+model DeviceAgent {
+  id          String   @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name        String
+  /** Site/location label, e.g. "Marriott NYC — 14F MDF". */
+  location    String?
+  /** SHA-256 hash of the agent's secret key. The raw key is shown once. */
+  hashedKey   String   @unique
+  keyPrefix   String
+  /** Heartbeat — set on every poll. Stale = agent box is down. */
+  lastSeenAt  DateTime?
+  version     String?
+  online      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  devices  Device[]
+  commands DeviceCommand[]
+
+  @@index([workspaceId])
+}
+
+/**
+ * DeviceCommand — a queued control instruction. The UI enqueues it; the agent
+ * polls, picks up PENDING commands, executes them on the device, and reports
+ * the result back (SUCCESS / FAILED).
+ */
+model DeviceCommand {
+  id          String   @id @default(cuid())
+  workspaceId String
+  deviceId    String
+  device      Device   @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  agentId     String
+  agent       DeviceAgent @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  /** "power_on" | "power_off" | "restart" | "input" | "volume" | "mute" | "raw" */
+  action      String
+  /** Action arguments, e.g. { input: "HDMI1" } or { level: 30 } or { command: "..." }. */
+  params      Json?
+  status      CommandStatus @default(PENDING)
+  /** Set by the agent after execution. */
+  result      String?
+  issuedBy    String?
+  createdAt   DateTime @default(now())
+  executedAt  DateTime?
+
+  @@index([workspaceId])
+  @@index([deviceId])
+  @@index([agentId, status])
+}
+
+enum CommandStatus {
+  PENDING
+  SENT
+  SUCCESS
+  FAILED
+  EXPIRED
 }
 
 model Drawing {

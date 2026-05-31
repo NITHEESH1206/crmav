@@ -36,3 +36,6 @@ prisma/migrations/dev.db*
 # IDE
 .idea/
 .vscode/
+
+.vercel
+.env*

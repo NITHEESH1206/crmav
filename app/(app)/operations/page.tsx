@@ -1,4 +1,5 @@
-import { Cpu, Wifi, WifiOff, AlertTriangle, Activity } from "lucide-react";
+import Link from "next/link";
+import { Cpu, Wifi, WifiOff, AlertTriangle, Activity, Radio, ArrowUpRight } from "lucide-react";
 import { ModuleShell } from "@/components/app/module-shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { OpsShell } from "@/components/operations/ops-shell";
@@ -26,6 +27,16 @@ export default async function OperationsPage() {
       eyebrow="Operations"
       title="Operations Center"
       description="Live AV health across every monitored room. Acknowledge alerts, manage connectors, run NOC mode on the wall display."
+      actions={
+        <Link
+          href="/operations/control"
+          className="btn-glass-signal inline-flex items-center gap-1.5 h-9 px-4 rounded-full text-[13px] font-medium"
+        >
+          <Radio className="h-3.5 w-3.5" />
+          Remote control
+          <ArrowUpRight className="h-3 w-3" strokeWidth={2} />
+        </Link>
+      }
     >
       {/* Summary strip */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
