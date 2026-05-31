@@ -39,7 +39,8 @@
       "PowerShell($temp = \"$env:TEMP\\\\ui-ux-pro-max-skill\"; if \\(Test-Path $temp\\) { Remove-Item -Recurse -Force $temp }; git clone --depth 1 https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git $temp 2>&1 | Select-Object -Last 5; \"---\"; Get-ChildItem \"$temp\\\\.claude\\\\skills\" -Directory | Select-Object -ExpandProperty Name)",
       "PowerShell(claude mcp add magic --scope user --env API_KEY=\"7aeeb4fb7124a34d43c81c8030d9d98aa2aa1c2a23aff38e5735cdeff93b3ad1\" -- npx -y \"@21st-dev/magic@latest\")",
       "Bash(ls vercel.json)",
-      "Bash(cat vercel.json)"
+      "Bash(cat vercel.json)",
+      "Bash(git rev-list *)"
     ]
   }
 }
