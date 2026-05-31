@@ -17,6 +17,8 @@ import {
   Radio,
   Settings2,
   Terminal,
+  ScanLine,
+  Trash2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -27,6 +29,8 @@ import {
   configureDeviceControl,
   getCommandStatus,
   quickAddDeviceByIp,
+  claimDiscoveredDevice,
+  dismissDiscoveredDevice,
 } from "@/app/actions/monitoring";
 
 type Agent = {
@@ -69,14 +73,29 @@ type Command = {
   executedAt: Date | null;
 };
 
+type Discovered = {
+  id: string;
+  ip: string;
+  port: number;
+  protocol: string;
+  label: string | null;
+  hostname: string | null;
+  banner: string | null;
+  agentName: string | null;
+  agentLocation: string | null;
+  lastSeenAt: Date;
+};
+
 export function ControlPanel({
   agents,
   devices,
   commands,
+  discovered = [],
 }: {
   agents: Agent[];
   devices: Device[];
   commands: Command[];
+  discovered?: Discovered[];
 }) {
   const [newAgentOpen, setNewAgentOpen] = useState(false);
   const [addDeviceOpen, setAddDeviceOpen] = useState(false);
@@ -120,6 +139,27 @@ export function ControlPanel({
           </div>
         )}
       </section>
+
+      {/* Discovered on the network */}
+      {discovered.length > 0 && (
+        <section>
+          <h2 className="text-[15px] font-medium text-ink-300 inline-flex items-center gap-2 mb-1">
+            <ScanLine className="h-4 w-4 text-signal-700" />
+            Discovered on your network
+            <span className="ml-1 rounded-full bg-signal-500/15 text-signal-700 text-[11px] font-semibold px-2 py-0.5">
+              {discovered.length}
+            </span>
+          </h2>
+          <p className="text-[12px] text-ink-300/55 mb-3">
+            Your connector scanned the LAN and found these. Add one and it&apos;s instantly controllable — no IP typing.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+            {discovered.map((d) => (
+              <DiscoveredCard key={d.id} item={d} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Controllable devices */}
       <section>
@@ -286,6 +326,86 @@ function AgentCard({ agent }: { agent: Agent }) {
           {agent.online ? "Online" : agent.lastSeenAt ? `Last seen ${new Date(agent.lastSeenAt).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}` : "Never connected"}
         </span>
         <span className="text-ink-300/55 font-mono">{agent.deviceCount} device{agent.deviceCount === 1 ? "" : "s"}</span>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Discovered device card ─── */
+function DiscoveredCard({ item }: { item: Discovered }) {
+  const suggested = item.label ?? item.hostname ?? `${item.protocol} ${item.ip}`;
+  const [name, setName] = useState(suggested);
+  const [pending, startTransition] = useTransition();
+  const [gone, setGone] = useState(false);
+
+  function add() {
+    if (name.trim().length < 1) {
+      toast.error("Name the device");
+      return;
+    }
+    startTransition(async () => {
+      const r = await claimDiscoveredDevice({ discoveredId: item.id, label: name.trim() });
+      if (r.ok) {
+        setGone(true);
+        toast.success("Added to control", { description: `${name.trim()} · ${item.ip}` });
+      } else {
+        toast.error("Couldn't add", { description: r.error });
+      }
+    });
+  }
+
+  function dismiss() {
+    startTransition(async () => {
+      await dismissDiscoveredDevice(item.id);
+      setGone(true);
+    });
+  }
+
+  if (gone) return null;
+
+  return (
+    <div className="glass-card p-4 border border-signal-500/15">
+      <div className="flex items-start gap-2.5 mb-3">
+        <span className="h-9 w-9 rounded-xl bg-signal-500/10 border border-signal-500/20 flex items-center justify-center shrink-0">
+          <ScanLine className="h-4 w-4 text-signal-700" />
+        </span>
+        <div className="min-w-0">
+          <div className="text-[13px] font-medium text-ink-300 truncate">{suggested}</div>
+          <div className="text-[11px] text-ink-300/55 font-mono truncate">
+            {item.ip}:{item.port} · {item.protocol}
+          </div>
+          {item.agentName && (
+            <div className="text-[10.5px] text-ink-300/45 truncate">via {item.agentName}</div>
+          )}
+        </div>
+      </div>
+
+      <input
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        className="input-glass mb-2 text-[12.5px]"
+        placeholder="Device name"
+      />
+
+      <div className="grid grid-cols-[1fr_auto] gap-2">
+        <button
+          type="button"
+          onClick={add}
+          disabled={pending}
+          className="btn-glass-signal inline-flex items-center justify-center gap-1.5 h-9 rounded-full text-[12.5px] font-medium"
+        >
+          {pending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Plus className="h-3.5 w-3.5" />}
+          Add &amp; control
+        </button>
+        <button
+          type="button"
+          onClick={dismiss}
+          disabled={pending}
+          className="hover-glass h-9 w-9 rounded-full border border-bone-300/55 flex items-center justify-center text-ink-300/45 hover:text-status-danger-fg"
+          title="Dismiss"
+        >
+          <Trash2 className="h-3.5 w-3.5" />
+        </button>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 {
   "name": "zynexav-connector",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "ZynexAV on-site connector — bridges AV devices on your local network to the ZynexAV cloud for remote monitoring & control. Pure software, runs on any always-on PC. No hardware to buy.",
   "type": "module",
   "bin": {

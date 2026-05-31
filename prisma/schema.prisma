@@ -57,6 +57,7 @@ model Workspace {
   automations   Automation[]
   automationRuns AutomationRun[]
   deviceAgents  DeviceAgent[]
+  discoveredDevices DiscoveredDevice[]
 }
 
 model User {
@@ -467,8 +468,9 @@ model DeviceAgent {
   online      Boolean  @default(false)
   createdAt   DateTime @default(now())
 
-  devices  Device[]
-  commands DeviceCommand[]
+  devices    Device[]
+  commands   DeviceCommand[]
+  discovered DiscoveredDevice[]
 
   @@index([workspaceId])
 }
@@ -507,6 +509,41 @@ enum CommandStatus {
   SUCCESS
   FAILED
   EXPIRED
+}
+
+/**
+ * Devices the connector found on the LAN by scanning the subnet (Phase 32).
+ * These are candidates the user can one-click "Add & control" — no IP typing.
+ */
+model DiscoveredDevice {
+  id          String   @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  agentId     String
+  agent       DeviceAgent @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  ipAddress   String
+  port        Int
+  protocol    DeviceProtocol @default(NONE)
+  hostname    String?
+  /** Best-guess label from the discovery probe (PJLink name / banner). */
+  label       String?
+  /** Raw identifying string returned by the probe. */
+  banner      String?
+  status      DiscoveredStatus @default(NEW)
+  /** Set once the user promotes this to a controllable Device. */
+  linkedDeviceId String?
+  firstSeenAt DateTime @default(now())
+  lastSeenAt  DateTime @default(now())
+
+  @@unique([agentId, ipAddress, port])
+  @@index([workspaceId])
+  @@index([agentId])
+}
+
+enum DiscoveredStatus {
+  NEW
+  ADDED
+  DISMISSED
 }
 
 model Drawing {

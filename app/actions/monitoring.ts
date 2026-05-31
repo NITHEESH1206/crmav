@@ -117,6 +117,54 @@ export async function quickAddDeviceByIp(input: z.infer<typeof quickAddSchema>) 
   return { ok: true as const, deviceId: device.id };
 }
 
+/* ─── Promote a discovered device into a controllable Device ─── */
+const claimSchema = z.object({
+  discoveredId: z.string(),
+  label: z.string().min(1).max(80),
+});
+
+export async function claimDiscoveredDevice(input: z.infer<typeof claimSchema>) {
+  const data = claimSchema.parse(input);
+  const workspaceId = await getCurrentWorkspaceId();
+
+  const found = await prisma.discoveredDevice.findFirst({
+    where: { id: data.discoveredId, workspaceId, status: "NEW" },
+  });
+  if (!found) return { ok: false as const, error: "Discovered device not found." };
+
+  const device = await prisma.device.create({
+    data: {
+      workspaceId,
+      label: data.label,
+      ipAddress: found.ipAddress,
+      agentId: found.agentId,
+      controlProtocol: found.protocol === "NONE" ? "TCP_RAW" : found.protocol,
+      controlPort: found.port,
+      status: "OFFLINE",
+      powerState: "UNKNOWN",
+    },
+  });
+
+  await prisma.discoveredDevice.update({
+    where: { id: found.id },
+    data: { status: "ADDED", linkedDeviceId: device.id },
+  });
+
+  revalidatePath("/operations/control");
+  revalidatePath("/operations");
+  return { ok: true as const, deviceId: device.id };
+}
+
+export async function dismissDiscoveredDevice(discoveredId: string) {
+  const workspaceId = await getCurrentWorkspaceId();
+  await prisma.discoveredDevice.updateMany({
+    where: { id: discoveredId, workspaceId },
+    data: { status: "DISMISSED" },
+  });
+  revalidatePath("/operations/control");
+  return { ok: true };
+}
+
 /* ─── Enqueue a control command ─── */
 const commandSchema = z.object({
   deviceId: z.string(),

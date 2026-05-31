@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { bearerFrom, hashAgentKey } from "@/lib/agents/auth";
+import { LATEST_AGENT_VERSION } from "@/lib/agents/version";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -44,6 +45,18 @@ const bodySchema = z.object({
         commandId: z.string(),
         status: z.enum(["SUCCESS", "FAILED"]),
         result: z.string().optional(),
+      })
+    )
+    .optional(),
+  discovered: z
+    .array(
+      z.object({
+        ip: z.string(),
+        port: z.number().int().min(1).max(65535),
+        protocol: z.enum(["NONE", "PJLINK", "TCP_RAW", "CRESTRON", "TELNET", "HTTP"]).optional(),
+        hostname: z.string().max(120).optional(),
+        label: z.string().max(120).optional(),
+        banner: z.string().max(300).optional(),
       })
     )
     .optional(),
@@ -109,6 +122,34 @@ export async function POST(req: Request) {
     }
   }
 
+  // 3b. Ingest discovered devices from the connector's subnet scan
+  if (body.discovered?.length) {
+    for (const dev of body.discovered.slice(0, 256)) {
+      await prisma.discoveredDevice.upsert({
+        where: {
+          agentId_ipAddress_port: { agentId: agent.id, ipAddress: dev.ip, port: dev.port },
+        },
+        update: {
+          lastSeenAt: new Date(),
+          protocol: dev.protocol ?? undefined,
+          hostname: dev.hostname ?? undefined,
+          label: dev.label ?? undefined,
+          banner: dev.banner ?? undefined,
+        },
+        create: {
+          workspaceId: agent.workspaceId,
+          agentId: agent.id,
+          ipAddress: dev.ip,
+          port: dev.port,
+          protocol: dev.protocol ?? "NONE",
+          hostname: dev.hostname ?? null,
+          label: dev.label ?? null,
+          banner: dev.banner ?? null,
+        },
+      });
+    }
+  }
+
   // 4. Expire stale pending commands (older than 5 min, never picked up)
   await prisma.deviceCommand.updateMany({
     where: {
@@ -143,5 +184,6 @@ export async function POST(req: Request) {
       params: p.params ?? {},
     })),
     pollIntervalMs: 4000,
+    latestVersion: LATEST_AGENT_VERSION,
   });
 }

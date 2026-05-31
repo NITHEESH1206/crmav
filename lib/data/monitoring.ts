@@ -55,6 +55,28 @@ export async function listControllableDevices() {
   }));
 }
 
+export async function listDiscoveredDevices() {
+  const workspaceId = await getCurrentWorkspaceId();
+  const found = await prisma.discoveredDevice.findMany({
+    where: { workspaceId, status: "NEW" },
+    include: { agent: { select: { name: true, location: true } } },
+    orderBy: { lastSeenAt: "desc" },
+    take: 60,
+  });
+  return found.map((d) => ({
+    id: d.id,
+    ip: d.ipAddress,
+    port: d.port,
+    protocol: d.protocol,
+    label: d.label,
+    hostname: d.hostname,
+    banner: d.banner,
+    agentName: d.agent?.name ?? null,
+    agentLocation: d.agent?.location ?? null,
+    lastSeenAt: d.lastSeenAt,
+  }));
+}
+
 export async function listRecentCommands(limit = 20) {
   const workspaceId = await getCurrentWorkspaceId();
   const cmds = await prisma.deviceCommand.findMany({

@@ -1,13 +1,19 @@
 import { Radio, ShieldCheck, Download } from "lucide-react";
 import { ModuleShell } from "@/components/app/module-shell";
 import { ControlPanel } from "@/components/monitoring/control-panel";
-import { listAgents, listControllableDevices, listRecentCommands } from "@/lib/data/monitoring";
+import {
+  listAgents,
+  listControllableDevices,
+  listRecentCommands,
+  listDiscoveredDevices,
+} from "@/lib/data/monitoring";
 
 export default async function ControlPage() {
-  const [agents, devices, commands] = await Promise.all([
+  const [agents, devices, commands, discovered] = await Promise.all([
     listAgents(),
     listControllableDevices(),
     listRecentCommands(20),
+    listDiscoveredDevices(),
   ]);
 
   const breadcrumbs = [
@@ -36,8 +42,8 @@ export default async function ControlPage() {
             </p>
             <div className="mt-3 grid sm:grid-cols-3 gap-2">
               {[
-                ["1", "Install the connector", "One command on any on-site PC. Survives reboots."],
-                ["2", "Type the device IP", "Add the IP + protocol in ZynexAV. The connector verifies it."],
+                ["1", "Install the connector", "Download & run on any on-site PC. node zynex-agent.mjs --install survives reboots."],
+                ["2", "It scans your network", "The connector finds AV devices automatically — add them in one click, or type an IP."],
                 ["3", "Control from anywhere", "Power, restart, inputs — from any browser, on any network."],
               ].map(([n, t, d]) => (
                 <div key={n} className="rounded-xl bg-white/60 border border-bone-300/50 p-3">
@@ -49,15 +55,22 @@ export default async function ControlPage() {
                 </div>
               ))}
             </div>
-            <div className="mt-3 flex items-center gap-2 text-[11.5px] text-ink-300/55 font-mono">
-              <Download className="h-3 w-3" />
-              Connector: <span className="text-ink-300/80">agent/zynex-agent.mjs</span> · setup guide in <span className="text-ink-300/80">agent/README.md</span> · Node 18+ · zero dependencies
+            <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-[11.5px] text-ink-300/55">
+              <a
+                href="/connector/zynex-agent.mjs"
+                download
+                className="btn-glass-secondary inline-flex items-center gap-1.5 h-8 px-3.5 rounded-full font-medium text-ink-300"
+              >
+                <Download className="h-3.5 w-3.5" />
+                Download connector
+              </a>
+              <span className="font-mono">v2 · Node 18+ · zero dependencies · auto-update via <span className="text-ink-300/80">--update</span></span>
             </div>
           </div>
         </div>
       </div>
 
-      <ControlPanel agents={agents} devices={devices} commands={commands} />
+      <ControlPanel agents={agents} devices={devices} commands={commands} discovered={discovered} />
     </ModuleShell>
   );
 }

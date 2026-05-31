@@ -8,21 +8,44 @@ devices to the ZynexAV cloud so you can monitor and control them from anywhere.
 It only makes **outbound** HTTPS calls, so it works behind any firewall/router
 with zero inbound ports, no VPN, and no static IP.
 
+**v2 highlights:** automatic LAN device discovery, one-command service install,
+and self-update.
+
 ---
 
 ## Quick start (any OS)
 
 1. In ZynexAV: **Operations → Remote control → New connector**. Copy the key.
-2. On the on-site PC (needs [Node.js 18+](https://nodejs.org)):
+2. Download the connector: **Download connector** button on that page (or
+   `https://your-app.vercel.app/connector/zynex-agent.mjs`).
+3. On the on-site PC (needs [Node.js 18+](https://nodejs.org)):
 
 ```bash
-# Download just this folder's zynex-agent.mjs, then:
 set ZYNEX_CLOUD_URL=https://your-app.vercel.app
 set ZYNEX_AGENT_KEY=zyx_agt_xxxxxxxxxxxx
 node zynex-agent.mjs
 ```
 
-That's it. Now in ZynexAV, type a device's IP and it connects.
+That's it. The connector immediately scans your network — discovered AV devices
+appear under **Discovered on your network** in ZynexAV, ready to add in one click.
+You can still add any device manually by typing its IP.
+
+### Commands
+
+```bash
+node zynex-agent.mjs              # run the connector
+node zynex-agent.mjs --discover   # one-shot LAN scan, prints what it finds
+node zynex-agent.mjs --install    # set up as a background service (this OS)
+node zynex-agent.mjs --update     # download & install the latest connector
+```
+
+### Discovery tuning (optional env)
+
+```bash
+ZYNEX_SCAN=off                 # disable auto-discovery
+ZYNEX_SCAN_CIDR=192.168.10     # scan a specific /24 (default: auto-detect)
+ZYNEX_SCAN_INTERVAL_MIN=15     # minutes between scans (default 15)
+```
 
 ---
 
