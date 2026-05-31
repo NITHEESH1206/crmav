@@ -6,13 +6,14 @@ import { motion } from "framer-motion";
 import { Check, Minus, Plus, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const EXTRA_USER_PRICE = 6999;
+const EXTRA_USER_PRICE = 6999; // per user / month
+const ANNUAL_DISCOUNT = 0.2; // 20% off when billed annually
 
 type Plan = {
   id: "basic" | "pro" | "enterprise";
   name: string;
   tagline: string;
-  basePrice: number | null; // null = contact sales
+  basePrice: number | null; // monthly; null = contact sales
   includedUsers: number;
   canExtend: boolean;
   features: string[];
@@ -77,10 +78,12 @@ const PLANS: Plan[] = [
 ];
 
 function inr(n: number) {
-  return "₹" + n.toLocaleString("en-IN");
+  return "₹" + Math.round(n).toLocaleString("en-IN");
 }
 
 export function Pricing() {
+  const [annual, setAnnual] = useState(false);
+
   return (
     <section id="pricing" className="relative py-24 md:py-32">
       <div className="mx-auto max-w-[1100px] px-6 lg:px-10">
@@ -90,7 +93,7 @@ export function Pricing() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.7 }}
-          className="max-w-[760px] mb-14 md:mb-16"
+          className="max-w-[760px] mb-10 md:mb-12"
         >
           <span className="inline-flex items-center gap-2 mb-6 font-mono text-[13px] text-ink-300/60 uppercase tracking-[0.06em]">
             <span className="h-1 w-1 rounded-full bg-signal-500" />
@@ -101,31 +104,81 @@ export function Pricing() {
           </h2>
           <p className="mt-4 text-[16px] md:text-[17px] leading-[1.55] text-ink-300/65">
             Start with a plan, add seats whenever you grow — every extra user is a flat{" "}
-            <span className="text-ink-300 font-medium">{inr(EXTRA_USER_PRICE)}</span>. No hidden tiers,
-            no per-feature paywalls.
+            <span className="text-ink-300 font-medium">{inr(EXTRA_USER_PRICE)}/mo</span>. No hidden
+            tiers, no per-feature paywalls. Pay annually and save 20%.
           </p>
+        </motion.div>
+
+        {/* Billing period toggle */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mb-10 flex justify-center"
+        >
+          <div className="glass inline-flex items-center gap-1 rounded-full p-1">
+            <button
+              type="button"
+              onClick={() => setAnnual(false)}
+              className={cn(
+                "h-9 px-5 rounded-full text-[13.5px] font-medium transition-all",
+                !annual ? "glass-pill-active text-ink-300" : "text-ink-300/60 hover:text-ink-300"
+              )}
+            >
+              Monthly
+            </button>
+            <button
+              type="button"
+              onClick={() => setAnnual(true)}
+              className={cn(
+                "h-9 pl-5 pr-2 rounded-full text-[13.5px] font-medium transition-all inline-flex items-center gap-2",
+                annual ? "glass-pill-active text-ink-300" : "text-ink-300/60 hover:text-ink-300"
+              )}
+            >
+              Annual
+              <span
+                className={cn(
+                  "rounded-full px-2 py-0.5 text-[11px] font-semibold",
+                  annual ? "bg-signal-500 text-white" : "bg-signal-500/15 text-signal-700"
+                )}
+              >
+                Save 20%
+              </span>
+            </button>
+          </div>
         </motion.div>
 
         {/* Plan cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 items-start">
           {PLANS.map((plan, i) => (
-            <PlanCard key={plan.id} plan={plan} index={i} />
+            <PlanCard key={plan.id} plan={plan} index={i} annual={annual} />
           ))}
         </div>
 
         <p className="mt-8 text-center text-[13px] text-ink-300/50">
-          Prices billed annually, exclusive of GST. Extra users can be added or removed anytime.
+          Prices per month, exclusive of GST. Annual plans are billed once a year at 20% off.
+          Extra users can be added or removed anytime.
         </p>
       </div>
     </section>
   );
 }
 
-function PlanCard({ plan, index }: { plan: Plan; index: number }) {
+function PlanCard({ plan, index, annual }: { plan: Plan; index: number; annual: boolean }) {
   const [users, setUsers] = useState(plan.includedUsers);
   const extraUsers = Math.max(0, users - plan.includedUsers);
-  const total =
-    plan.basePrice !== null ? plan.basePrice + extraUsers * EXTRA_USER_PRICE : null;
+
+  const factor = annual ? 1 - ANNUAL_DISCOUNT : 1;
+  const hasPrice = plan.basePrice !== null;
+
+  // Undiscounted monthly total (for strikethrough reference)
+  const origMonthly = hasPrice ? plan.basePrice! + extraUsers * EXTRA_USER_PRICE : 0;
+  // Effective per-month figures for the selected billing period
+  const effBase = hasPrice ? Math.round(plan.basePrice! * factor) : 0;
+  const effExtra = Math.round(EXTRA_USER_PRICE * factor);
+  const monthlyTotal = effBase + extraUsers * effExtra;
+  const annualTotal = monthlyTotal * 12;
 
   return (
     <motion.div
@@ -154,27 +207,36 @@ function PlanCard({ plan, index }: { plan: Plan; index: number }) {
 
       {/* Price */}
       <div className="mt-6 pb-6 border-b border-bone-300/45">
-        {total !== null ? (
+        {hasPrice ? (
           <>
             <div className="flex items-baseline gap-1.5">
               <span className="font-display text-[40px] md:text-[44px] leading-none tracking-tight text-ink-300">
-                {inr(total)}
+                {inr(monthlyTotal)}
               </span>
-              <span className="text-[14px] text-ink-300/55">/ year</span>
+              <span className="text-[14px] text-ink-300/55">/ month</span>
             </div>
-            <p className="mt-2 text-[12.5px] text-ink-300/55">
-              {plan.basePrice !== null && inr(plan.basePrice)} base
-              {extraUsers > 0 && (
-                <>
-                  {" "}+ {extraUsers} extra {extraUsers === 1 ? "user" : "users"} × {inr(EXTRA_USER_PRICE)}
-                </>
-              )}
-            </p>
+
+            {annual ? (
+              <p className="mt-2 text-[12.5px] text-ink-300/55">
+                <span className="line-through text-ink-300/40">{inr(origMonthly)}/mo</span>{" "}
+                <span className="text-signal-700 font-medium">20% off</span> · billed annually at{" "}
+                <span className="text-ink-300/75 font-medium">{inr(annualTotal)}/yr</span>
+              </p>
+            ) : (
+              <p className="mt-2 text-[12.5px] text-ink-300/55">
+                {inr(effBase)} base
+                {extraUsers > 0 && (
+                  <>
+                    {" "}+ {extraUsers} extra {extraUsers === 1 ? "user" : "users"} × {inr(effExtra)}
+                  </>
+                )}
+              </p>
+            )}
           </>
         ) : (
           <>
             <div className="font-display text-[40px] md:text-[44px] leading-none tracking-tight text-ink-300">
-              Let's talk
+              Let&apos;s talk
             </div>
             <p className="mt-2 text-[12.5px] text-ink-300/55">Custom pricing for your organisation.</p>
           </>
@@ -188,7 +250,7 @@ function PlanCard({ plan, index }: { plan: Plan; index: number }) {
             <div className="text-[13px] text-ink-300/70">
               Team size
               <span className="block text-[11.5px] text-ink-300/45">
-                {plan.includedUsers} included · {inr(EXTRA_USER_PRICE)} per extra user
+                {plan.includedUsers} included · {inr(effExtra)} per extra user
               </span>
             </div>
             <div className="flex items-center gap-1 glass rounded-full p-1">
