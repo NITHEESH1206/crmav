@@ -390,6 +390,8 @@ model Device {
   room        Room?   @relation(fields: [roomId], references: [id])
   catalogId   String?
   catalogItem CatalogItem? @relation(fields: [catalogId], references: [id])
+  /** Friendly name for devices added directly by IP (no catalog item). */
+  label       String?
   serialNumber String? @unique
   ipAddress   String?
   macAddress  String?

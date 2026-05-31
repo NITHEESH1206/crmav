@@ -71,6 +71,52 @@ export async function configureDeviceControl(input: z.infer<typeof configureSche
   return { ok: true };
 }
 
+/* ─── Quick-add a device by IP (the "type an IP and it connects" flow) ─── */
+const quickAddSchema = z.object({
+  label: z.string().min(1).max(80),
+  ipAddress: z.string().min(3).max(60),
+  agentId: z.string().min(1),
+  controlProtocol: z.enum(["PJLINK", "TCP_RAW", "CRESTRON", "TELNET", "HTTP"]),
+  controlPort: z.number().int().min(1).max(65535).optional().nullable(),
+});
+
+const DEFAULT_PORTS: Record<string, number> = {
+  PJLINK: 4352,
+  CRESTRON: 41794,
+  TELNET: 23,
+  TCP_RAW: 23,
+  HTTP: 80,
+};
+
+export async function quickAddDeviceByIp(input: z.infer<typeof quickAddSchema>) {
+  const data = quickAddSchema.parse(input);
+  const workspaceId = await getCurrentWorkspaceId();
+
+  // Make sure the connector belongs to this workspace.
+  const agent = await prisma.deviceAgent.findFirst({
+    where: { id: data.agentId, workspaceId },
+    select: { id: true },
+  });
+  if (!agent) return { ok: false as const, error: "Connector not found." };
+
+  const device = await prisma.device.create({
+    data: {
+      workspaceId,
+      label: data.label,
+      ipAddress: data.ipAddress,
+      agentId: data.agentId,
+      controlProtocol: data.controlProtocol,
+      controlPort: data.controlPort ?? DEFAULT_PORTS[data.controlProtocol] ?? 23,
+      status: "OFFLINE", // until the connector verifies reachability
+      powerState: "UNKNOWN",
+    },
+  });
+
+  revalidatePath("/operations/control");
+  revalidatePath("/operations");
+  return { ok: true as const, deviceId: device.id };
+}
+
 /* ─── Enqueue a control command ─── */
 const commandSchema = z.object({
   deviceId: z.string(),

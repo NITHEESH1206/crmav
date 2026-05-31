@@ -1,0 +1,19 @@
+{
+  "name": "zynexav-connector",
+  "version": "1.0.0",
+  "description": "ZynexAV on-site connector — bridges AV devices on your local network to the ZynexAV cloud for remote monitoring & control. Pure software, runs on any always-on PC. No hardware to buy.",
+  "type": "module",
+  "bin": {
+    "zynexav-connector": "./zynex-agent.mjs"
+  },
+  "main": "zynex-agent.mjs",
+  "scripts": {
+    "start": "node zynex-agent.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": ["av", "control", "pjlink", "crestron", "monitoring"],
+  "license": "MIT",
+  "dependencies": {}
+}

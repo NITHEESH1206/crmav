@@ -37,7 +37,7 @@ export async function listControllableDevices() {
   const now = Date.now();
   return devices.map((d) => ({
     id: d.id,
-    name: d.catalogItem?.name ?? d.serialNumber ?? "Device",
+    name: d.label ?? d.catalogItem?.name ?? d.serialNumber ?? "Device",
     brand: d.catalogItem?.brand ?? null,
     category: d.catalogItem?.category ?? null,
     room: d.room?.name ?? null,
@@ -68,7 +68,7 @@ export async function listRecentCommands(limit = 20) {
     action: c.action,
     status: c.status,
     result: c.result,
-    deviceName: c.device.catalogItem?.name ?? "Device",
+    deviceName: c.device.label ?? c.device.catalogItem?.name ?? "Device",
     createdAt: c.createdAt,
     executedAt: c.executedAt,
   }));

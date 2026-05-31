@@ -26,6 +26,7 @@ import {
   sendDeviceCommand,
   configureDeviceControl,
   getCommandStatus,
+  quickAddDeviceByIp,
 } from "@/app/actions/monitoring";
 
 type Agent = {
@@ -78,10 +79,12 @@ export function ControlPanel({
   commands: Command[];
 }) {
   const [newAgentOpen, setNewAgentOpen] = useState(false);
+  const [addDeviceOpen, setAddDeviceOpen] = useState(false);
   const [configDevice, setConfigDevice] = useState<Device | null>(null);
 
   const linkedDevices = devices.filter((d) => d.agentId);
   const unlinkedDevices = devices.filter((d) => !d.agentId);
+  const onlineAgents = agents.filter((a) => a.online);
 
   return (
     <div className="space-y-6">
@@ -90,7 +93,7 @@ export function ControlPanel({
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-[15px] font-medium text-ink-300 inline-flex items-center gap-2">
             <Server className="h-4 w-4 text-ink-300/55" />
-            On-site agents
+            Connectors
           </h2>
           <button
             type="button"
@@ -98,15 +101,15 @@ export function ControlPanel({
             className="btn-glass-primary inline-flex items-center gap-1.5 h-8 px-3.5 rounded-full text-[12.5px] font-medium"
           >
             <Plus className="h-3.5 w-3.5" />
-            New agent
+            New connector
           </button>
         </div>
         {agents.length === 0 ? (
           <div className="glass-card px-6 py-12 text-center">
             <Server className="h-6 w-6 mx-auto text-ink-300/35 mb-2" />
-            <p className="text-[13px] text-ink-300/75">No agents yet.</p>
+            <p className="text-[13px] text-ink-300/75">No connectors yet.</p>
             <p className="text-[12px] text-ink-300/50 mt-1 max-w-md mx-auto">
-              An agent is a small program you run on a box (Raspberry Pi / mini-PC) on the same network as your AV devices. It bridges them to the cloud for remote control.
+              The connector is a small program (pure software, no hardware to buy) you run once on any always-on PC you already have on-site. It bridges your AV devices to the cloud so you can control them from anywhere.
             </p>
           </div>
         ) : (
@@ -120,14 +123,31 @@ export function ControlPanel({
 
       {/* Controllable devices */}
       <section>
-        <h2 className="text-[15px] font-medium text-ink-300 inline-flex items-center gap-2 mb-3">
-          <Radio className="h-4 w-4 text-ink-300/55" />
-          Devices under control
-        </h2>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-[15px] font-medium text-ink-300 inline-flex items-center gap-2">
+            <Radio className="h-4 w-4 text-ink-300/55" />
+            Devices under control
+          </h2>
+          <button
+            type="button"
+            onClick={() => {
+              if (agents.length === 0) {
+                toast.error("Add a connector first", { description: "You need a connector running on-site before adding devices." });
+                setNewAgentOpen(true);
+                return;
+              }
+              setAddDeviceOpen(true);
+            }}
+            className="btn-glass-signal inline-flex items-center gap-1.5 h-8 px-3.5 rounded-full text-[12.5px] font-medium"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            Add device by IP
+          </button>
+        </div>
         {linkedDevices.length === 0 ? (
           <div className="glass-card px-6 py-12 text-center">
             <Radio className="h-6 w-6 mx-auto text-ink-300/35 mb-2" />
-            <p className="text-[13px] text-ink-300/75">No devices linked to an agent yet.</p>
+            <p className="text-[13px] text-ink-300/75">No devices linked to a connector yet.</p>
             <p className="text-[12px] text-ink-300/50 mt-1">
               Configure a device below to start controlling it remotely.
             </p>
@@ -218,6 +238,9 @@ export function ControlPanel({
       </section>
 
       {newAgentOpen && <NewAgentDialog onClose={() => setNewAgentOpen(false)} />}
+      {addDeviceOpen && (
+        <AddDeviceDialog agents={onlineAgents.length ? onlineAgents : agents} onClose={() => setAddDeviceOpen(false)} />
+      )}
       {configDevice && (
         <ConfigureDialog
           device={configDevice}
@@ -233,10 +256,10 @@ export function ControlPanel({
 function AgentCard({ agent }: { agent: Agent }) {
   const [, startTransition] = useTransition();
   function remove() {
-    if (!confirm(`Delete agent "${agent.name}"? Its devices will be unlinked.`)) return;
+    if (!confirm(`Delete connector "${agent.name}"? Its devices will be unlinked.`)) return;
     startTransition(async () => {
       await deleteAgent(agent.id);
-      toast.success("Agent removed");
+      toast.success("Connector removed");
     });
   }
   return (
@@ -299,7 +322,7 @@ function DeviceControlCard({ device, onConfigure }: { device: Device; onConfigur
           } else if (st.status === "FAILED") {
             toast.error(`${labelFor(action)} failed`, { description: st.result ?? "Device declined" });
           } else if (st.status === "EXPIRED" || tries > 8) {
-            toast.warning("No response from agent", { description: "Is the on-site agent running?" });
+            toast.warning("No response from connector", { description: "Is the connector running on your on-site PC?" });
           }
         }
       }, 1500);
@@ -348,7 +371,7 @@ function DeviceControlCard({ device, onConfigure }: { device: Device; onConfigur
 
       {agentDown && (
         <div className="mb-3 rounded-lg bg-status-warning-bg/60 border border-status-warning-fg/20 px-2.5 py-1.5 text-[11px] text-status-warning-fg">
-          Agent "{device.agentName}" is offline — commands will queue until it reconnects.
+          Connector "{device.agentName}" is offline — commands will queue until it reconnects.
         </div>
       )}
 
@@ -424,7 +447,7 @@ function NewAgentDialog({ onClose }: { onClose: () => void }) {
 
   function create() {
     if (name.trim().length < 2) {
-      toast.error("Name the agent");
+      toast.error("Name the connector");
       return;
     }
     startTransition(async () => {
@@ -438,7 +461,7 @@ function NewAgentDialog({ onClose }: { onClose: () => void }) {
       <div className="absolute inset-0 bg-ink-300/35 backdrop-blur-sm" />
       <div onClick={(e) => e.stopPropagation()} className="glass-card relative w-full max-w-md overflow-hidden">
         <header className="px-5 py-3.5 border-b border-bone-300/40 flex items-center justify-between">
-          <h3 className="text-[14px] font-medium text-ink-300">New on-site agent</h3>
+          <h3 className="text-[14px] font-medium text-ink-300">New connector</h3>
           <button onClick={onClose} className="hover-glass h-8 w-8 rounded-full border border-transparent flex items-center justify-center text-ink-300/55 hover:text-ink-300">
             <X className="h-3.5 w-3.5" />
           </button>
@@ -446,9 +469,12 @@ function NewAgentDialog({ onClose }: { onClose: () => void }) {
 
         {!rawKey ? (
           <div className="px-5 py-4 space-y-3">
+            <p className="text-[12px] text-ink-300/60 leading-relaxed">
+              Pure software — runs on any always-on PC you already have at the site. No hardware to buy. Name it, then we'll give you a one-time key and the install command.
+            </p>
             <label className="block">
-              <span className="text-[11.5px] text-ink-300/65 font-medium">Agent name</span>
-              <input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Marriott NYC bridge" className="input-glass mt-1" autoFocus />
+              <span className="text-[11.5px] text-ink-300/65 font-medium">Connector name</span>
+              <input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Marriott NYC — reception PC" className="input-glass mt-1" autoFocus />
             </label>
             <label className="block">
               <span className="text-[11.5px] text-ink-300/65 font-medium">Location (optional)</span>
@@ -457,14 +483,14 @@ function NewAgentDialog({ onClose }: { onClose: () => void }) {
             <div className="flex justify-end gap-2 pt-1">
               <button onClick={onClose} className="hover-glass h-9 px-4 rounded-full border border-bone-300/55 text-[13px] text-ink-300/75 hover:text-ink-300">Cancel</button>
               <button onClick={create} disabled={pending} className="btn-glass-signal h-9 px-4 rounded-full text-[13px] font-medium">
-                {pending ? "Creating…" : "Create agent"}
+                {pending ? "Creating…" : "Create connector"}
               </button>
             </div>
           </div>
         ) : (
           <div className="px-5 py-4 space-y-3">
             <div className="rounded-xl bg-status-warning-bg/60 border border-status-warning-fg/20 p-3 text-[12px] text-ink-300/80">
-              Copy this key now — it's shown <strong>only once</strong>. Set it as <span className="font-mono">ZYNEX_AGENT_KEY</span> on your on-site box.
+              Copy this key now — it's shown <strong>only once</strong>. Set it as <span className="font-mono">ZYNEX_AGENT_KEY</span> when you run the connector on your on-site PC.
             </div>
             <div className="flex items-center gap-2 rounded-xl bg-ink-300 px-3 py-2.5">
               <code className="flex-1 text-[12px] font-mono text-bone-100 break-all">{rawKey}</code>
@@ -489,6 +515,104 @@ function NewAgentDialog({ onClose }: { onClose: () => void }) {
             </div>
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+/* ─── Add device by IP dialog (the "type an IP and it connects" flow) ─── */
+function AddDeviceDialog({ agents, onClose }: { agents: Agent[]; onClose: () => void }) {
+  const [label, setLabel] = useState("");
+  const [ip, setIp] = useState("");
+  const [protocol, setProtocol] = useState("PJLINK");
+  const [port, setPort] = useState("");
+  const [agentId, setAgentId] = useState(agents[0]?.id ?? "");
+  const [pending, startTransition] = useTransition();
+
+  const defaultPort =
+    protocol === "PJLINK" ? "4352" :
+    protocol === "CRESTRON" ? "41794" :
+    protocol === "HTTP" ? "80" : "23";
+
+  const ipOk = /^(\d{1,3}\.){3}\d{1,3}$|^[a-zA-Z0-9.-]+$/.test(ip.trim());
+
+  function add() {
+    if (label.trim().length < 1) { toast.error("Name the device"); return; }
+    if (!ipOk || ip.trim().length < 3) { toast.error("Enter a valid IP or hostname"); return; }
+    if (!agentId) { toast.error("Pick a connector"); return; }
+    startTransition(async () => {
+      const r = await quickAddDeviceByIp({
+        label: label.trim(),
+        ipAddress: ip.trim(),
+        agentId,
+        controlProtocol: protocol as "PJLINK",
+        controlPort: port ? parseInt(port, 10) : parseInt(defaultPort, 10),
+      });
+      if (r.ok) {
+        toast.success("Device added", { description: "The connector will verify it within a few seconds." });
+        onClose();
+      } else {
+        toast.error("Couldn't add device", { description: r.error });
+      }
+    });
+  }
+
+  return (
+    <div className="fixed inset-0 z-[90] flex items-center justify-center p-4" onClick={onClose}>
+      <div className="absolute inset-0 bg-ink-300/35 backdrop-blur-sm" />
+      <div onClick={(e) => e.stopPropagation()} className="glass-card relative w-full max-w-md overflow-hidden">
+        <header className="px-5 py-3.5 border-b border-bone-300/40 flex items-center justify-between">
+          <h3 className="text-[14px] font-medium text-ink-300">Add device by IP</h3>
+          <button onClick={onClose} className="hover-glass h-8 w-8 rounded-full border border-transparent flex items-center justify-center text-ink-300/55 hover:text-ink-300">
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </header>
+        <div className="px-5 py-4 space-y-3">
+          <label className="block">
+            <span className="text-[11.5px] text-ink-300/65 font-medium">Device name</span>
+            <input value={label} onChange={(e) => setLabel(e.target.value)} placeholder="e.g. Boardroom projector" className="input-glass mt-1" autoFocus />
+          </label>
+          <div className="grid grid-cols-[2fr_1fr] gap-3">
+            <label className="block">
+              <span className="text-[11.5px] text-ink-300/65 font-medium">Device IP</span>
+              <input value={ip} onChange={(e) => setIp(e.target.value)} placeholder="192.168.1.50" className="input-glass mt-1 font-mono" />
+            </label>
+            <label className="block">
+              <span className="text-[11.5px] text-ink-300/65 font-medium">Port</span>
+              <input value={port} onChange={(e) => setPort(e.target.value)} placeholder={defaultPort} className="input-glass mt-1 font-mono" />
+            </label>
+          </div>
+          <label className="block">
+            <span className="text-[11.5px] text-ink-300/65 font-medium">Protocol</span>
+            <select value={protocol} onChange={(e) => setProtocol(e.target.value)} className="input-glass mt-1">
+              <option value="PJLINK">PJLink (projectors)</option>
+              <option value="TCP_RAW">Raw TCP (displays / matrix)</option>
+              <option value="CRESTRON">Crestron console</option>
+              <option value="TELNET">Telnet</option>
+              <option value="HTTP">HTTP / REST</option>
+            </select>
+          </label>
+          <label className="block">
+            <span className="text-[11.5px] text-ink-300/65 font-medium">Via connector</span>
+            <select value={agentId} onChange={(e) => setAgentId(e.target.value)} className="input-glass mt-1">
+              {agents.length === 0 && <option value="">No connectors available</option>}
+              {agents.map((a) => (
+                <option key={a.id} value={a.id}>
+                  {a.name}{a.location ? ` · ${a.location}` : ""}{a.online ? "" : " (offline)"}
+                </option>
+              ))}
+            </select>
+          </label>
+          <p className="text-[11px] text-ink-300/55 leading-relaxed">
+            The connector on that PC reaches the device at this IP over your LAN. Once it confirms the device responds, it goes online and you can power it on/off from anywhere.
+          </p>
+          <div className="flex justify-end gap-2 pt-1">
+            <button onClick={onClose} className="hover-glass h-9 px-4 rounded-full border border-bone-300/55 text-[13px] text-ink-300/75 hover:text-ink-300">Cancel</button>
+            <button onClick={add} disabled={pending} className="btn-glass-signal h-9 px-4 rounded-full text-[13px] font-medium">
+              {pending ? "Adding…" : "Add & connect"}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -540,7 +664,7 @@ function ConfigureDialog({
         </header>
         <div className="px-5 py-4 space-y-3">
           <label className="block">
-            <span className="text-[11.5px] text-ink-300/65 font-medium">Bridge agent</span>
+            <span className="text-[11.5px] text-ink-300/65 font-medium">Connector</span>
             <select value={agentId} onChange={(e) => setAgentId(e.target.value)} className="input-glass mt-1">
               <option value="">— None —</option>
               {agents.map((a) => (
@@ -569,7 +693,7 @@ function ConfigureDialog({
             </label>
           </div>
           <p className="text-[11px] text-ink-300/55">
-            The agent reaches the device at this LAN IP. PJLink defaults to 4352, Crestron 41794, telnet 23.
+            The connector reaches the device at this LAN IP. PJLink defaults to 4352, Crestron 41794, telnet 23.
           </p>
           <div className="flex justify-end gap-2 pt-1">
             <button onClick={onClose} className="hover-glass h-9 px-4 rounded-full border border-bone-300/55 text-[13px] text-ink-300/75 hover:text-ink-300">Cancel</button>
