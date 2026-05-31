@@ -11,7 +11,7 @@ const LINKS = [
   { label: "Product",   href: "#product" },
   { label: "Workflow",  href: "#workflow" },
   { label: "Customers", href: "#customers" },
-  { label: "Journal",   href: "#journal" },
+  { label: "Pricing",   href: "#pricing" },
 ];
 
 export function LandingNavbar() {

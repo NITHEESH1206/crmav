@@ -6,6 +6,7 @@ import { ValueProps } from "@/components/landing/value-props";
 import { CaseStudy } from "@/components/landing/case-study";
 import { Journal } from "@/components/landing/journal";
 import { Testimonial } from "@/components/landing/testimonial";
+import { Pricing } from "@/components/landing/pricing";
 import { FinalCTA } from "@/components/landing/final-cta";
 import { LandingFooter } from "@/components/landing/footer";
 
@@ -55,6 +56,7 @@ export default function LandingPage() {
         <CaseStudy />
         <Journal />
         <Testimonial />
+        <Pricing />
         <FinalCTA />
         <LandingFooter />
       </main>
