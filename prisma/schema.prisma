@@ -54,6 +54,8 @@ model Workspace {
   siteSurveys   SiteSurvey[]
   drawings      Drawing[]
   amcChecklists CommissioningChecklist[]
+  automations   Automation[]
+  automationRuns AutomationRun[]
 }
 
 model User {
@@ -792,4 +794,47 @@ model ApiKey {
   hashedKey   String   @unique
   lastUsedAt  DateTime?
   createdAt   DateTime @default(now())
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Automations (Phase 21) — installed workflows + execution history
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Automation {
+  id          String   @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name        String
+  /** Template id this was installed from (e.g. "sla-watchdog"), or "custom". */
+  templateId  String?
+  /** Trigger id from the catalogue (e.g. "invoice.overdue"). */
+  triggerId   String
+  enabled     Boolean  @default(true)
+  /** Conditions + actions stored as JSON so the catalogue can evolve without migrations. */
+  conditions  Json?
+  actions     Json
+  lastRunAt   DateTime?
+  runCount    Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  runs AutomationRun[]
+
+  @@index([workspaceId])
+}
+
+model AutomationRun {
+  id           String   @id @default(cuid())
+  workspaceId  String
+  workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  automationId String
+  automation   Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
+  /** success | skipped | failed */
+  outcome      String
+  /** What entity triggered it, for the log (e.g. "INV-4521 · Marriott"). */
+  entityLabel  String?
+  detail       String?
+  createdAt    DateTime @default(now())
+
+  @@index([workspaceId, createdAt])
 }

@@ -1,13 +1,16 @@
 "use client";
 
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
-import { Plus, Sparkles } from "lucide-react";
+import { Plus, Sparkles, Check, Loader2 } from "lucide-react";
 import { TEMPLATES, TRIGGERS, ACTIONS } from "@/lib/automations/catalog";
+import { installTemplate } from "@/app/actions/automations";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
-export function TemplateGallery() {
+export function TemplateGallery({ installedIds = [] }: { installedIds?: string[] }) {
   const categories = Array.from(new Set(TEMPLATES.map((t) => t.category)));
+  const installed = new Set(installedIds);
 
   return (
     <div className="space-y-6">
@@ -15,12 +18,12 @@ export function TemplateGallery() {
         const items = TEMPLATES.filter((t) => t.category === cat);
         return (
           <section key={cat}>
-            <div className="text-[10.5px] uppercase tracking-[0.14em] text-ink-300/55 font-semibold mb-2">
+            <div className="font-mono text-[10.5px] uppercase tracking-[0.08em] text-ink-300/55 font-semibold mb-2">
               {cat}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {items.map((t) => (
-                <TemplateCard key={t.id} template={t} />
+                <TemplateCard key={t.id} template={t} installed={installed.has(t.id)} />
               ))}
             </div>
           </section>
@@ -30,12 +33,35 @@ export function TemplateGallery() {
   );
 }
 
-function TemplateCard({ template }: { template: (typeof TEMPLATES)[number] }) {
+function TemplateCard({
+  template,
+  installed,
+}: {
+  template: (typeof TEMPLATES)[number];
+  installed: boolean;
+}) {
   const trigger = TRIGGERS.find((tr) => tr.id === template.trigger);
   const TriggerIcon = trigger?.icon ?? Sparkles;
+  const [isInstalled, setInstalled] = useState(installed);
+  const [pending, startTransition] = useTransition();
+
+  function install() {
+    startTransition(async () => {
+      const r = await installTemplate({ templateId: template.id });
+      if (r.ok) {
+        setInstalled(true);
+        toast.success(`Installed "${template.name}"`, {
+          description: "Now active. Switch to the Active tab and hit Run now to test it.",
+        });
+      } else {
+        toast.error(r.error || "Couldn't install");
+        if (r.error === "Already installed") setInstalled(true);
+      }
+    });
+  }
 
   return (
-    <article className="rounded-lg bg-white border border-bone-300/55 p-4 flex flex-col gap-3 hover:border-bone-300/85 transition-colors">
+    <article className="glass-card p-4 flex flex-col gap-3">
       <header className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <h3 className="text-[13.5px] font-semibold text-ink-300">{template.name}</h3>
@@ -68,25 +94,22 @@ function TemplateCard({ template }: { template: (typeof TEMPLATES)[number] }) {
       </div>
 
       <footer className="flex items-center justify-end gap-2 mt-1">
-        <button
-          type="button"
-          className="text-[12px] text-ink-300/65 hover:text-ink-300 font-medium"
-          onClick={() => toast.info("Preview", { description: "Visual editor opens in a follow-up." })}
-        >
-          Preview
-        </button>
-        <button
-          type="button"
-          onClick={() =>
-            toast.success(`Installed "${template.name}"`, {
-              description: "Active in your workspace once the job runner ships.",
-            })
-          }
-          className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md bg-ink-300 text-bone-100 text-[12px] font-medium hover:bg-ink-200"
-        >
-          <Plus className="h-3 w-3" />
-          Install
-        </button>
+        {isInstalled ? (
+          <span className="inline-flex items-center gap-1.5 h-7 px-3 rounded-full bg-status-success-bg/70 border border-status-success-fg/25 text-[12px] font-medium text-status-success-fg">
+            <Check className="h-3 w-3" strokeWidth={2.5} />
+            Installed
+          </span>
+        ) : (
+          <button
+            type="button"
+            onClick={install}
+            disabled={pending}
+            className="btn-glass-primary inline-flex items-center gap-1.5 h-7 px-3 rounded-full text-[12px] font-medium"
+          >
+            {pending ? <Loader2 className="h-3 w-3 animate-spin" /> : <Plus className="h-3 w-3" />}
+            Install
+          </button>
+        )}
       </footer>
     </article>
   );

@@ -3,11 +3,8 @@
 import { useState, useTransition } from "react";
 import { Mail, Bell, Check } from "lucide-react";
 import { toast } from "sonner";
-import {
-  NOTIFICATION_EVENTS,
-  updateNotificationPref,
-  type NotificationPrefs,
-} from "@/app/actions/notifications";
+import { updateNotificationPref } from "@/app/actions/notifications";
+import { NOTIFICATION_EVENTS, type NotificationPrefs } from "@/lib/notifications/events";
 import { cn } from "@/lib/utils";
 
 export function NotificationsTab({ initial }: { initial: NotificationPrefs }) {

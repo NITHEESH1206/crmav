@@ -4,27 +4,18 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getCurrentWorkspaceId } from "@/lib/data/workspace";
 import { revalidatePath } from "next/cache";
+import {
+  NOTIFICATION_EVENTS,
+  DEFAULT_NOTIFICATION_PREF as DEFAULT_PREF,
+  type NotificationPrefs,
+} from "@/lib/notifications/events";
 
 /**
  * Per-workspace notification channel preferences.
  * Persisted as a JSON blob on the workspace: { eventKey: { email, inApp } }.
+ * The event catalogue + types live in lib/notifications/events.ts so this
+ * "use server" file only exports async functions.
  */
-
-export const NOTIFICATION_EVENTS = [
-  { key: "sla-breach",      label: "SLA breach risk on service tickets" },
-  { key: "project-phase",   label: "Project moved between phases" },
-  { key: "low-stock",       label: "Inventory low-stock alerts" },
-  { key: "po-approval",     label: "PO approvals required" },
-  { key: "invoice-paid",    label: "Invoice paid" },
-  { key: "invoice-overdue", label: "Invoice goes overdue" },
-  { key: "amc-renewal",     label: "AMC renewal approaching" },
-  { key: "daily-digest",    label: "Daily revenue digest" },
-] as const;
-
-export type NotificationPref = { email: boolean; inApp: boolean };
-export type NotificationPrefs = Record<string, NotificationPref>;
-
-const DEFAULT_PREF: NotificationPref = { email: true, inApp: true };
 
 export async function getNotificationPrefs(): Promise<NotificationPrefs> {
   const workspaceId = await getCurrentWorkspaceId();
