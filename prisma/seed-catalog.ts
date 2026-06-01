@@ -44,6 +44,7 @@ async function main() {
           costCents: item.costCents,
           specsJson: item.specs ? JSON.parse(JSON.stringify(item.specs)) : null,
           datasheetUrl: item.datasheetUrl ?? null,
+          imageUrl: item.imageUrl ?? null,
         },
       });
       updated++;
@@ -60,6 +61,7 @@ async function main() {
           costCents: item.costCents,
           specsJson: item.specs ? JSON.parse(JSON.stringify(item.specs)) : null,
           datasheetUrl: item.datasheetUrl ?? null,
+          imageUrl: item.imageUrl ?? null,
         },
       });
       added++;

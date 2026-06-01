@@ -24,6 +24,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { cn, formatCompact } from "@/lib/utils";
+import { CatalogImportButton } from "./import-dialog";
 
 export type CatalogRow = {
   id: string;
@@ -34,6 +35,7 @@ export type CatalogRow = {
   description: string | null;
   listPriceCents: number;
   costCents: number;
+  imageUrl?: string | null;
 };
 
 const CATEGORY_ICON: Record<string, LucideIcon> = {
@@ -163,6 +165,7 @@ export function CatalogBrowser({
           <span className="text-[11.5px] font-mono text-ink-300/55 px-2 py-0.5 rounded bg-bone-100">
             {filtered.length}
           </span>
+          <CatalogImportButton />
         </div>
 
         {/* Active filter chips */}
@@ -240,10 +243,20 @@ function ProductCard({ item }: { item: CatalogRow }) {
   const Icon = CATEGORY_ICON[item.category] ?? Box;
   return (
     <article className="group rounded-lg bg-white border border-bone-300/55 overflow-hidden hover:border-bone-300/85 transition-colors flex flex-col">
-      <div className="aspect-[16/10] relative duotone-signal border-b border-bone-300/45 overflow-hidden">
-        <div className="absolute inset-0 flex items-center justify-center z-10">
-          <Icon className="h-10 w-10 text-ink-300/45 group-hover:text-signal-600/70 transition-colors" strokeWidth={1.2} />
-        </div>
+      <div className="aspect-[16/10] relative border-b border-bone-300/45 overflow-hidden bg-white">
+        {item.imageUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={item.imageUrl}
+            alt={item.name}
+            loading="lazy"
+            className="absolute inset-0 h-full w-full object-contain p-3"
+          />
+        ) : (
+          <div className="absolute inset-0 duotone-signal flex items-center justify-center">
+            <Icon className="h-10 w-10 text-ink-300/45 group-hover:text-signal-600/70 transition-colors" strokeWidth={1.2} />
+          </div>
+        )}
         <span className="absolute top-2 left-2 inline-flex items-center rounded-md bg-white/95 backdrop-blur px-1.5 py-0.5 text-[10px] font-medium text-ink-300 border border-bone-300/55 z-10">
           {item.brand}
         </span>

@@ -46,7 +46,10 @@
       "Bash(git add *)",
       "Bash(ls \"app/\\(app\\)/layout.tsx\")",
       "Bash(sed -n '1,60p' \"app/\\(app\\)/layout.tsx\")",
-      "Bash(ls components/app/)"
+      "Bash(ls components/app/)",
+      "Bash(ls components/catalog/)",
+      "Bash(sed -n '1,40p' \"app/\\(app\\)/catalog/page.tsx\")",
+      "Bash(sed -n '1,60p' lib/data/catalog.ts)"
     ]
   }
 }

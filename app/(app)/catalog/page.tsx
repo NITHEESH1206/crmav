@@ -48,6 +48,7 @@ export default async function CatalogPage() {
           description: p.description,
           listPriceCents: p.listPriceCents,
           costCents: p.costCents,
+          imageUrl: p.imageUrl,
         }))}
         brands={brands}
         categories={categories}

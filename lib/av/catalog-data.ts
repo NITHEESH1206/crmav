@@ -12,6 +12,8 @@ export type CatalogSeed = {
   specs?: Record<string, string | number | boolean>;
   /** Optional manufacturer datasheet URL. */
   datasheetUrl?: string;
+  /** Optional product photo URL (use licensed / dealer-feed images). */
+  imageUrl?: string;
 };
 
 /**
@@ -433,4 +435,90 @@ export const CATALOG: CatalogSeed[] = [
     description: "4-conductor 12 AWG plenum speaker cable, 1000ft.", ...m(395) },
   { sku: "BEL-1505A", brand: "Belden", category: "Cable", name: "Belden 1505A SDI 1000ft",
     description: "Precision RG-6 SDI/HD coaxial cable, 1000ft.", ...m(245) },
+
+  // ───────────────────────────────────────────────────────────────────
+  // EXPANSION — more real devices across the most-specified brands
+  // ───────────────────────────────────────────────────────────────────
+
+  // Crestron — control, AVoIP, touch
+  { sku: "CRES-TSW-770-B", brand: "Crestron", category: "Control - Touch Panel", name: "TSW-770 7\" Touch Screen",
+    description: "7-inch wall-mount touch panel with PoE, glass front.", specs: { size: "7\"", poe: "yes" }, ...m(1100) },
+  { sku: "CRES-TSW-1070-B", brand: "Crestron", category: "Control - Touch Panel", name: "TSW-1070 10.1\" Touch Screen",
+    description: "10.1-inch wall-mount touch panel with PoE.", specs: { size: "10.1\"", poe: "yes" }, ...m(1500) },
+  { sku: "CRES-CP4N", brand: "Crestron", category: "Control - Processor", name: "CP4N 4-Series Control Processor",
+    description: "4-Series control processor with dual NIC for secure networks.", ...m(2700) },
+  { sku: "CRES-DM-NVX-360", brand: "Crestron", category: "AVoIP Encoder", name: "DM-NVX-360 AV-over-IP",
+    description: "4K60 4:4:4 SDVoE-class encoder/decoder over 1GbE.", specs: { resolution: "4K60 4:4:4" }, ...m(1900) },
+  { sku: "CRES-HD-MD4X2-4KZ", brand: "Crestron", category: "Video Switcher", name: "HD-MD4X2-4KZ Switcher",
+    description: "4x2 4K60 HDR HDMI switcher with audio de-embed.", ...m(1200) },
+
+  // Extron — switching, DTP, control
+  { sku: "EXT-IN1804", brand: "Extron", category: "Video Switcher", name: "IN1804 4-Input Scaler",
+    description: "Four-input 4K/60 scaling presentation switcher.", ...m(1750) },
+  { sku: "EXT-DTP3-T-211", brand: "Extron", category: "AVoIP Encoder", name: "DTP3 T 211 Transmitter",
+    description: "HDMI + USB-C to DTP3 twisted-pair transmitter, 330ft.", ...m(695) },
+  { sku: "EXT-DTP3-R-211", brand: "Extron", category: "AVoIP Decoder", name: "DTP3 R 211 Receiver",
+    description: "DTP3 twisted-pair receiver, 4K/60 4:4:4 to 330ft.", ...m(695) },
+  { sku: "EXT-IPCP-PRO-355", brand: "Extron", category: "Control - Processor", name: "IPCP Pro 355 Control Processor",
+    description: "IP Link Pro control processor with extensive I/O.", ...m(1650) },
+  { sku: "EXT-DMP-128-PLUS", brand: "Extron", category: "DSP", name: "DMP 128 Plus Audio DSP",
+    description: "12x8 ProDSP processor with AEC and Dante option.", specs: { aec: "yes", dante: "option" }, ...m(2200) },
+
+  // QSC / Q-SYS
+  { sku: "QSC-CORE-110F", brand: "Q-SYS", category: "DSP", name: "Q-SYS Core 110f",
+    description: "Integrated DSP core with 8x8 analog I/O and 128x128 network.", ...m(3200) },
+  { sku: "QSC-NC-110", brand: "Q-SYS", category: "Camera - PTZ", name: "Q-SYS NC-110 PTZ Camera",
+    description: "Native Q-SYS PTZ conferencing camera, 1080p60.", ...m(1700) },
+  { sku: "QSC-AD-C6T", brand: "QSC", category: "Speaker - Ceiling", name: "AcousticDesign AD-C6T",
+    description: "6.5-inch ceiling speaker, 70/100V + 8Ω.", ...m(220) },
+  { sku: "QSC-CX-Q-4K4", brand: "QSC", category: "Amplifier", name: "CX-Q 4K4 Network Amplifier",
+    description: "4-channel 4000W Q-SYS network amplifier with Dante.", ...m(3600) },
+
+  // Biamp
+  { sku: "BIA-TESIRA-FORTE-X", brand: "Biamp", category: "DSP", name: "TesiraFORTÉ X 400",
+    description: "Fixed AVB/Dante DSP with AEC for medium rooms.", specs: { aec: "yes" }, ...m(3500) },
+  { sku: "BIA-PARLE-TCM-XA", brand: "Biamp", category: "Microphone - Ceiling", name: "Parlé TCM-XA Beamtracking Mic",
+    description: "Ceiling beamtracking microphone with on-board AEC.", ...m(2400) },
+  { sku: "BIA-DEVIO-SCR-25X", brand: "Biamp", category: "Conferencing - Codec", name: "Devio SCR-25X",
+    description: "USB/BYOD conferencing hub with beamtracking mic support.", ...m(1500) },
+
+  // Shure
+  { sku: "SHR-MXA920-S", brand: "Shure", category: "Microphone - Ceiling", name: "MXA920 Ceiling Array (Square)",
+    description: "Ceiling array mic with automatic coverage and IntelliMix DSP.", ...m(4200) },
+  { sku: "SHR-MXA902", brand: "Shure", category: "Microphone - Ceiling", name: "MXA902 Integrated Conferencing Ceiling Array",
+    description: "All-in-one ceiling array mic + loudspeaker with DSP.", ...m(2900) },
+  { sku: "SHR-IMX-ROOM", brand: "Shure", category: "DSP", name: "IntelliMix Room DSP Software",
+    description: "Audio processing software for networked Shure mics.", ...m(950) },
+
+  // Logitech / Poly / Cisco — UC
+  { sku: "LOG-RALLY-BAR", brand: "Logitech", category: "Conferencing - Video Bar", name: "Rally Bar",
+    description: "All-in-one video bar for medium rooms, AI viewfinder.", ...m(3999) },
+  { sku: "LOG-RALLY-BAR-MINI", brand: "Logitech", category: "Conferencing - Video Bar", name: "Rally Bar Mini",
+    description: "All-in-one video bar for small/medium rooms.", ...m(2999) },
+  { sku: "LOG-TAP-IP", brand: "Logitech", category: "Control - Touch Panel", name: "Tap IP Touch Controller",
+    description: "PoE network touch controller for meeting rooms.", ...m(999) },
+  { sku: "POLY-STUDIO-X52", brand: "Poly", category: "Conferencing - Video Bar", name: "Poly Studio X52",
+    description: "All-in-one video bar with DirectorAI for medium rooms.", ...m(4299) },
+  { sku: "CIS-ROOMBAR-PRO", brand: "Cisco", category: "Conferencing - Video Bar", name: "Cisco Room Bar Pro",
+    description: "Video bar for medium-to-large rooms with dual-screen support.", ...m(5500) },
+
+  // Displays / Projectors
+  { sku: "SAM-QM85B", brand: "Samsung", category: "Display", name: "QM85B 85\" UHD Display",
+    description: "85-inch 4K UHD commercial display, 500 nits, 24/7.", specs: { size: "85\"", brightness: "500 nits" }, ...m(5200) },
+  { sku: "LG-86TR3DK", brand: "LG", category: "Display - Interactive", name: "86TR3DK Interactive Display",
+    description: "86-inch 4K interactive touch display for collaboration.", ...m(4300) },
+  { sku: "SONY-VPL-FHZ85", brand: "Sony", category: "Projector", name: "VPL-FHZ85 Laser Projector",
+    description: "8000 lumen 3LCD WUXGA laser projector.", specs: { lumens: "8000", resolution: "WUXGA" }, ...m(9800) },
+  { sku: "EPSON-EB-PU2010W", brand: "Epson", category: "Projector", name: "EB-PU2010W Laser Projector",
+    description: "10,000 lumen WUXGA 3LCD laser installation projector.", ...m(11500) },
+  { sku: "BARCO-G62-W14", brand: "Barco", category: "Projector", name: "Barco G62-W14 Laser Projector",
+    description: "14,000 lumen WUXGA single-chip DLP laser projector.", ...m(17500) },
+
+  // Mounts / racks / network
+  { sku: "CHIEF-LTM1U", brand: "Chief", category: "Accessory", name: "Chief LTM1U Large Tilt Mount",
+    description: "Universal large flat-panel tilt wall mount, up to 125 lb.", ...m(180) },
+  { sku: "NETGEAR-M4250-10G2XF", brand: "NETGEAR", category: "Network Switch", name: "M4250-10G2XF AV Switch",
+    description: "AV-line managed switch, 8x1G PoE+ + 2x10G SFP+, Dante/NDI profiles.", ...m(1100) },
+  { sku: "MA-PROLITE-44", brand: "Middle Atlantic", category: "Rack", name: "ProLite 44U Open Frame Rack",
+    description: "44U open-frame rack with cable management.", ...m(720) },
 ];
