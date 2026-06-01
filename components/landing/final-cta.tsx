@@ -32,7 +32,7 @@ export function FinalCTA() {
             </p>
 
             <div className="mt-9 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-              <Link href="/dashboard" className="group">
+              <Link href="/sign-up" className="group">
                 <span className="btn-glass-signal inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-[16px] font-medium w-full sm:w-auto">
                   Start your trial
                   <ArrowUpRight

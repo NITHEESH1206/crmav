@@ -30,13 +30,30 @@ import {
 import { useAssistant } from "@/lib/stores/assistant";
 import { useMobileNav } from "@/lib/stores/mobile-nav";
 import { useDensity, type Density } from "@/lib/stores/density";
+import { SignOutItem } from "@/components/auth/sign-out-item";
 
-export function Topbar() {
+export type TopbarUser = {
+  name: string;
+  email: string;
+  initials: string;
+};
+
+export function Topbar({
+  user,
+  clerkActive = false,
+}: {
+  user?: TopbarUser | null;
+  clerkActive?: boolean;
+}) {
   const showAssistant = useAssistant((s) => s.show);
   const toggleMobileNav = useMobileNav((s) => s.toggle);
   const density = useDensity((s) => s.density);
   const setDensity = useDensity((s) => s.setDensity);
   const [searchOpen, setSearchOpen] = useState(false);
+
+  const displayName = user?.name ?? "ZynexAV User";
+  const displayEmail = user?.email ?? "demo@zynexav.app";
+  const initials = user?.initials ?? "ZX";
 
   function openPalette() {
     if (typeof window !== "undefined") {
@@ -156,18 +173,18 @@ export function Topbar() {
           <DropdownMenuTrigger asChild>
             <button className="hover-glass flex items-center gap-2 rounded-full border border-transparent pl-1.5 pr-3 py-1.5">
               <Avatar className="h-6 w-6">
-                <AvatarFallback className="text-[10px]">MR</AvatarFallback>
+                <AvatarFallback className="text-[10px]">{initials}</AvatarFallback>
               </Avatar>
               <div className="hidden lg:block text-left">
-                <div className="text-[12px] font-medium leading-tight text-ink-300">Marcus Reyes</div>
+                <div className="text-[12px] font-medium leading-tight text-ink-300">{displayName}</div>
               </div>
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel>
               <div className="font-normal">
-                <div className="text-[13px] font-medium text-ink-300">Marcus Reyes</div>
-                <div className="text-[11px] text-ink-300/55">marcus@soundstage.av</div>
+                <div className="text-[13px] font-medium text-ink-300">{displayName}</div>
+                <div className="text-[11px] text-ink-300/55">{displayEmail}</div>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
@@ -190,10 +207,16 @@ export function Topbar() {
               Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LogOut className="h-3.5 w-3.5" />
-              Sign out
-            </DropdownMenuItem>
+            {clerkActive ? (
+              <SignOutItem />
+            ) : (
+              <DropdownMenuItem asChild>
+                <a href="/sign-in">
+                  <LogOut className="h-3.5 w-3.5" />
+                  Sign out
+                </a>
+              </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

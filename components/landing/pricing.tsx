@@ -37,7 +37,7 @@ const PLANS: Plan[] = [
       "Invoicing with Razorpay",
       "Email support",
     ],
-    cta: { label: "Start with Basic", href: "/dashboard" },
+    cta: { label: "Start with Basic", href: "/sign-up" },
   },
   {
     id: "pro",
@@ -56,7 +56,7 @@ const PLANS: Plan[] = [
       "Client portal & e-signature",
       "Priority support",
     ],
-    cta: { label: "Start with Pro", href: "/dashboard" },
+    cta: { label: "Start with Pro", href: "/sign-up" },
   },
   {
     id: "enterprise",

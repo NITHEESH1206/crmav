@@ -52,12 +52,12 @@ export function LandingNavbar() {
 
           <div className="hidden md:flex items-center gap-3">
             <Link
-              href="/dashboard"
+              href="/sign-in"
               className="text-[14px] text-ink-300/70 hover:text-ink-300 transition-colors"
             >
               Sign in
             </Link>
-            <Link href="/dashboard" className="group">
+            <Link href="/sign-up" className="group">
               <span className="btn-glass-primary inline-flex items-center gap-1.5 rounded-full pl-4 pr-3.5 py-2 text-[14px] font-medium">
                 Get started
                 <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={2} />
@@ -95,7 +95,7 @@ export function LandingNavbar() {
               </Link>
             ))}
             <Link
-              href="/dashboard"
+              href="/sign-up"
               onClick={() => setOpen(false)}
               className="mt-2 inline-flex items-center justify-center gap-1.5 rounded-full bg-ink-300 text-bone-100 px-4 py-3 text-[14px] font-medium"
             >

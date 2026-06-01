@@ -1,10 +1,12 @@
 import "server-only";
 import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
+import { hasClerk, getCurrentUser } from "@/lib/auth";
 
 /**
- * For the demo we operate against a single seeded workspace.
- * Production swap: derive workspaceId from Clerk session claims.
+ * Demo fallback: operate against the single seeded workspace.
+ * When Clerk is enabled, getCurrentWorkspaceId() resolves the signed-in
+ * user's own workspace instead (see below).
  *
  * Wrapped in retry-with-backoff so Neon's auto-suspend cold-start
  * (free-tier DBs sleep after ~5 min idle and take 2-5s to wake)
@@ -54,5 +56,12 @@ const cachedFetch = unstable_cache(fetchWorkspaceId, ["current-workspace-id"], {
 });
 
 export async function getCurrentWorkspaceId(): Promise<string> {
+  // Multi-tenant: resolve the signed-in user's workspace (NOT shared-cached,
+  // since it's per-request). Falls back to the demo workspace for unauthenticated
+  // contexts (e.g. the public client portal) so those keep working.
+  if (hasClerk()) {
+    const user = await getCurrentUser();
+    if (user) return user.workspaceId;
+  }
   return cachedFetch();
 }

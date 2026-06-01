@@ -11,6 +11,7 @@ import { GenerationDrawer } from "@/components/ai/generation-drawer";
 import { CopilotRail } from "@/components/ai/copilot-rail";
 import { SessionProvider } from "@/lib/permissions/session";
 import { getLookups } from "@/lib/data/lookups";
+import { hasClerk, getCurrentUserDisplay } from "@/lib/auth";
 
 // All app routes are data-driven from Neon. Force on-demand rendering so the
 // build doesn't try to statically pre-render 30+ pages in parallel and exhaust
@@ -20,7 +21,8 @@ export const runtime = "nodejs";
 export const fetchCache = "force-no-store";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
-  const lookups = await getLookups();
+  const [lookups, user] = await Promise.all([getLookups(), getCurrentUserDisplay()]);
+  const clerkActive = hasClerk();
   return (
     <SessionProvider role="ADMIN">
     <div className="relative min-h-screen">
@@ -46,7 +48,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       <Sidebar />
       <MobileSidebar />
       <div className="lg:pl-[244px] min-h-screen flex flex-col">
-        <Topbar />
+        <Topbar user={user} clerkActive={clerkActive} />
         <main className="flex-1 px-3 sm:px-6 lg:px-8 pb-12 pt-4 sm:pt-6">
           <div className="mx-auto max-w-[1600px]">{children}</div>
         </main>
