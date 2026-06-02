@@ -4,6 +4,8 @@ import Anthropic from "@anthropic-ai/sdk";
 import { getAnthropic, AI_DEFAULTS, AIError, isAIConfigured } from "@/lib/ai/client";
 import { PROJECT_BUILDER_PROMPT } from "@/lib/ai/prompts";
 import { loadCatalogContext } from "@/lib/ai/catalog-context";
+import { getCurrentWorkspaceId } from "@/lib/data/workspace";
+import { checkAiQuota, recordAiUsage, quotaMessage } from "@/lib/ai/usage";
 import {
   projectPlanSchema,
   PROJECT_PLAN_TOOL,
@@ -88,6 +90,16 @@ export async function POST(req: Request): Promise<Response> {
     );
   }
 
+  // Per-workspace monthly AI quota guard (the Builder runs on Opus).
+  const workspaceId = await getCurrentWorkspaceId();
+  const quota = await checkAiQuota(workspaceId);
+  if (!quota.allowed) {
+    return NextResponse.json<PlanResponse>(
+      { ok: false, error: quotaMessage(quota) },
+      { status: 429 }
+    );
+  }
+
   // Build the per-request user message — the system prompt stays cached.
   const roomsBlock = brief.rooms.map((room, idx) => {
     const dimsLine =
@@ -141,6 +153,11 @@ export async function POST(req: Request): Promise<Response> {
       tools: [PROJECT_PLAN_TOOL],
       tool_choice: { type: "tool", name: PROJECT_PLAN_TOOL.name },
       messages: [{ role: "user", content: userMessage }],
+    });
+
+    await recordAiUsage(workspaceId, {
+      inputTokens: response.usage?.input_tokens,
+      outputTokens: response.usage?.output_tokens,
     });
 
     // Find the tool_use block — guaranteed by tool_choice

@@ -1,6 +1,16 @@
 import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
 import { getAnthropic, AI_DEFAULTS, AIError, isAIConfigured } from "./client";
+import { getCurrentWorkspaceId } from "@/lib/data/workspace";
+import { checkAiQuota, recordAiUsage, quotaMessage } from "./usage";
+
+/** Plain-text Response used when a workspace is over its monthly AI quota. */
+function aiQuotaResponse(message: string): Response {
+  return new Response(`⚠ ${message}`, {
+    status: 429,
+    headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store" },
+  });
+}
 
 type StreamOpts = {
   systemPrompt: string;
@@ -19,6 +29,10 @@ export async function streamCompletion(opts: StreamOpts): Promise<Response> {
   if (!isAIConfigured()) {
     return aiUnconfiguredResponse();
   }
+  const workspaceId = await getCurrentWorkspaceId();
+  const quota = await checkAiQuota(workspaceId);
+  if (!quota.allowed) return aiQuotaResponse(quotaMessage(quota));
+
   const client = getAnthropic();
   const encoder = new TextEncoder();
 
@@ -26,7 +40,7 @@ export async function streamCompletion(opts: StreamOpts): Promise<Response> {
     async start(controller) {
       try {
         const stream = client.messages.stream({
-          model: AI_DEFAULTS.model,
+          model: AI_DEFAULTS.copilotModel,
           max_tokens: opts.maxTokens ?? 16_000,
           thinking: { type: "adaptive" },
           output_config: { effort: opts.effort ?? "medium" },
@@ -44,7 +58,11 @@ export async function streamCompletion(opts: StreamOpts): Promise<Response> {
           controller.enqueue(encoder.encode(delta));
         });
 
-        await stream.finalMessage();
+        const final = await stream.finalMessage();
+        await recordAiUsage(workspaceId, {
+          inputTokens: final.usage?.input_tokens,
+          outputTokens: final.usage?.output_tokens,
+        });
         controller.close();
       } catch (err) {
         const msg = errorToText(err);
@@ -73,6 +91,10 @@ export async function streamChat(opts: {
   maxTokens?: number;
 }): Promise<Response> {
   if (!isAIConfigured()) return aiUnconfiguredResponse();
+  const workspaceId = await getCurrentWorkspaceId();
+  const quota = await checkAiQuota(workspaceId);
+  if (!quota.allowed) return aiQuotaResponse(quotaMessage(quota));
+
   const client = getAnthropic();
   const encoder = new TextEncoder();
 
@@ -80,7 +102,7 @@ export async function streamChat(opts: {
     async start(controller) {
       try {
         const stream = client.messages.stream({
-          model: AI_DEFAULTS.model,
+          model: AI_DEFAULTS.copilotModel,
           max_tokens: opts.maxTokens ?? 8_000,
           thinking: { type: "adaptive" },
           output_config: { effort: opts.effort ?? "medium" },
@@ -98,7 +120,11 @@ export async function streamChat(opts: {
           controller.enqueue(encoder.encode(delta));
         });
 
-        await stream.finalMessage();
+        const final = await stream.finalMessage();
+        await recordAiUsage(workspaceId, {
+          inputTokens: final.usage?.input_tokens,
+          outputTokens: final.usage?.output_tokens,
+        });
         controller.close();
       } catch (err) {
         const msg = errorToText(err);

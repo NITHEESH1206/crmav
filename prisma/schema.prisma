@@ -21,6 +21,8 @@ model Workspace {
   logoUrl   String?
   currency  String   @default("USD")
   timezone  String   @default("UTC")
+  /** Subscription plan — gates AI usage limits (and future billing). */
+  plan      Plan     @default(BASIC)
   /** Per-workspace notification channel preferences (Phase 29).
    *  Shape: { "<eventKey>": { email: bool, inApp: bool } } */
   notificationPrefs Json?
@@ -58,6 +60,29 @@ model Workspace {
   automationRuns AutomationRun[]
   deviceAgents  DeviceAgent[]
   discoveredDevices DiscoveredDevice[]
+  aiUsage       AiUsage[]
+}
+
+enum Plan {
+  BASIC
+  PRO
+  ENTERPRISE
+}
+
+/** Monthly AI usage per workspace, keyed by period "YYYY-MM" (Phase 34). */
+model AiUsage {
+  id           String   @id @default(cuid())
+  workspaceId  String
+  workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  /** Calendar period, e.g. "2026-06". */
+  period       String
+  calls        Int      @default(0)
+  inputTokens  Int      @default(0)
+  outputTokens Int      @default(0)
+  updatedAt    DateTime @updatedAt
+
+  @@unique([workspaceId, period])
+  @@index([workspaceId])
 }
 
 model User {

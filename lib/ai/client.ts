@@ -26,8 +26,14 @@ export class AIError extends Error {
   }
 }
 
-/** Default model and tuning for ZynexAV. Opus 4.7, adaptive thinking. */
+/**
+ * Model tuning for ZynexAV.
+ *  - `model` (Opus): the heavy Project Builder — depth matters, run sparingly.
+ *  - `copilotModel` (Sonnet): the chatty Co-pilot + all generation endpoints —
+ *    near-Opus quality at a fraction of the cost. Both overridable via env.
+ */
 export const AI_DEFAULTS = {
-  model: "claude-opus-4-7" as const,
+  model: process.env.ANTHROPIC_MODEL || "claude-opus-4-7",
+  copilotModel: process.env.ANTHROPIC_COPILOT_MODEL || "claude-sonnet-4-5",
   max_tokens: 64_000,
 } as const;
