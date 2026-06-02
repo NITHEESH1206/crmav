@@ -39,3 +39,6 @@ prisma/migrations/dev.db*
 
 .vercel
 .env*
+
+# Stray Clerk quickstart scaffold (not part of ZynexAV)
+clerk-nextjs/
