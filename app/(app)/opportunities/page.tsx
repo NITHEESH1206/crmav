@@ -6,6 +6,7 @@ import { Sparkles, TrendingUp, Building2 } from "lucide-react";
 import { initials, formatCompact } from "@/lib/utils";
 import { getOpportunitiesByStage } from "@/lib/data/opportunities";
 import { OpenableRow } from "@/components/app/openable";
+import { CrmImportButton } from "@/components/crm/import-dialog";
 
 const STAGE_LABEL: Record<string, string> = {
   DISCOVERY: "Discovery",
@@ -55,6 +56,12 @@ export default async function OpportunitiesPage() {
         ],
       }}
     >
+      <div className="flex items-center justify-between mb-4">
+        <div className="text-[12.5px] text-ink-300/55">
+          Total open pipeline · <span className="font-mono text-ink-300/80">${formatCompact(totalPipeline / 100)}</span>
+        </div>
+        <CrmImportButton />
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {columns.map((col) => (
           <div key={col.stage} className="flex flex-col gap-3 min-h-[400px]">
