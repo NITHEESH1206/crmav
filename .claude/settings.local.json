@@ -49,7 +49,10 @@
       "Bash(ls components/app/)",
       "Bash(ls components/catalog/)",
       "Bash(sed -n '1,40p' \"app/\\(app\\)/catalog/page.tsx\")",
-      "Bash(sed -n '1,60p' lib/data/catalog.ts)"
+      "Bash(sed -n '1,60p' lib/data/catalog.ts)",
+      "Bash(git check-ignore *)",
+      "Bash(grep -cE 'sk_\\(test|live\\)|pk_\\(test|live\\)' .env.example)",
+      "Bash(grep -cE 'sk_\\(test|live\\)|pk_\\(test|live\\)' .env)"
     ]
   }
 }
