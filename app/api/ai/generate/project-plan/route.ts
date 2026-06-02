@@ -141,7 +141,8 @@ export async function POST(req: Request): Promise<Response> {
     const response = await client.messages.create({
       model: AI_DEFAULTS.model,
       max_tokens: 16_000,
-      thinking: { type: "adaptive" },
+      // NOTE: `thinking` is intentionally NOT set here — the API rejects
+      // extended thinking when tool_choice forces a specific tool.
       output_config: { effort: "high" },
       system: [
         {
