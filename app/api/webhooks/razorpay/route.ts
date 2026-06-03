@@ -114,6 +114,22 @@ async function handlePaymentLinkPaid(event: RzpEvent) {
   const link = event.payload?.payment_link?.entity;
   if (!link?.reference_id) return;
 
+  // Plan upgrades carry reference_id "plan_<PLAN>_<workspaceId>".
+  if (link.reference_id.startsWith("plan_")) {
+    const rest = link.reference_id.slice("plan_".length);
+    const sep = rest.indexOf("_");
+    const plan = rest.slice(0, sep);
+    const workspaceId = rest.slice(sep + 1);
+    if (["BASIC", "PRO", "ENTERPRISE"].includes(plan) && workspaceId) {
+      await prisma.workspace
+        .update({ where: { id: workspaceId }, data: { plan: plan as "PRO" } })
+        .catch(() => undefined);
+      revalidatePath("/settings");
+      await logEvent(event, { action: "plan-upgraded", workspaceId, plan });
+    }
+    return;
+  }
+
   // reference_id === invoice.id (we set it that way in createPaymentLink)
   const invoice = await prisma.invoice.findUnique({
     where: { id: link.reference_id },

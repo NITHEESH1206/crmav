@@ -5,6 +5,7 @@ import { getCurrentWorkspaceId } from "@/lib/data/workspace";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { randomBytes, createHash } from "crypto";
+import { PLAN_SEAT_LIMITS, PLAN_LABEL } from "@/lib/billing/plans";
 
 // ─── Workspace ───────────────────────────────────────────────────────────
 const workspaceSchema = z.object({
@@ -61,6 +62,21 @@ const inviteSchema = z.object({
 export async function inviteMember(input: z.infer<typeof inviteSchema>) {
   const data = inviteSchema.parse(input);
   const workspaceId = await getCurrentWorkspaceId();
+
+  // Seat limit by plan.
+  const ws = await prisma.workspace.findUnique({
+    where: { id: workspaceId },
+    select: { plan: true },
+  });
+  const plan = ws?.plan ?? "BASIC";
+  const seatLimit = PLAN_SEAT_LIMITS[plan];
+  const seatsUsed = await prisma.user.count({ where: { workspaceId } });
+  if (seatsUsed >= seatLimit) {
+    throw new Error(
+      `Your ${PLAN_LABEL[plan]} plan includes ${seatLimit} users. Upgrade your plan to add more seats.`
+    );
+  }
+
   const existing = await prisma.user.findUnique({ where: { email: data.email } });
   if (existing) throw new Error("A user with that email already exists.");
   const created = await prisma.user.create({

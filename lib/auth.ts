@@ -42,6 +42,16 @@ async function provisionForClerkUser(clerkId: string): Promise<User> {
     email.split("@")[0];
   const avatarUrl = cu?.imageUrl ?? null;
 
+  // If this email was invited to an existing workspace, claim that seat and
+  // join — don't spin up a brand-new workspace.
+  const invited = await prisma.user.findUnique({ where: { email } });
+  if (invited && !invited.clerkId) {
+    return prisma.user.update({
+      where: { id: invited.id },
+      data: { clerkId, avatarUrl, name: invited.name || name },
+    });
+  }
+
   // Find a free workspace slug.
   const base = slugify(name + "-workspace");
   let slug = base;

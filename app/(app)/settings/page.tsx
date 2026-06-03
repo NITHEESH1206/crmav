@@ -10,8 +10,10 @@ import {
   Plug,
   History,
   Shield,
+  CreditCard,
 } from "lucide-react";
 import { CompanyTab } from "@/components/settings/company-tab";
+import { BillingTab } from "@/components/settings/billing-tab";
 import { TeamTab } from "@/components/settings/team-tab";
 import { ApiKeysTab } from "@/components/settings/api-keys-tab";
 import { AuditTab } from "@/components/settings/audit-tab";
@@ -19,6 +21,7 @@ import { PermissionsMatrix } from "@/components/settings/permissions-matrix";
 import { IntegrationsTab } from "@/components/settings/integrations-tab";
 import { NotificationsTab } from "@/components/settings/notifications-tab";
 import { getNotificationPrefs } from "@/app/actions/notifications";
+import { getPlanBillingInfo } from "@/lib/data/billing";
 import {
   getWorkspace,
   listWorkspaceMembers,
@@ -28,12 +31,13 @@ import {
 import { notFound } from "next/navigation";
 
 export default async function SettingsPage() {
-  const [workspace, members, keys, audit, notifPrefs] = await Promise.all([
+  const [workspace, members, keys, audit, notifPrefs, billing] = await Promise.all([
     getWorkspace(),
     listWorkspaceMembers(),
     listApiKeys(),
     listAuditLog(50),
     getNotificationPrefs(),
+    getPlanBillingInfo(),
   ]);
 
   if (!workspace) notFound();
@@ -53,6 +57,10 @@ export default async function SettingsPage() {
           <TabsTrigger value="team">
             <Users className="h-3.5 w-3.5 mr-1.5" />
             Team & roles
+          </TabsTrigger>
+          <TabsTrigger value="billing">
+            <CreditCard className="h-3.5 w-3.5 mr-1.5" />
+            Plan & billing
           </TabsTrigger>
           <TabsTrigger value="permissions">
             <Shield className="h-3.5 w-3.5 mr-1.5" />
@@ -82,6 +90,10 @@ export default async function SettingsPage() {
 
         <TabsContent value="team">
           <TeamTab members={members} />
+        </TabsContent>
+
+        <TabsContent value="billing">
+          <BillingTab info={billing} />
         </TabsContent>
 
         <TabsContent value="permissions">
