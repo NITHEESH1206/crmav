@@ -22,6 +22,18 @@ export const PLAN_LABEL: Record<Plan, string> = {
 
 export const PLAN_ORDER: Plan[] = ["BASIC", "PRO", "ENTERPRISE"];
 
+export type BillingPeriod = "monthly" | "annual";
+
+/** Annual billing saves 20% (matches the public pricing page). */
+export const ANNUAL_DISCOUNT = 0.2;
+
+/** Amount to charge for a plan over the chosen period, in paise. */
+export function priceForPeriod(plan: Plan, period: BillingPeriod): number {
+  const monthly = PLAN_PRICE_CENTS[plan];
+  if (period === "annual") return Math.round(monthly * 12 * (1 - ANNUAL_DISCOUNT));
+  return monthly;
+}
+
 export function formatInr(paise: number): string {
   return "₹" + Math.round(paise / 100).toLocaleString("en-IN");
 }

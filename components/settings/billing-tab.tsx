@@ -1,13 +1,20 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { Check, Sparkles, Users, Zap, CreditCard, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { setWorkspacePlan, createPlanUpgradeLink } from "@/app/actions/billing";
-import { PLAN_LABEL, PLAN_PRICE_CENTS, PLAN_ORDER, formatInr } from "@/lib/billing/plans";
+import {
+  PLAN_LABEL,
+  PLAN_PRICE_CENTS,
+  PLAN_ORDER,
+  formatInr,
+  priceForPeriod,
+  type BillingPeriod,
+} from "@/lib/billing/plans";
 
 type Plan = "BASIC" | "PRO" | "ENTERPRISE";
 
@@ -29,6 +36,7 @@ const FEATURES: Record<Plan, string[]> = {
 
 export function BillingTab({ info }: { info: Info }) {
   const [pending, startTransition] = useTransition();
+  const [period, setPeriod] = useState<BillingPeriod>("monthly");
 
   function meter(used: number, limit: number) {
     const pct = limit > 0 ? Math.min(100, Math.round((used / limit) * 100)) : 0;
@@ -59,7 +67,7 @@ export function BillingTab({ info }: { info: Info }) {
       return;
     }
     startTransition(async () => {
-      const r = await createPlanUpgradeLink({ plan });
+      const r = await createPlanUpgradeLink({ plan, period });
       if (r.ok && r.url) {
         toast.success("Opening secure checkout…");
         window.open(r.url, "_blank");
@@ -102,6 +110,38 @@ export function BillingTab({ info }: { info: Info }) {
         <p className="text-[12.5px] text-ink-300/55">Only an owner or admin can change the plan.</p>
       )}
 
+      {/* Billing period toggle */}
+      <div className="flex justify-center">
+        <div className="glass inline-flex items-center gap-1 rounded-full p-1">
+          <button
+            type="button"
+            onClick={() => setPeriod("monthly")}
+            className={cn(
+              "h-8 px-4 rounded-full text-[12.5px] font-medium transition-all",
+              period === "monthly" ? "glass-pill-active text-ink-300" : "text-ink-300/60 hover:text-ink-300"
+            )}
+          >
+            Monthly
+          </button>
+          <button
+            type="button"
+            onClick={() => setPeriod("annual")}
+            className={cn(
+              "h-8 pl-4 pr-2 rounded-full text-[12.5px] font-medium transition-all inline-flex items-center gap-2",
+              period === "annual" ? "glass-pill-active text-ink-300" : "text-ink-300/60 hover:text-ink-300"
+            )}
+          >
+            Annual
+            <span className={cn(
+              "rounded-full px-2 py-0.5 text-[10px] font-semibold",
+              period === "annual" ? "bg-signal-500 text-white" : "bg-signal-500/15 text-signal-700"
+            )}>
+              Save 20%
+            </span>
+          </button>
+        </div>
+      </div>
+
       {/* Plan cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {PLAN_ORDER.map((plan) => {
@@ -120,10 +160,18 @@ export function BillingTab({ info }: { info: Info }) {
                 {current && <Badge className="bg-signal-500 text-white text-[10px]">Current</Badge>}
               </div>
               <div className="mt-2 mb-3">
-                {plan === "ENTERPRISE" ? (
+                {plan === "ENTERPRISE" || price === 0 ? (
                   <span className="font-display text-[22px] text-ink-300">Let&apos;s talk</span>
+                ) : period === "annual" ? (
+                  <span className="font-display text-[22px] text-ink-300">
+                    {formatInr(priceForPeriod(plan, "annual"))}
+                    <span className="text-[12px] text-ink-300/55 font-sans"> / yr</span>
+                  </span>
                 ) : (
-                  <span className="font-display text-[22px] text-ink-300">{formatInr(price)}<span className="text-[12px] text-ink-300/55 font-sans"> / mo</span></span>
+                  <span className="font-display text-[22px] text-ink-300">
+                    {formatInr(price)}
+                    <span className="text-[12px] text-ink-300/55 font-sans"> / mo</span>
+                  </span>
                 )}
               </div>
               <ul className="space-y-1.5 flex-1">
