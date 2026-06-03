@@ -614,7 +614,8 @@ model CatalogItem {
   id           String  @id @default(cuid())
   workspaceId  String
   workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  sku          String  @unique
+  /** Unique PER WORKSPACE (not global) so every tenant can hold its own copy. */
+  sku          String
   name         String
   brand        String
   category     String
@@ -629,6 +630,9 @@ model CatalogItem {
   boqItems    BOQItem[]
   devices     Device[]
   inventory   InventoryItem[]
+
+  @@unique([workspaceId, sku])
+  @@index([workspaceId])
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

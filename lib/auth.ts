@@ -64,6 +64,16 @@ async function provisionForClerkUser(clerkId: string): Promise<User> {
       },
       include: { users: true },
     });
+
+    // Seed the starter AV catalog so the new account is usable immediately.
+    // Best-effort: a seeding hiccup must never block signup.
+    try {
+      const { seedWorkspaceCatalog } = await import("@/lib/av/seed-workspace");
+      await seedWorkspaceCatalog(ws.id);
+    } catch (e) {
+      console.warn("[auth] catalog seed-on-signup failed:", e instanceof Error ? e.message : e);
+    }
+
     return ws.users[0];
   } catch {
     // Race or unique collision — another request already provisioned this user.

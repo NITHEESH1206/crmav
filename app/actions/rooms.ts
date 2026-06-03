@@ -139,7 +139,9 @@ export async function generateBOQForRoom(roomId: string) {
     if (!layout?.items) continue;
     for (const it of layout.items) {
       if (!it.catalogSku) continue;
-      const cat = await prisma.catalogItem.findUnique({ where: { sku: it.catalogSku } });
+      const cat = await prisma.catalogItem.findUnique({
+        where: { workspaceId_sku: { workspaceId: room.workspaceId, sku: it.catalogSku } },
+      });
       if (!cat) continue;
       lines.push({
         description: cat.name,

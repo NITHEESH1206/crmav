@@ -143,16 +143,14 @@ export async function importCatalogCsv(csvText: string): Promise<ImportResult> {
 
     try {
       const existing = await prisma.catalogItem.findUnique({
-        where: { sku },
-        select: { id: true, workspaceId: true },
+        where: { workspaceId_sku: { workspaceId, sku } },
+        select: { id: true },
       });
       if (existing) {
-        // SKU is globally unique — don't overwrite another tenant's item.
-        if (existing.workspaceId !== workspaceId) {
-          skipped++;
-          continue;
-        }
-        await prisma.catalogItem.update({ where: { sku }, data });
+        await prisma.catalogItem.update({
+          where: { workspaceId_sku: { workspaceId, sku } },
+          data,
+        });
         updated++;
       } else {
         await prisma.catalogItem.create({ data: { workspaceId, sku, ...data } });

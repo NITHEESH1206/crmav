@@ -31,10 +31,12 @@ async function main() {
   let added = 0;
   let updated = 0;
   for (const item of CATALOG) {
-    const existing = await prisma.catalogItem.findUnique({ where: { sku: item.sku } });
+    const existing = await prisma.catalogItem.findUnique({
+      where: { workspaceId_sku: { workspaceId: workspace.id, sku: item.sku } },
+    });
     if (existing) {
       await prisma.catalogItem.update({
-        where: { sku: item.sku },
+        where: { workspaceId_sku: { workspaceId: workspace.id, sku: item.sku } },
         data: {
           name: item.name,
           brand: item.brand,
