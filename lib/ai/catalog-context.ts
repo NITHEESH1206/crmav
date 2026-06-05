@@ -1,6 +1,7 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
 import { getCurrentWorkspaceId } from "@/lib/data/workspace";
+import { ensureWorkspaceCatalog } from "@/lib/av/seed-workspace";
 import type { CatalogIndex } from "./plan-schema";
 
 /**
@@ -53,6 +54,7 @@ export async function loadCatalogContext(): Promise<{
   count: number;
 }> {
   const workspaceId = await getCurrentWorkspaceId();
+  await ensureWorkspaceCatalog(workspaceId);
   const items = await prisma.catalogItem.findMany({
     where: { workspaceId },
     select: {

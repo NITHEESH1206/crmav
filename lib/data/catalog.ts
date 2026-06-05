@@ -1,9 +1,11 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
 import { getCurrentWorkspaceId } from "./workspace";
+import { ensureWorkspaceCatalog } from "@/lib/av/seed-workspace";
 
 export async function listCatalog() {
   const workspaceId = await getCurrentWorkspaceId();
+  await ensureWorkspaceCatalog(workspaceId);
   return prisma.catalogItem.findMany({
     where: { workspaceId },
     orderBy: [{ brand: "asc" }, { name: "asc" }],
