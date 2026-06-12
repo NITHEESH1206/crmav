@@ -52,11 +52,12 @@ Edit the allowlist in `middleware.ts` (`isPublic`) to change this.
 
 ## 5. Notes / follow-ups
 
-- **New workspaces start empty** (no catalog/demo data). If you want new
-  signups to land with the AV catalog pre-loaded, add a seed-on-provision step
-  in `provisionForClerkUser` (copy `CatalogItem`s from a template workspace).
-- The cron job (`/api/cron/automations`) runs without a user session and falls
-  back to the demo workspace; make it iterate all workspaces before going
-  multi-tenant in production.
-- Team invites (adding more users to a workspace) are a natural next step —
-  Clerk Organizations or a custom invite flow.
+- ~~New workspaces start empty~~ **Done (Phase 35):** every new signup is
+  auto-seeded with the full AV catalog, with a self-healing fallback on the
+  catalog read paths (`ensureWorkspaceCatalog`).
+- ~~Make the cron multi-tenant~~ **Already correct:** `/api/cron/automations`
+  calls `runAllAutomations()`, which iterates every workspace. Set
+  `CRON_SECRET` in production so only Vercel Cron can trigger it.
+- ~~Team invites~~ **Done (Phase 36):** Settings → Team invites a member by
+  email (seat-limited by plan); when that email signs up via Clerk, it claims
+  the invited seat instead of creating a new workspace.
