@@ -55,6 +55,8 @@ export type FlowNode = {
   width?: number;
   ports: Port[];
   endpointIcon?: EndpointIcon;
+  /** Product photo (from the catalog) — rendered as a node thumbnail. */
+  imageUrl?: string;
 };
 
 export type FlowEdge = {

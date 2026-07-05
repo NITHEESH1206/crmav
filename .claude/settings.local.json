@@ -55,7 +55,9 @@
       "Bash(grep -cE 'sk_\\(test|live\\)|pk_\\(test|live\\)' .env)",
       "Bash(sed -n '/export async function inviteMember/,/^}/p' app/actions/settings.ts)",
       "Bash(sed -n '78,130p' lib/razorpay/client.ts)",
-      "Bash(sed -n '/async function handlePaymentLinkPaid/,/^}/p' app/api/webhooks/razorpay/route.ts)"
+      "Bash(sed -n '/async function handlePaymentLinkPaid/,/^}/p' app/api/webhooks/razorpay/route.ts)",
+      "PowerShell(npm install xlsx 2>&1)",
+      "PowerShell(node \"C:\\\\Users\\\\Admin\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\D--aether-AV-CRM\\\\578862e2-481a-4350-993a-f336e98b295d\\\\scratchpad\\\\boq-test.mjs\" 2>$null)"
     ]
   }
 }

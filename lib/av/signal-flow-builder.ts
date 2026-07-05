@@ -17,6 +17,7 @@ type AnyDev = {
   brand: string;
   category: string;
   quantity: number;
+  imageUrl?: string;
 };
 
 /* ─── Category → flow node category mapping ─── */
@@ -149,6 +150,7 @@ export function buildSignalFlow(devices: AnyDev[]): FlowDiagram {
         y: startY + i * Y_GAP,
         width: NODE_W,
         endpointIcon: endpointIconFor(u.category),
+        imageUrl: u.imageUrl,
         ports: [
           { id: `${id}-in`, label: "IN", type: "HDMI", direction: "in" },
           { id: `${id}-out`, label: "OUT", type: "HDMI", direction: "out" },

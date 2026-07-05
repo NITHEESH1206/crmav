@@ -422,8 +422,13 @@ function EndpointNode({
       style={{ left: node.x, top: node.y, width: w }}
     >
       <div className="flex flex-col items-center text-center">
-        <div className="h-12 w-12 rounded border border-neutral-700 bg-white flex items-center justify-center shadow-sm">
-          <Icon className="h-7 w-7 text-neutral-800" strokeWidth={1.4} />
+        <div className="h-12 w-12 rounded border border-neutral-700 bg-white flex items-center justify-center shadow-sm overflow-hidden">
+          {node.imageUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={node.imageUrl} alt="" className="h-full w-full object-contain p-0.5" />
+          ) : (
+            <Icon className="h-7 w-7 text-neutral-800" strokeWidth={1.4} />
+          )}
         </div>
         <div className="mt-1.5 text-[10px] font-bold tracking-wide text-neutral-800">
           {node.title}
@@ -488,8 +493,12 @@ function EquipmentNode({
         </div>
       </div>
 
-      {(node.brand || node.model) && (
+      {(node.brand || node.model || node.imageUrl) && (
         <div className="border-t border-neutral-700 bg-white px-2 py-1.5 text-center">
+          {node.imageUrl && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={node.imageUrl} alt="" className="h-9 object-contain mx-auto mb-1" />
+          )}
           {node.brand && (
             <div className="text-[9px] font-bold tracking-widest text-red-600">{node.brand}</div>
           )}
